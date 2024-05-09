@@ -7,7 +7,7 @@
 Clone this repo to the home directory then run:
 
 ```sh
-zsh .dotfiles/setup.zsh
+zsh ~/.dotfiles/setup.zsh
 ```
 
 ### Nerd Font
