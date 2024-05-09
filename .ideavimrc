@@ -1,0 +1,84 @@
+source ~/.vimrc
+
+"""""" Notes
+" :actionlist to see all actions
+" Supported Set Commands: https://github.com/JetBrains/ideavim/wiki/set-commands
+"""""" Settings
+" Smart join for <C-J>
+set ideajoin
+" Keep the refactoring mode after a refactoring
+set idearefactormode=keep
+" Map vim marks to IDEA global marks
+set ideamarks
+"""""" Editing and Reloading the Config
+" set clipboard+=unnamed
+" set clipboard+=ideaput
+nnoremap \e :e ~/.ideavimrc<CR>
+nnoremap \r :action IdeaVim.ReloadVimRc.reload<CR>
+"""""" Handlers
+" https://github.com/JetBrains/ideavim/wiki/sethandler
+"""""" Distraction-Free Mode
+nnoremap <leader>zz :action ToggleDistractionFreeMode<CR>
+"""""" Terminal
+nnoremap <leader>tt :action ActivateTerminalToolWindow<CR>
+nnoremap <leader>to :action Terminal.OpenInTerminal<CR>
+"""""" Window Navigation
+nnoremap <TAB> :action NextTab<CR>
+nnoremap <S-TAB> :action PreviousTab<CR>
+nnoremap <leader>ws :action MoveTabRight<CR>
+nnoremap <leader>wS :action MoveTabDown<CR>
+nnoremap <leader>wp :action PinActiveEditorTab<CR>
+nnoremap <leader>wu :action Unsplit<CR>
+nnoremap <leader>wm :action MoveEditorToOppositeTabGroup<CR>
+nnoremap <leader>wn :action NextWindow<CR>
+nnoremap <leader>wx :action CloseContent<CR>
+nnoremap <leader>wq :action CloseAllEditors<CR>
+"""""" Tool Windows
+nnoremap <leader>wl :action JumpToLastWindow<CR>
+nnoremap <leader>wz :action HideAllWindows<CR>
+"""""" Editing Source Code
+nnoremap <leader>. :action ShowIntentionActions<CR>
+nnoremap <leader><Space> :action ShowHoverInfo<CR>
+noremap <leader>cc :action CommentByLineComment<CR>k
+nnoremap <leader>rn :action RenameElement<CR>
+nnoremap [m :action MethodUp<CR>
+nnoremap ]m :action MethodDown<CR>
+nnoremap g; :action JumpToLastChange<CR>
+nnoremap g, :action JumpToNextChange<CR>
+nnoremap ge :action GotoNextError<CR>
+nnoremap gE :action GotoPreviousError<CR>
+"""""" Searching
+nnoremap <leader>/ :action TextSearchAction<CR>
+nnoremap <leader>? :action RecentFiles<CR>
+nnoremap <leader>sf :action GotoFile<CR>
+nnoremap <leader>sr :action RecentLocations<CR>
+nnoremap <leader>sc :action FindInPath<CR>
+nnoremap <leader>sa :action GotoAction<CR>
+nnoremap <leader>sh :action CallHierarchy<CR>
+nnoremap <leader>sn :action ShowNavBar<CR>
+nnoremap <leader>ss :action FileStructurePopup<CR>
+"""""" Goto
+" There is also :action FindUsages)
+nnoremap gt :action QuickTypeDefinition<CR>
+nnoremap gd :action GotoDeclaration<CR>
+nnoremap gD :action GotoTypeDeclaration<CR>
+nnoremap gi :action GotoImplementation<CR>
+nnoremap gr :action ShowUsages<CR>
+nnoremap gb :action Back<CR>
+nnoremap gf :action Forward<CR>
+nnoremap gn :action GotoNextElementUnderCaretUsage<CR>
+nnoremap gN :action GotoPrevElementUnderCaretUsage<CR>
+"""""" Running and Debugging
+nnoremap ,r :action ContextRun<CR>
+nnoremap ,c :action RunClass<CR>
+nnoremap ,f :action ChooseRunConfiguration<CR>
+nnoremap ,t :action ActivateRunToolWindow<CR>
+nnoremap ,u :action Rerun<CR>
+nnoremap ,f :action RerunFailedTests<CR>
+nnoremap ,b :action ToggleLineBreakpoint<CR>
+nnoremap ,d :action ContextDebug<CR>
+nnoremap ,n :action ActivateDebugToolWindow<CR>
+
+"""""" Version Control
+nnoremap <leader>vv :action Vcs.QuickListPopupAction<CR>
+nnoremap <leader>vn :action GitNewBranchAction<CR>

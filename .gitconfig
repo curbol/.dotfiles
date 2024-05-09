@@ -1,0 +1,22 @@
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+[user]
+	name = curbol
+	email = curtis.bollinger@gmail.com
+	signingkey = 7126CEFC29A0A439
+[core]
+	editor = nvim --wait
+[commit]
+	gpgsign = true
+[pull]
+	rebase = false
+[fetch]
+	prune = true
+[maintenance]
+	repo = /Users/curtis/code/noms
+[push]
+	autoSetupRemote = true
+[diff]
+	tool = nvim
+[difftool "nvim"]
+	cmd = nvim -d $LOCAL $REMOTE
