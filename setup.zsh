@@ -1,19 +1,13 @@
 #!/bin/zsh
 
-# Run this script to symlink dotfiles to the home directory.
-# > ./setup.zsh
-
-# Declare an associative array where
-#   key = source file relative to the dotfiles directory
-#   value = target location starting from the home directory
-typeset -A links
-links=(
-  .config/tmux/tmux.conf ~/.config/tmux/tmux.conf
-	.config/wezterm/wezterm.lua ~/.config/wezterm/wezterm.lua
-  .gitconfig ~/.gitconfig
-  .ideavimrc ~/.ideavimrc
-  .vimrc ~/.vimrc
-  .zshrc ~/.zshrc
+# Declare a simple array with the paths of dotfiles relative to the dotfiles directory
+dotfiles=(
+  ".config/tmux/tmux.conf"
+  ".config/wezterm/wezterm.lua"
+  ".gitconfig"
+  ".ideavimrc"
+  ".vimrc"
+  ".zshrc"
 )
 
 create_symlink() {
@@ -21,7 +15,7 @@ create_symlink() {
   local dest=$2
 
   # Create the parent directory of the destination if it doesn't exist
-  mkdir -p $(dirname "$dest")
+  mkdir -p "$(dirname "$dest")"
 
   # Remove the destination file if it already exists
   if [[ -e "$dest" || -L "$dest" ]]; then
@@ -37,8 +31,12 @@ create_symlink() {
 # Directory containing your dotfiles
 dotfiles_dir=$(cd "$(dirname "$0")" && pwd)
 
-for src in ${(k)links}; do
-  create_symlink "$dotfiles_dir/$src" "$links[$src]"
+# Iterate over the dotfiles array
+for file in $dotfiles; do
+  src="$dotfiles_dir/$file"
+  dest="$HOME/$file"
+  
+  create_symlink "$src" "$dest"
 done
 
 echo "Dotfiles have been symlinked!"
