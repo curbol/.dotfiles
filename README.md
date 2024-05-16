@@ -26,8 +26,6 @@ brew install font-jetbrains-mono-nerd-font
 brew install wezterm
 ```
 
-### Dependancies
-
 ### ZSH
 
 (Zsh is the default on macOS)
@@ -38,6 +36,10 @@ brew install powerlevel10k
 
 ```sh
 brew install zsh-vi-mode
+```
+
+```sh
+brew install fzf
 ```
 
 ```sh

@@ -136,6 +136,9 @@ alias kschema='kubectl -n schema'
 alias kprogresstracking='kubectl -n progress-tracking'
 alias kgenesis='kubectl -n genesis'
 
+# Fuzzy finder: https://github.com/junegunn/fzf
+eval "$(fzf --zsh)"
+
 # Attach to existing tmux session or create a new one
 tm() {
     if [[ $# -eq 0 ]]; then
