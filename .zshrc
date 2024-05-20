@@ -99,6 +99,9 @@ zvm_after_lazy_keybindings() {
 }
 # ------------------------------------------------------------------------------
 
+# Set config directory
+export XDG_CONFIG_HOME="$HOME/.config"
+
 # Neovim
 # https://github.com/curbol/kickstart.nvim
 alias vim='nvim'

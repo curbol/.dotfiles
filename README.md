@@ -39,11 +39,13 @@ brew install zsh-vi-mode
 ```
 
 ```sh
-brew install fzf
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 
+### CLI Tools
+
 ```sh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+brew install jq cmake fzf ripgrep fd wget
 ```
 
 ### Neovim
@@ -52,12 +54,6 @@ Clone repo:
 
 ```sh
 git clone https://github.com/curbol/LazyVimStarter ~/.config/nvim
-```
-
-Dependencies:
-
-```sh
-brew install ripgrep fd wget
 ```
 
 Optional dependencies:
