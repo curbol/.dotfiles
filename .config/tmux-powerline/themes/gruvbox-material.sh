@@ -78,8 +78,8 @@ TMUX_OUTER_FOREGROUND_COLOR=$GRUVBOX_MATERIAL_GREY2
 if [ -z "$TMUX_POWERLINE_WINDOW_STATUS_CURRENT" ]; then
 	TMUX_POWERLINE_WINDOW_STATUS_CURRENT=(
 		"#[$(format regular)]"
-		"#[bold,italics,fg=${GRUVBOX_MATERIAL_ORANGE}]"
-		" #F#I:#W  "
+		"#[italics,fg=${GRUVBOX_MATERIAL_ORANGE}]"
+		" #F[#I]#W  "
 	)
 fi
 
@@ -95,7 +95,7 @@ if [ -z "$TMUX_POWERLINE_WINDOW_STATUS_FORMAT" ]; then
 	TMUX_POWERLINE_WINDOW_STATUS_FORMAT=(
 		"#[$(format regular)]"
 		"#[dim]"
-		" #{?window_flags,#F, }#I:#W  "
+		" #{?window_flags,#F, }[#I]#W  "
 	)
 fi
 
