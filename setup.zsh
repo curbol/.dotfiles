@@ -2,6 +2,7 @@
 
 # Declare a simple array with the paths of dotfiles relative to the dotfiles directory
 dotfiles=(
+  ".config/aerospace/aerospace.toml"
   ".config/tmux/tmux.conf"
   ".config/tmux-powerline"
   ".config/wezterm/wezterm.lua"

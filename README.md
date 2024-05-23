@@ -10,6 +10,17 @@ Clone this repo to the home directory then run:
 zsh ~/.dotfiles/setup.zsh
 ```
 
+### AeroSpace
+
+```sh
+brew install --cask nikitabobko/tap/aerospace
+```
+
+```sh
+brew tap FelixKratz/formulae
+brew install borders
+```
+
 ### Nerd Font
 
 ```sh
