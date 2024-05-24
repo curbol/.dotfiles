@@ -2,6 +2,16 @@
 
 ## MacOS
 
+### Apps
+
+```sh
+brew install mac-mouse-fix
+```
+
+```sh
+brew install obsidian slack discord spotify
+```
+
 ### Dotfiles
 
 Clone this repo to the home directory then run:
