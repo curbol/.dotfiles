@@ -26,7 +26,11 @@ scoop install JetBrainsMono-NF-Mono
 ## CLI Tools
 
 ```sh
-scoop install jq cmake fzf ripgrep fd wget zig
+scoop install jq cmake fzf ripgrep fd wget pwsh lazygit
+```
+
+```sh
+scoop install go python nodejs zig
 ```
 
 ## Wezterm Terminal
