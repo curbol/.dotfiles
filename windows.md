@@ -97,7 +97,9 @@ scoop install neovim
 git clone https://github.com/curbol/LazyVim ~/.config/nvim
 ```
 
-## TMUX
+## [WIP] TMUX 
+
+> **WARNING:** This only works for mintty or git-bash. Won't work in Wezterm :(
 
 ```sh
 scoop install msys2
