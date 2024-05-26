@@ -26,7 +26,7 @@ scoop install JetBrainsMono-NF-Mono
 ## CLI Tools
 
 ```sh
-scoop install jq cmake fzf ripgrep fd wget
+scoop install jq cmake fzf ripgrep fd wget zig
 ```
 
 ## Wezterm Terminal
