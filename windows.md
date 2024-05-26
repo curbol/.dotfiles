@@ -61,8 +61,8 @@ Extract the contents into the folder with `git-bash.exe`. The folder should be s
 
 Add zsh (and bash, etc.) to `PATH`
 
-```sh
-setx PATH "$env:PATH;C:\Users\curti\scoop\apps\git-with-openssh\2.45.1.windows.1\usr\bin"
+```txt
+%USERPROFILE%\scoop\apps\git-with-openssh\current\usr\bin
 ```
 
 ### ZSH Addons
@@ -95,4 +95,22 @@ scoop install neovim
 
 ```sh
 git clone https://github.com/curbol/LazyVim ~/.config/nvim
+```
+
+## TMUX
+
+```sh
+scoop install msys2
+```
+
+Add pacman (and other tools) to `PATH`
+
+```txt
+%USERPROFILE%\scoop\apps\msys2\current\usr\bin
+```
+
+> **Note:** This installs `pacman` and some other unilities. A terminal restart is required.
+
+```sh
+pacman -S tmux
 ```
