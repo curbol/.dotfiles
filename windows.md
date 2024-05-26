@@ -47,6 +47,8 @@ scoop install git-with-openssh
 
 ## ZSH Shell
 
+### Install ZSH
+
 [Download](https://packages.msys2.org/package/zsh?repo=msys&variant=x86_64).
 
 > **Note:** The download link should look something like this: `https://mirror.msys2.org/msys/x86_64/zsh-5.9-2-x86_64.pkg.tar.zst`.
@@ -57,6 +59,26 @@ Add zsh (and bash, etc.) to `PATH`
 
 ```sh
 setx PATH "$env:PATH;C:\Users\curti\scoop\apps\git-with-openssh\2.45.1.windows.1\usr\bin"
+```
+
+### ZSH Addons
+
+#### OhMyZsh
+
+```sh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+
+#### Powerlevel10k Prompt
+
+```sh
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+```
+
+#### Zsh-Vi-Mode
+
+```sh
+git clone https://github.com/jeffreytse/zsh-vi-mode ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-vi-mode
 ```
 
 ## Neovim
