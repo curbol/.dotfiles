@@ -10,10 +10,17 @@ local wezterm = require("wezterm")
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
+local target_triple = wezterm.target_triple
+local is_windows = target_triple:find("windows") ~= nil
+
+if is_windows then
+	config.default_prog = { "zsh" }
+end
+
 -- Window
 config.use_fancy_tab_bar = false
 config.enable_tab_bar = false
-config.window_decorations = "RESIZE"
+config.window_decorations = is_windows and "TITLE | RESIZE" or "RESIZE"
 config.window_close_confirmation = "AlwaysPrompt"
 config.window_padding = {
 	left = 0,

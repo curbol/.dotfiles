@@ -7,38 +7,37 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 # ------------------------------------------------------------------------------
 
-# Homebrew
-eval "$(/opt/homebrew/bin/brew shellenv)"
-
-# Powerlevel10k
-# https://github.com/romkatv/powerlevel10k
-source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
-
-# ------------------------------------------------------------------------------
-# Zsh-Vi-Mode
-# https://github.com/jeffreytse/zsh-vi-mode
-source $(brew --prefix)/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-
-# Below code configures zsh-vi-mode to use system clipboard for yank, paste, change, delete
-# https://github.com/jeffreytse/zsh-vi-mode/issues/19
-if [[ $(uname) = "Darwin" ]]; then
-  on_mac_os=0
+is_mac_os=0
+is_windows=0
+is_linux=0
+if [[ "$OSTYPE" = "darwin" ]]; then
+  is_mac_os=1
+elif [[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
+  is_windows=1
 else
-  on_mac_os=1
+  is_linux=1
 fi
 
-cbread() {
-  if [[ $on_mac_os -eq 0 ]]; then
-    pbcopy
-  else
+# Homebrew
+if [[ $is_mac_os -eq 1 ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+# ------------------------------------------------------------------------------
+# Below code configures zsh-vi-mode to use system clipboard for yank, paste, change, delete
+# https://github.com/jeffreytse/zsh-vi-mode/issues/19
+cbyank() {
+  if [[ $is_mac_os -eq 1 ]]; then
     xclip -selection primary -i -f | xclip -selection secondary -i -f | xclip -selection clipboard -i
+  elif [[ $is_windows -eq 1 ]]; then
+    clip
+  else
+    pbcopy
   fi
 }
 
-cbprint() {
-  if [[ $on_mac_os -eq 0 ]]; then
-    pbpaste
-  else
+cbpaste() {
+  if [[ $is_mac_os -eq 1 ]]; then
     if   x=$(xclip -o -selection clipboard 2> /dev/null); then
       echo -n $x
     elif x=$(xclip -o -selection primary   2> /dev/null); then
@@ -46,39 +45,43 @@ cbprint() {
     elif x=$(xclip -o -selection secondary 2> /dev/null); then
       echo -n $x
     fi
+  elif [[ $is_windows -eq 1 ]]; then
+    powershell.exe Get-Clipboard | tr -d '\r'
+  else
+    pbpaste
   fi
 }
 
 my_zvm_vi_yank() {
   zvm_vi_yank
-  echo -en "${CUTBUFFER}" | cbread
+  echo -en "${CUTBUFFER}" | cbyank
 }
 
 my_zvm_vi_delete() {
   zvm_vi_delete
-  echo -en "${CUTBUFFER}" | cbread
+  echo -en "${CUTBUFFER}" | cbyank
 }
 
 my_zvm_vi_change() {
   zvm_vi_change
-  echo -en "${CUTBUFFER}" | cbread
+  echo -en "${CUTBUFFER}" | cbyank
 }
 
 my_zvm_vi_change_eol() {
   zvm_vi_change_eol
-  echo -en "${CUTBUFFER}" | cbread
+  echo -en "${CUTBUFFER}" | cbyank
 }
 
 my_zvm_vi_put_after() {
-  CUTBUFFER=$(cbprint)
+  CUTBUFFER=$(cbpaste)
   zvm_vi_put_after
-  zvm_highlight clear # zvm_vi_put_after introduces weird highlighting for me
+  zvm_highlight clear # zvm_vi_put_after introduces weird highlighting
 }
 
 my_zvm_vi_put_before() {
-  CUTBUFFER=$(cbprint)
+  CUTBUFFER=$(cbpaste)
   zvm_vi_put_before
-  zvm_highlight clear # zvm_vi_put_before introduces weird highlighting for me
+  zvm_highlight clear # zvm_vi_put_before introduces weird highlighting
 }
 
 zvm_after_lazy_keybindings() {
@@ -165,7 +168,7 @@ tm() {
 # oh-my-zsh
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-# ZSH_THEME="powerlevel10k/powerlevel10k"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Uncomment the following line to disable auto-setting terminal title.
 # DISABLE_AUTO_TITLE="true"
@@ -186,7 +189,9 @@ export ZSH="$HOME/.oh-my-zsh"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git git-auto-fetch jump)
+plugins=(jump)
+# Custom plugins:
+plugins+=(zsh-vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
