@@ -10,5 +10,5 @@
 Clone this repo to the home directory then run:
 
 ```sh
-zsh ~/.dotfiles/setup.zsh
+sh ~/.dotfiles/setup.sh
 ```
