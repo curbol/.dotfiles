@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 # Declare a simple array with the paths of dotfiles relative to the dotfiles directory
 dotfiles=(
@@ -34,7 +34,7 @@ create_symlink() {
 dotfiles_dir=$(cd "$(dirname "$0")" && pwd)
 
 # Iterate over the dotfiles array
-for file in $dotfiles; do
+for file in "${dotfiles[@]}"; do
   src="$dotfiles_dir/$file"
   dest="$HOME/$file"
   
