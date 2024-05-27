@@ -29,7 +29,11 @@ create_symlink() {
 
 	# Create the symlink
 	echo "Creating symlink: $dest -> $src"
-	ln -s "$src" "$dest"
+	if [[ $is_windows -eq 1 ]]; then
+		cmd //c mklink "$dest" "$src"
+	else
+		ln -s "$src" "$dest"
+	fi
 }
 
 # Directory containing your dotfiles
