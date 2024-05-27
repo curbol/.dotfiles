@@ -13,6 +13,12 @@ The `extras` bucket is needed for some things like wezterm, git-with-openssh, et
 scoop bucket add extras
 ```
 
+## Apps
+
+```sh
+scoop install obsidian slack discord spotify
+```
+
 ## Nerd Font
 
 ```sh
@@ -26,14 +32,14 @@ scoop install JetBrainsMono-NF-Mono
 ## CLI Tools
 
 ```sh
-scoop install jq cmake fzf ripgrep fd wget pwsh lazygit
+scoop install jq cmake fzf ripgrep fd wget pwsh lazygit luarocks
 ```
 
 ```sh
 scoop install go python nodejs zig
 ```
 
-## Wezterm Terminal
+## Terminal
 
 [Download](https://wezfurlong.org/wezterm/install/windows.html#installing-on-windows)
 
@@ -97,7 +103,7 @@ scoop install neovim
 git clone https://github.com/curbol/LazyVim ~/.config/nvim
 ```
 
-## [WIP] TMUX 
+## [WIP] TMUX
 
 > **WARNING:** This only works for mintty or git-bash. Won't work in Wezterm :(
 
