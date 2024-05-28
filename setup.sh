@@ -2,7 +2,6 @@
 
 source $HOME/.dotfiles/ostype.sh
 
-# Declare a simple array with the paths of dotfiles relative to the dotfiles directory
 dotfiles=(
 	".config/aerospace/aerospace.toml"
 	".config/tmux/tmux.conf"
@@ -36,12 +35,8 @@ create_symlink() {
 	fi
 }
 
-# Directory containing your dotfiles
-dotfiles_dir=$(cd "$(dirname "$0")" && pwd)
-
-# Iterate over the dotfiles array
 for file in "${dotfiles[@]}"; do
-	src="$dotfiles_dir/$file"
+	src="$HOME/.dotfiles/$file"
 	dest="$HOME/$file"
 
 	create_symlink "$src" "$dest"
