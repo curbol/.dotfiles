@@ -1,7 +1,9 @@
 #!/bin/bash
 
+# Source the OS detection script
 source $HOME/.dotfiles/ostype.sh
 
+# Declare a simple array with the paths of dotfiles relative to the dotfiles directory
 dotfiles=(
 	".config/aerospace/aerospace.toml"
 	".config/tmux/tmux.conf"
@@ -29,17 +31,27 @@ create_symlink() {
 	# Create the symlink
 	echo "Creating symlink: $dest -> $src"
 	if [[ $is_windows -eq 1 ]]; then
-		cmd //c mklink "$dest" "$src"
+		# Use mklink for Windows
+		if [[ -d "$src" ]]; then
+			cmd //c "mklink /D $(cygpath -w "$dest") $(cygpath -w "$src")"
+		else
+			cmd //c "mklink $(cygpath -w "$dest") $(cygpath -w "$src")"
+		fi
 	else
 		ln -s "$src" "$dest"
 	fi
 }
 
+# Directory containing your dotfiles
+dotfiles_dir=$(cd "$(dirname "$0")" && pwd)
+
+# Iterate over the dotfiles array
 for file in "${dotfiles[@]}"; do
-	src="$HOME/.dotfiles/$file"
+	src="$dotfiles_dir/$file"
 	dest="$HOME/$file"
 
 	create_symlink "$src" "$dest"
 done
 
 echo "Dotfiles have been symlinked!"
+
