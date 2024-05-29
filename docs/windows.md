@@ -49,15 +49,17 @@ OR
 scoop install wezterm
 ```
 
-## Bash Shell
+## ZSH
+
+### Bash Shell
 
 ```sh
 scoop install git-with-openssh
 ```
 
-## ZSH Shell
+### ZSH Shell
 
-### Install ZSH
+#### Install ZSH
 
 [Download](https://packages.msys2.org/package/zsh?repo=msys&variant=x86_64).
 
@@ -103,9 +105,9 @@ scoop install neovim
 git clone https://github.com/curbol/LazyVim ~/.config/nvim
 ```
 
-## [WIP] TMUX
+## TMUX \[Not Working\]
 
-> **WARNING:** This only works for mintty or git-bash. Won't work in Wezterm :(
+> **WARNING:** This only works for mintty or git-bash. Not working in Wezterm :(
 
 ```sh
 scoop install msys2
@@ -122,3 +124,4 @@ Add pacman (and other tools) to `PATH`
 ```sh
 pacman -S tmux
 ```
+

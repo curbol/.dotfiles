@@ -9,7 +9,7 @@ dotfiles=(
 	".config/tmux/tmux.conf"
 	".config/tmux-powerline"
 	".config/wezterm/wezterm.lua"
-	".gitconfig"
+	# ".gitconfig"
 	".ideavimrc"
 	".vimrc"
 	".zshrc"
@@ -54,4 +54,3 @@ for file in "${dotfiles[@]}"; do
 done
 
 echo "Dotfiles have been symlinked!"
-

@@ -55,7 +55,7 @@ brew install wezterm
 
 ## ZSH
 
-(Zsh is the default on macOS)
+(ZSH is the default shell on macOS)
 
 ### ZSH Addons
 
@@ -81,7 +81,9 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$
 
 ## Neovim
 
-Clone repo:
+```sh
+brew install neovim
+```
 
 ```sh
 git clone https://github.com/curbol/LazyVimStarter ~/.config/nvim
