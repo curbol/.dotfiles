@@ -3,16 +3,20 @@
 # Source the OS detection script
 source $HOME/.dotfiles/ostype.sh
 
-# Declare a simple array with the paths of dotfiles relative to the dotfiles directory
-dotfiles=(
+# Paths of dotfiles to symlink relative to the dotfiles directory
+linkfiles=(
 	".config/aerospace/aerospace.toml"
 	".config/tmux/tmux.conf"
 	".config/tmux-powerline"
 	".config/wezterm/wezterm.lua"
-	# ".gitconfig"
 	".ideavimrc"
 	".vimrc"
 	".zshrc"
+)
+
+# Paths of dotfiles to copy relative to the dotfiles directory
+copyfiles=(
+	".gitconfig"
 )
 
 create_symlink() {
@@ -42,15 +46,41 @@ create_symlink() {
 	fi
 }
 
+copy_file() {
+	local src=$1
+	local dest=$2
+
+	# Create the parent directory of the destination if it doesn't exist
+	mkdir -p "$(dirname "$dest")"
+
+	# Remove the destination file if it already exists
+	if [[ -e "$dest" ]]; then
+		echo "Removing existing file: $dest"
+		rm -rf "$dest"
+	fi
+
+	# Copy the file
+	echo "Copying file: $src -> $dest"
+	cp -r "$src" "$dest"
+}
+
 # Directory containing your dotfiles
 dotfiles_dir=$(cd "$(dirname "$0")" && pwd)
 
-# Iterate over the dotfiles array
-for file in "${dotfiles[@]}"; do
+# Iterate over the linkfiles array and create symlinks
+for file in "${linkfiles[@]}"; do
 	src="$dotfiles_dir/$file"
 	dest="$HOME/$file"
 
 	create_symlink "$src" "$dest"
 done
 
-echo "Dotfiles have been symlinked!"
+# Iterate over the copyfiles array and copy files
+for file in "${copyfiles[@]}"; do
+	src="$dotfiles_dir/$file"
+	dest="$HOME/$file"
+
+	copy_file "$src" "$dest"
+done
+
+echo "Dotfiles have been processed!"
