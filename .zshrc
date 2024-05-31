@@ -7,7 +7,8 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 # ------------------------------------------------------------------------------
 
-source $HOME/.dotfiles/ostype.sh
+source $HOME/.dotfiles/scripts/ostype.sh
+source $HOME/.dotfiles/scripts/jump.sh
 
 # Homebrew
 if [[ $is_mac_os -eq 1 ]]; then
@@ -180,9 +181,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(jump)
-# Custom plugins:
-plugins+=(zsh-vi-mode)
+plugins=(zsh-vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
