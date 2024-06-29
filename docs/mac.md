@@ -124,5 +124,5 @@ brew install tmux
 ```
 
 ```sh
-brew install tpm
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ```
