@@ -114,7 +114,7 @@ brew install neovim
 ```
 
 ```sh
-git clone https://github.com/curbol/LazyVimStarter ~/.config/nvim
+git clone https://github.com/curbol/LazyVim ~/.config/nvim
 ```
 
 ## Tmux
