@@ -126,3 +126,9 @@ brew install tmux
 ```sh
 git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
 ```
+
+If needed, the config can be sourced like this:
+
+```sh
+tmux source ~/.config/tmux/tmux.conf
+```
