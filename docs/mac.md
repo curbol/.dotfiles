@@ -53,6 +53,34 @@ brew install go python nodejs zig
 brew install wezterm
 ```
 
+## SSH
+
+Generate ssh key:
+
+```sh
+ssh-keygen -t ed25519 -C "curtis.bollinger@gmail.com"
+```
+
+Add ssh private key to ssh agent:
+
+```sh
+ssh-add ~/.ssh/id_ed25519
+```
+
+Copy ssh public key to clipboard:
+
+```sh
+pbcopy < ~/.ssh/id_ed25519.pub
+```
+
+Add the copied ssh key in GitHub under Settings > SSH and GPG keys.
+
+Test connection:
+
+```sh
+ssh -T git@github.com
+```
+
 ## ZSH
 
 (ZSH is the default shell on macOS)
