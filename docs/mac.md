@@ -1,5 +1,25 @@
 # MacOS
 
+<!--toc:start-->
+- [MacOS](#macos)
+  - [Homebrew](#homebrew)
+  - [Apps](#apps)
+  - [AeroSpace](#aerospace)
+  - [Nerd Font](#nerd-font)
+  - [CLI Tools](#cli-tools)
+  - [Terminal](#terminal)
+  - [SSH](#ssh)
+  - [GPG](#gpg)
+    - [GPG Config](#gpg-config)
+  - [ZSH](#zsh)
+    - [ZSH Addons](#zsh-addons)
+      - [OhMyZsh](#ohmyzsh)
+      - [Zsh-Vi-Mode](#zsh-vi-mode)
+      - [Powerlevel10k Prompt](#powerlevel10k-prompt)
+  - [Neovim](#neovim)
+  - [Tmux](#tmux)
+<!--toc:end-->
+
 ## Homebrew
 
 ```sh
@@ -17,6 +37,8 @@ brew install obsidian slack discord spotify
 ```
 
 ## AeroSpace
+
+> TODO: Find something better
 
 ```sh
 brew install --cask nikitabobko/tap/aerospace
@@ -79,6 +101,73 @@ Test connection:
 
 ```sh
 ssh -T git@github.com
+```
+
+## GPG
+
+```sh
+brew install gnupg pinentry-mac
+```
+
+```sh
+gpg --full-generate-key
+```
+
+Choose defaults
+
+```sh
+gpg --list-secret-keys --keyid-format LONG
+```
+
+Copy the GPG key ID from the output. It will look something like pub ed25519/XXXXXXXXXXXXXXXX
+
+Add the key ID to `~/.gitconfig`:
+
+```sh
+git config --global user.signingkey XXXXXXXXXXXXXXXX
+```
+
+Print the public key:
+
+```sh
+gpg --armor --export XXXXXXXXXXXXXXXX
+```
+
+Copy the entire output (including -----BEGIN PGP PUBLIC KEY BLOCK----- and -----END PGP PUBLIC KEY BLOCK-----).
+
+Add the public key to GitHub under Settings > SSH and GPG keys.
+
+### GPG Config
+
+```sh
+mkdir ~/.gnupg
+```
+
+Set the correct permissions for `~/.gnupg` and its contents:
+
+```sh
+chmod 700 ~/.gnupg
+chmod 600 ~/.gnupg/*
+```
+
+```sh
+cat <<EOL >> ~/.gnupg/gpg-agent.conf
+default-cache-ttl 600
+max-cache-ttl 7200
+pinentry-program /usr/local/bin/pinentry-mac
+EOL
+```
+
+```sh
+cat <<EOL >> ~/.gnupg/gpg.conf
+use-agent
+EOL
+```
+
+Reload the gpg-agent:
+
+```sh
+gpgconf --kill gpg-agent
 ```
 
 ## ZSH

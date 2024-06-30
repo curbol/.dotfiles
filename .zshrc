@@ -11,7 +11,10 @@ source $HOME/.dotfiles/scripts/ostype.sh
 source $HOME/.dotfiles/scripts/jump.sh
 
 # Homebrew
-if [[ $is_mac_os -eq 1 ]]; then
+if [[ $is_mac_intel -eq 1 ]]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
+if [[ $is_mac_arm -eq 1 ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
