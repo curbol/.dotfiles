@@ -75,7 +75,7 @@ brew install jq cmake fzf ripgrep fd wget lazygit luarocks
 ```
 
 ```sh
-brew install go python nodejs zig
+brew install go python nodejs zig ruby
 ```
 
 ## Terminal
