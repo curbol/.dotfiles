@@ -2,6 +2,7 @@
 
 <!--toc:start-->
 - [MacOS](#macos)
+  - [General](#general)
   - [Homebrew](#homebrew)
   - [Apps](#apps)
   - [AeroSpace](#aerospace)
@@ -19,6 +20,14 @@
   - [Neovim](#neovim)
   - [Tmux](#tmux)
 <!--toc:end-->
+
+## General
+
+Turn off mouse acceleration:
+
+```sh
+defaults write .GlobalPreferences com.apple.mouse.scaling -1
+```
 
 ## Homebrew
 
