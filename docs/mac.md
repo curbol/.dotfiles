@@ -1,6 +1,7 @@
 # MacOS
 
 <!--toc:start-->
+
 - [MacOS](#macos)
   - [General](#general)
   - [Homebrew](#homebrew)
@@ -19,7 +20,7 @@
       - [Powerlevel10k Prompt](#powerlevel10k-prompt)
   - [Neovim](#neovim)
   - [Tmux](#tmux)
-<!--toc:end-->
+  <!--toc:end-->
 
 ## General
 
@@ -71,7 +72,11 @@ brew install font-jetbrains-mono-nerd-font
 ## CLI Tools
 
 ```sh
-brew install jq cmake fzf ripgrep fd wget lazygit luarocks
+brew install jq cmake fzf ripgrep fd wget lazygit luarocks markdown-toc prettier
+```
+
+```sh
+npm i -g neovim terraform-fmt
 ```
 
 ```sh
