@@ -68,7 +68,7 @@ brew install font-jetbrains-mono-nerd-font
 ## CLI Tools
 
 ```sh
-brew install tmux jq cmake fzf ripgrep fd wget lazygit luarocks markdown-toc prettier
+brew install jq cmake fzf ripgrep fd wget lazygit luarocks markdown-toc prettier
 ```
 
 ```sh
@@ -209,16 +209,6 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$
 
 > **Prompt Style:** Lean, Unicode, 8 colors, No time, Two lines, Disconnected, No frame, Sparse, Few icons, Concise, Yes transient, Verbose
 
-## Neovim
-
-```sh
-brew install neovim
-```
-
-```sh
-git clone https://github.com/curbol/LazyVim ~/.config/nvim
-```
-
 ## Tmux
 
 ```sh
@@ -233,4 +223,14 @@ If needed, the config can be sourced like this:
 
 ```sh
 tmux source ~/.config/tmux/tmux.conf
+```
+
+## Neovim
+
+```sh
+brew install neovim
+```
+
+```sh
+git clone https://github.com/curbol/LazyVim ~/.config/nvim
 ```
