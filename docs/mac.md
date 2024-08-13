@@ -62,10 +62,6 @@ brew install borders
 ## Nerd Font
 
 ```sh
-brew tap homebrew/cask-fonts
-```
-
-```sh
 brew install font-jetbrains-mono-nerd-font
 ```
 
