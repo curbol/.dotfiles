@@ -72,7 +72,7 @@ brew install jq cmake fzf ripgrep fd wget lazygit luarocks markdown-toc prettier
 ```
 
 ```sh
-npm i -g neovim terraform-fmt
+npm i -g terraform-fmt
 ```
 
 ```sh
@@ -157,6 +157,9 @@ Set the correct permissions for `~/.gnupg` and its contents:
 
 ```sh
 chmod 700 ~/.gnupg
+```
+
+```sh
 chmod 600 ~/.gnupg/*
 ```
 
