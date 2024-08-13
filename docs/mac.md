@@ -68,7 +68,7 @@ brew install font-jetbrains-mono-nerd-font
 ## CLI Tools
 
 ```sh
-brew install jq cmake fzf ripgrep fd wget lazygit luarocks markdown-toc prettier
+brew install tmux jq cmake fzf ripgrep fd wget lazygit luarocks markdown-toc prettier
 ```
 
 ```sh
