@@ -171,7 +171,9 @@ chmod 600 ~/.gnupg/*
 cat <<EOL >> ~/.gnupg/gpg-agent.conf
 default-cache-ttl 600
 max-cache-ttl 7200
-pinentry-program /usr/local/bin/pinentry-mac
+pinentry-program /opt/homebrew/bin/pinentry-mac
+# Use below instead for intel mac
+# pinentry-program /usr/local/bin/pinentry-mac 
 EOL
 ```
 
@@ -184,7 +186,8 @@ EOL
 Reload the gpg-agent:
 
 ```sh
-gpgconf --kill gpg-agent
+gpgconf --kill gpg-agent && \
+gpgconf --launch gpg-agent
 ```
 
 ## ZSH
