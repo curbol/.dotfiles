@@ -72,11 +72,15 @@ brew install jq cmake fzf ripgrep fd wget lazygit luarocks markdown-toc prettier
 ```
 
 ```sh
-npm i -g terraform-fmt
+brew install kubectl
 ```
 
 ```sh
 brew install go python nodejs zig
+```
+
+```sh
+npm i -g terraform-fmt
 ```
 
 ## Terminal
