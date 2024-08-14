@@ -219,7 +219,7 @@ brew install tmux
 git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
 ```
 
-In tmux, do <prefix>, <shift>-I to install plugins. The prefix should be <ctrl>-a (default is <ctrl>-b)
+In tmux, do `prefix` then `shift`-I to install plugins. The prefix should be `ctrl`-a (default is `ctrl`-b)
 
 If needed, the config can be sourced like this:
 
