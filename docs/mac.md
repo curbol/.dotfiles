@@ -123,34 +123,6 @@ ssh -T git@github.com
 brew install gnupg pinentry-mac
 ```
 
-```sh
-gpg --full-generate-key
-```
-
-Choose defaults
-
-```sh
-gpg --list-secret-keys --keyid-format LONG
-```
-
-Copy the GPG key ID from the output. It will look something like pub ed25519/XXXXXXXXXXXXXXXX
-
-Add the key ID to `~/.gitconfig`:
-
-```sh
-git config --global user.signingkey XXXXXXXXXXXXXXXX
-```
-
-Print the public key:
-
-```sh
-gpg --armor --export XXXXXXXXXXXXXXXX
-```
-
-Copy the entire output (including -----BEGIN PGP PUBLIC KEY BLOCK----- and -----END PGP PUBLIC KEY BLOCK-----).
-
-Add the public key to GitHub under Settings > SSH and GPG keys.
-
 ### GPG Config
 
 ```sh
@@ -191,6 +163,36 @@ Reload the gpg-agent:
 gpgconf --kill gpg-agent && \
 gpgconf --launch gpg-agent
 ```
+
+### Generate and Save GPG Key
+
+```sh
+gpg --full-generate-key
+```
+
+Choose defaults
+
+```sh
+gpg --list-secret-keys --keyid-format LONG
+```
+
+Copy the GPG key ID from the output. It will look something like pub ed25519/XXXXXXXXXXXXXXXX
+
+Add the key ID to `~/.gitconfig`:
+
+```sh
+git config --global user.signingkey XXXXXXXXXXXXXXXX
+```
+
+Print the public key:
+
+```sh
+gpg --armor --export XXXXXXXXXXXXXXXX
+```
+
+Copy the entire output (including -----BEGIN PGP PUBLIC KEY BLOCK----- and -----END PGP PUBLIC KEY BLOCK-----).
+
+Add the public key to GitHub under Settings > SSH and GPG keys.
 
 ## ZSH
 
