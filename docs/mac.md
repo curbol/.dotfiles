@@ -157,15 +157,13 @@ Add the public key to GitHub under Settings > SSH and GPG keys.
 mkdir ~/.gnupg
 ```
 
-Set the correct permissions for `~/.gnupg` and its contents:
+Set the correct permissions for `~/.gnupg`:
 
 ```sh
 chmod 700 ~/.gnupg
 ```
 
-```sh
-chmod 600 ~/.gnupg/*
-```
+Fill in config files
 
 ```sh
 cat <<EOL >> ~/.gnupg/gpg-agent.conf
@@ -181,6 +179,10 @@ EOL
 cat <<EOL >> ~/.gnupg/gpg.conf
 use-agent
 EOL
+```
+
+```sh
+chmod 600 ~/.gnupg/*
 ```
 
 Reload the gpg-agent:
