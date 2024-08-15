@@ -7,7 +7,7 @@
 # marks: lists all marks
 #
 
-source $HOME/.dotfiles/scripts/ostype.sh
+source "$HOME/.dotfiles/scripts/ostype.sh"
 
 if [[ $is_windows -eq 1 ]]; then
 	export MARKPATH="$HOMEPATH/.marks"

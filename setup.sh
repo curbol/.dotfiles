@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Source the OS detection script
-source $HOME/.dotfiles/scripts/ostype.sh
+source "$HOME/.dotfiles/scripts/ostype.sh"
 
 # Paths of dotfiles to symlink relative to the dotfiles directory
 linkfiles=(
