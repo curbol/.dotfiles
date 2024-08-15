@@ -72,7 +72,7 @@ brew install jq cmake fzf ripgrep fd wget lazygit luarocks markdown-toc prettier
 ```
 
 ```sh
-brew install kubectl
+brew install kubectl awscli automake
 ```
 
 ```sh
@@ -193,6 +193,14 @@ gpg --armor --export XXXXXXXXXXXXXXXX
 Copy the entire output (including -----BEGIN PGP PUBLIC KEY BLOCK----- and -----END PGP PUBLIC KEY BLOCK-----).
 
 Add the public key to GitHub under Settings > SSH and GPG keys.
+
+## Dotfiles
+
+Clone this repo to the home directory then run:
+
+```sh
+sh ~/.dotfiles/setup.sh
+```
 
 ## ZSH
 
