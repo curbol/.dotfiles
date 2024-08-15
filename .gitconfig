@@ -3,9 +3,10 @@
 [user]
 	name = curbol
 	email = curtis.bollinger@gmail.com
-	signingkey = 7126CEFC29A0A439
+	signingkey = XXXXXXXXXXXXXXXX
 [core]
 	editor = nvim --wait
+  excludesfile = ~/.gitignore 
 [commit]
 	gpgsign = true
 [pull]
