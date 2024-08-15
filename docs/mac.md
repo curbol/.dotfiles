@@ -72,11 +72,15 @@ brew install jq cmake fzf ripgrep fd wget lazygit luarocks markdown-toc prettier
 ```
 
 ```sh
-npm i -g terraform-fmt
+brew install kubectl
 ```
 
 ```sh
 brew install go python nodejs zig
+```
+
+```sh
+npm i -g terraform-fmt
 ```
 
 ## Terminal
@@ -119,6 +123,49 @@ ssh -T git@github.com
 brew install gnupg pinentry-mac
 ```
 
+### GPG Config
+
+```sh
+mkdir ~/.gnupg
+```
+
+Set the correct permissions for `~/.gnupg`:
+
+```sh
+chmod 700 ~/.gnupg
+```
+
+Fill in config files
+
+```sh
+cat <<EOL >> ~/.gnupg/gpg-agent.conf
+default-cache-ttl 600
+max-cache-ttl 7200
+pinentry-program /opt/homebrew/bin/pinentry-mac
+# Use below instead for intel mac
+# pinentry-program /usr/local/bin/pinentry-mac 
+EOL
+```
+
+```sh
+cat <<EOL >> ~/.gnupg/gpg.conf
+use-agent
+EOL
+```
+
+```sh
+chmod 600 ~/.gnupg/*
+```
+
+Reload the gpg-agent:
+
+```sh
+gpgconf --kill gpg-agent && \
+gpgconf --launch gpg-agent
+```
+
+### Generate and Save GPG Key
+
 ```sh
 gpg --full-generate-key
 ```
@@ -147,42 +194,6 @@ Copy the entire output (including -----BEGIN PGP PUBLIC KEY BLOCK----- and -----
 
 Add the public key to GitHub under Settings > SSH and GPG keys.
 
-### GPG Config
-
-```sh
-mkdir ~/.gnupg
-```
-
-Set the correct permissions for `~/.gnupg` and its contents:
-
-```sh
-chmod 700 ~/.gnupg
-```
-
-```sh
-chmod 600 ~/.gnupg/*
-```
-
-```sh
-cat <<EOL >> ~/.gnupg/gpg-agent.conf
-default-cache-ttl 600
-max-cache-ttl 7200
-pinentry-program /usr/local/bin/pinentry-mac
-EOL
-```
-
-```sh
-cat <<EOL >> ~/.gnupg/gpg.conf
-use-agent
-EOL
-```
-
-Reload the gpg-agent:
-
-```sh
-gpgconf --kill gpg-agent
-```
-
 ## ZSH
 
 (ZSH is the default shell on macOS)
@@ -209,14 +220,18 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$
 
 > **Prompt Style:** Lean, Unicode, 8 colors, No time, Two lines, Disconnected, No frame, Sparse, Few icons, Concise, Yes transient, Verbose
 
-## Neovim
+#### [zsh-completions](https://github.com/zsh-users/zsh-completions)
+
+Clone the repository inside your oh-my-zsh repo:
 
 ```sh
-brew install neovim
+git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions
 ```
 
+Add it to `FPATH` in your `.zshrc` by adding the following line before `source "$ZSH/oh-my-zsh.sh"`:
+
 ```sh
-git clone https://github.com/curbol/LazyVim ~/.config/nvim
+fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 ```
 
 ## Tmux
@@ -233,4 +248,16 @@ If needed, the config can be sourced like this:
 
 ```sh
 tmux source ~/.config/tmux/tmux.conf
+```
+
+In tmux, do `prefix` then `shift`-I to install plugins. The prefix should be `ctrl`-a (default is `ctrl`-b)
+
+## Neovim
+
+```sh
+brew install neovim
+```
+
+```sh
+git clone https://github.com/curbol/LazyVim ~/.config/nvim
 ```
