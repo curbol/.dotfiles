@@ -228,7 +228,7 @@ Clone the repository inside your oh-my-zsh repo:
 git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions
 ```
 
-Add it to FPATH in your .zshrc by adding the following line before source "$ZSH/oh-my-zsh.sh":
+Add it to `FPATH` in your `.zshrc` by adding the following line before `source "$ZSH/oh-my-zsh.sh"`:
 
 ```sh
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
