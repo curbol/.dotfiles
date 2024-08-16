@@ -111,6 +111,7 @@ alias gotidy='go mod tidy && go mod vendor'
 
 # Gladly stuff
 export GOPRIVATE=github.com/sagansystems,github.com/gladly
+export PATH=$PATH:/opt/pact/bin
 
 # Fuzzy finder: https://github.com/junegunn/fzf
 eval "$(fzf --zsh)"
