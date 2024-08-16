@@ -107,35 +107,10 @@ alias vim='nvim'
 # Go
 export GOPATH=~/go
 export PATH=$PATH:$GOPATH/bin
-
-# andromeda stuff
-export GOPRIVATE=github.com/getnacelle/*
 alias gotidy='go mod tidy && go mod vendor'
-alias gobuild='go build ./...'
-alias gobuilde2e='go build -tags e2e ./...'
 
-# nacelle stuff
-export PATH="$HOME/code/nacelle-dev-tools/bin:$PATH"
-export NPM_TOKEN=
-alias awsdev='export AWS_REGION=us-east-2 && aws-vault exec platform-development -- bash -c "rm -rf ~/.kube/* && aws eks update-kubeconfig --name nacelle-development-shared-infra-cluster --region us-east-2 && zsh"'
-alias awsprod='export AWS_REGION=us-east-2 && aws-vault exec platform-production -- bash -c "rm -rf ~/.kube/* && aws eks update-kubeconfig --name nacelle-production-shared-infra-cluster --region us-east-2 && zsh"'
-alias awsprodwest='export AWS_REGION=us-west-1 && aws-vault exec platform-production-west -- bash -c "rm -rf ~/.kube/* && aws eks update-kubeconfig --name nacelle-production-west-shared-infra-cluster --region us-west-1 && zsh"'
-alias awsprod-legacy='export AWS_REGION=us-east-1 && aws-vault exec nacelle-master --no-session --duration=1h -- zsh'
-alias kdilithium='kubectl -n dilithium'
-alias khailfrequency='kubectl -n hail-frequency'
-alias kadmin='kubectl -n admin'
-alias kshopifyconnector='kubectl -n shopify-connector'
-alias kcontentfulconnector='kubectl -n contentful-connector'
-alias knativedata='kubectl -n native-data'
-alias ksanityconnector='kubectl -n sanity-connector'
-alias kpreviewdata='kubectl -n preview-data'
-alias ktricorder='kubectl -n tricorder'
-alias ksalesforce='kubectl -n salesforce-connector'
-alias kcomlink='kubectl -n comlink'
-alias knoms='kubectl -n noms'
-alias kschema='kubectl -n schema'
-alias kprogresstracking='kubectl -n progress-tracking'
-alias kgenesis='kubectl -n genesis'
+# Gladly stuff
+export GOPRIVATE=github.com/sagansystems,github.com/gladly
 
 # Fuzzy finder: https://github.com/junegunn/fzf
 eval "$(fzf --zsh)"
