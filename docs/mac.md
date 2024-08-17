@@ -68,7 +68,7 @@ brew install font-jetbrains-mono-nerd-font
 ## CLI Tools
 
 ```sh
-brew install jq cmake fzf ripgrep fd wget lazygit luarocks markdown-toc prettier
+brew install xclip jq cmake fzf ripgrep fd wget lazygit luarocks markdown-toc prettier
 ```
 
 ```sh
@@ -143,7 +143,7 @@ default-cache-ttl 600
 max-cache-ttl 7200
 pinentry-program /opt/homebrew/bin/pinentry-mac
 # Use below instead for intel mac
-# pinentry-program /usr/local/bin/pinentry-mac 
+# pinentry-program /usr/local/bin/pinentry-mac
 EOL
 ```
 

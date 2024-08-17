@@ -110,13 +110,8 @@ export PATH=$PATH:$GOPATH/bin
 alias gotidy='go mod tidy && go mod vendor'
 
 # Python
-if [[ ! -d "venv" ]]; then
-  # create a new virtual environment
-  python3 -m venv venv
-fi
-source venv/bin/activate 
-alias python='python3'
-alias pip='pip3'
+# brew install pyenv
+export PATH="$HOME/.pyenv/shims:$PATH"
 
 # Gladly stuff
 export GOPRIVATE=github.com/sagansystems,github.com/gladly
