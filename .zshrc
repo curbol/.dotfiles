@@ -109,9 +109,22 @@ export GOPATH=~/go
 export PATH=$PATH:$GOPATH/bin
 alias gotidy='go mod tidy && go mod vendor'
 
+# Python
+if [[ ! -d "venv" ]]; then
+  # create a new virtual environment
+  python3 -m venv venv
+fi
+source venv/bin/activate 
+alias python='python3'
+alias pip='pip3'
+
 # Gladly stuff
 export GOPRIVATE=github.com/sagansystems,github.com/gladly
+export BUILD_HARNESS_PATH=$HOME/code/build-harness
+export DOCKER_COMPOSE_PATH=$HOME/code/docker-compose
 export PATH=$PATH:/opt/pact/bin
+export PACT_PROVIDER_VERSION=dev_laptop
+export PACT_DISABLE_SSL_VERIFICATION=true
 
 # Fuzzy finder: https://github.com/junegunn/fzf
 eval "$(fzf --zsh)"
