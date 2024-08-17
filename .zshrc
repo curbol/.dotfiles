@@ -23,16 +23,20 @@ fi
 # https://github.com/jeffreytse/zsh-vi-mode/issues/19
 cbyank() {
   if [[ $is_mac_os -eq 1 ]]; then
-    xclip -selection primary -i -f | xclip -selection secondary -i -f | xclip -selection clipboard -i
+    pbcopy
   elif [[ $is_windows -eq 1 ]]; then
     clip
   else
-    pbcopy
+    xclip -selection primary -i -f | xclip -selection secondary -i -f | xclip -selection clipboard -i
   fi
 }
 
 cbpaste() {
   if [[ $is_mac_os -eq 1 ]]; then
+    pbpaste
+  elif [[ $is_windows -eq 1 ]]; then
+    powershell.exe Get-Clipboard | tr -d '\r'
+  else
     if   x=$(xclip -o -selection clipboard 2> /dev/null); then
       echo -n $x
     elif x=$(xclip -o -selection primary   2> /dev/null); then
@@ -40,10 +44,6 @@ cbpaste() {
     elif x=$(xclip -o -selection secondary 2> /dev/null); then
       echo -n $x
     fi
-  elif [[ $is_windows -eq 1 ]]; then
-    powershell.exe Get-Clipboard | tr -d '\r'
-  else
-    pbpaste
   fi
 }
 
