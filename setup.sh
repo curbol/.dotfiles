@@ -5,7 +5,6 @@ source "$HOME/.dotfiles/scripts/ostype.sh"
 
 # Paths of dotfiles to symlink relative to the dotfiles directory
 linkfiles=(
-  ".config/aerospace/aerospace.toml"
   ".config/tmux/tmux.conf"
   ".config/tmux-powerline"
   ".config/wezterm/wezterm.lua"

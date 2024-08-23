@@ -1,27 +1,5 @@
 # MacOS
 
-<!--toc:start-->
-
-- [MacOS](#macos)
-  - [General](#general)
-  - [Homebrew](#homebrew)
-  - [Apps](#apps)
-  - [AeroSpace](#aerospace)
-  - [Nerd Font](#nerd-font)
-  - [CLI Tools](#cli-tools)
-  - [Terminal](#terminal)
-  - [SSH](#ssh)
-  - [GPG](#gpg)
-    - [GPG Config](#gpg-config)
-  - [ZSH](#zsh)
-    - [ZSH Addons](#zsh-addons)
-      - [OhMyZsh](#ohmyzsh)
-      - [Zsh-Vi-Mode](#zsh-vi-mode)
-      - [Powerlevel10k Prompt](#powerlevel10k-prompt)
-  - [Neovim](#neovim)
-  - [Tmux](#tmux)
-  <!--toc:end-->
-
 ## General
 
 Turn off mouse acceleration:
@@ -46,17 +24,10 @@ brew install mac-mouse-fix
 brew install obsidian slack discord spotify
 ```
 
-## AeroSpace
-
-> TODO: Find something better
+## Rectangle
 
 ```sh
-brew install --cask nikitabobko/tap/aerospace
-```
-
-```sh
-brew tap FelixKratz/formulae
-brew install borders
+brew install rectangle
 ```
 
 ## Nerd Font
