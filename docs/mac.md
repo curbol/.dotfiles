@@ -43,7 +43,7 @@ brew install xclip jq cmake fzf ripgrep fd wget lazygit luarocks markdown-toc pr
 ```
 
 ```sh
-brew install kubectl awscli automake
+brew install psql kubectl awscli automake
 ```
 
 ```sh
