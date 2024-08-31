@@ -120,6 +120,9 @@ export DOCKER_COMPOSE_PATH=$HOME/code/docker-compose
 export PATH=$PATH:/opt/pact/bin
 export PACT_PROVIDER_VERSION=dev_laptop
 export PACT_DISABLE_SSL_VERIFICATION=true
+alias auth-local='saganadmin localhost:8001'
+alias auth-master='saganadmin https://us-master.gladly.qa'
+alias auth-staging='saganadmin https://us-staging.gladly.qa'
 
 # Fuzzy finder: https://github.com/junegunn/fzf
 eval "$(fzf --zsh)"
