@@ -21,7 +21,7 @@ brew install trailer mac-mouse-fix
 ```
 
 ```sh
-brew install obsidian slack discord spotify
+brew install obsidian slack discord spotify licecap
 ```
 
 ## Rectangle
