@@ -17,7 +17,7 @@ defaults write .GlobalPreferences com.apple.mouse.scaling -1
 ## Apps
 
 ```sh
-brew install mac-mouse-fix
+brew install trailer mac-mouse-fix
 ```
 
 ```sh
