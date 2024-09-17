@@ -43,11 +43,11 @@ brew install xclip jq cmake fzf ripgrep fd wget lazygit luarocks markdown-toc pr
 ```
 
 ```sh
-brew install postgresql kubectl awscli automake
+brew install gh postgresql kubectl awscli automake
 ```
 
 ```sh
-brew install go python nodejs zig
+brew install go python pyenv nodejs zig
 ```
 
 ```sh
