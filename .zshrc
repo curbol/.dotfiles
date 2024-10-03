@@ -18,6 +18,12 @@ if [[ $is_mac_arm -eq 1 ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
+# Autocomplete
+# example: appcfg completion zsh > ~/.zsh/completions/_appcfg
+autoload -U compinit; compinit
+mkdir -p ~/.zsh/completions
+fpath+=(~/.zsh/completions)
+
 # ------------------------------------------------------------------------------
 # Below code configures zsh-vi-mode to use system clipboard for yank, paste, change, delete
 # https://github.com/jeffreytse/zsh-vi-mode/issues/19
@@ -143,6 +149,7 @@ alias auth-staging='saganadmin https://us-staging.gladly.qa'
 alias gladmin-local='docker run -it --rm --name gladmin-local-$(openssl rand -hex 4) -v /Users/curtis/Gladly:/host -e GLADLY_DN=localhost -e ORG=example.org -e GLADLY_JWT_TOKEN=$(saganadmin localhost:8001) sagan/gladmin'
 alias gladmin-master='docker run -it --rm --name gladmin-master-$(openssl rand -hex 4) -v /Users/curtis/Gladly:/host -e GLADLY_DN=us-master.gladly.qa -e ORG=gladly.com -e GLADLY_JWT_TOKEN=$(saganadmin https://us-master.gladly.qa) sagan/gladmin'
 alias gladmin-staging='docker run -it --rm --name gladmin-staging-$(openssl rand -hex 4) -v /Users/curtis/Gladly:/host -e GLADLY_DN=us-staging.gladly.qa -e ORG=gladly.com -e GLADLY_JWT_TOKEN=$(saganadmin https://us-staging.gladly.qa) sagan/gladmin'
+alias appcfg="go run ~/code/supernova/tools/appcfg"
 
 # Fuzzy finder: https://github.com/junegunn/fzf
 eval "$(fzf --zsh)"

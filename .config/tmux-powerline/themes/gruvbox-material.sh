@@ -76,29 +76,32 @@ TMUX_OUTER_2_FOREGROUND_COLOR=$GRUVBOX_MATERIAL_GREY5
 # See `man tmux` for additional formatting options for the status line.
 # The `format regular` and `format inverse` functions are provided as conveniences
 
+# active window format
 # shellcheck disable=SC2128
 if [ -z "$TMUX_POWERLINE_WINDOW_STATUS_CURRENT" ]; then
-	TMUX_POWERLINE_WINDOW_STATUS_CURRENT=(
-		"#[$(format regular)]"
-		"#[bold,italics,fg=${GRUVBOX_MATERIAL_ORANGE}]"
-		" #F[#I]#W  "
-	)
+  TMUX_POWERLINE_WINDOW_STATUS_CURRENT=(
+    "#[$(format regular)]"
+    "#[bold,italics,fg=${GRUVBOX_MATERIAL_ORANGE}]"
+    " #F[#I]#W❯#{pane_current_command}  "
+  )
 fi
 
-# shellcheck disable=SC2128
-if [ -z "$TMUX_POWERLINE_WINDOW_STATUS_STYLE" ]; then
-	TMUX_POWERLINE_WINDOW_STATUS_STYLE=(
-		"#[$(format regular)]"
-	)
-fi
-
+# inactive window format
 # shellcheck disable=SC2128
 if [ -z "$TMUX_POWERLINE_WINDOW_STATUS_FORMAT" ]; then
-	TMUX_POWERLINE_WINDOW_STATUS_FORMAT=(
-		"#[$(format regular)]"
-		"#[dim]"
-		" #{?window_flags,#F, }[#I]#W  "
-	)
+  TMUX_POWERLINE_WINDOW_STATUS_FORMAT=(
+    "#[$(format regular)]"
+    "#[dim]"
+    " #{?window_flags,#F, }[#I]#W❯#{pane_current_command}  "
+  )
+fi
+
+# window style
+# shellcheck disable=SC2128
+if [ -z "$TMUX_POWERLINE_WINDOW_STATUS_STYLE" ]; then
+  TMUX_POWERLINE_WINDOW_STATUS_STYLE=(
+    "#[$(format regular)]"
+  )
 fi
 
 # Format: segment_name [background_color|default_bg_color] [foreground_color|default_fg_color] [non_default_separator|default_separator] [separator_background_color|no_sep_bg_color]
@@ -146,22 +149,22 @@ fi
 
 # shellcheck disable=SC1143,SC2128
 if [ -z "$TMUX_POWERLINE_LEFT_STATUS_SEGMENTS" ]; then
-	TMUX_POWERLINE_LEFT_STATUS_SEGMENTS=(
-		"custom_mode ${TMUX_OUTER_1_BACKGROUND_COLOR} ${TMUX_OUTER_1_FOREGROUND_COLOR}"
-		"tmux_session_info ${TMUX_OUTER_2_BACKGROUND_COLOR} ${TMUX_OUTER_2_FOREGROUND_COLOR}"
-		# "hostname"
-		# "pwd 89 211"
-	)
+  TMUX_POWERLINE_LEFT_STATUS_SEGMENTS=(
+    "custom_mode ${TMUX_OUTER_1_BACKGROUND_COLOR} ${TMUX_OUTER_1_FOREGROUND_COLOR}"
+    "tmux_session_info ${TMUX_OUTER_2_BACKGROUND_COLOR} ${TMUX_OUTER_2_FOREGROUND_COLOR}"
+    # "hostname"
+    # "pwd 89 211"
+  )
 fi
 
 # shellcheck disable=SC1143,SC2128
 if [ -z "$TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS" ]; then
-	TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS=(
-		# "date_day 235 136"
-		# "date default ${GRUVBOX_MATERIAL_YELLOW} ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN} default default"
-		"custom_weather default_bg_color ${GRUVBOX_MATERIAL_YELLOW} ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN} default_bg_color default_fg_color"
-		"custom_session_info ${TMUX_OUTER_2_BACKGROUND_COLOR} ${TMUX_OUTER_2_FOREGROUND_COLOR}"
-		"time ${TMUX_OUTER_1_BACKGROUND_COLOR} ${TMUX_OUTER_1_FOREGROUND_COLOR}"
-		# "utc_time 235 136 ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN}"
-	)
+  TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS=(
+    # "date_day 235 136"
+    # "date default ${GRUVBOX_MATERIAL_YELLOW} ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN} default default"
+    "custom_weather default_bg_color ${GRUVBOX_MATERIAL_YELLOW} ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN} default_bg_color default_fg_color"
+    "custom_session_info ${TMUX_OUTER_2_BACKGROUND_COLOR} ${TMUX_OUTER_2_FOREGROUND_COLOR}"
+    "time ${TMUX_OUTER_1_BACKGROUND_COLOR} ${TMUX_OUTER_1_FOREGROUND_COLOR}"
+    # "utc_time 235 136 ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN}"
+  )
 fi
