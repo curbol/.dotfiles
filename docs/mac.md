@@ -24,12 +24,6 @@ brew install trailer mac-mouse-fix
 brew install obsidian slack discord spotify licecap
 ```
 
-## Rectangle
-
-```sh
-brew install rectangle
-```
-
 ## Nerd Font
 
 ```sh
