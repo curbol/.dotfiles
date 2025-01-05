@@ -4,10 +4,42 @@
 
 -- Config Docs
 -- https://wezfurlong.org/wezterm/config/files.html
-local wezterm = require("wezterm")
 
--- Config
+-- Built-in nerdfonts
+-- https://wezfurlong.org/wezterm/config/lua/wezterm/nerdfonts.html
+
+local wezterm = require("wezterm")
+local gui = wezterm.gui
+local action = wezterm.action
 local config = wezterm.config_builder()
+
+-- Gruvbox Material (https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/themes/gruvbox-material.lua)
+local GRUVBOX_GREY1 = "#282828"
+local GRUVBOX_GREY2 = "#32302f"
+local GRUVBOX_GREY3 = "#504945"
+local GRUVBOX_GREY4 = "#a89984"
+local GRUVBOX_GREY5 = "#ddc7a1"
+
+local GRUVBOX_RED = "#ea6962"
+local GRUVBOX_ORANGE = "#e78a4e"
+local GRUVBOX_YELLOW = "#d8a657"
+local GRUVBOX_GREEN = "#a9b665"
+local GRUVBOX_AQUA = "#89b482"
+local GRUVBOX_BLUE = "#7daea3"
+local GRUVBOX_PURPLE = "#d3869b"
+
+-- Colorscheme
+local STATUS_BAR_BG = GRUVBOX_GREY2
+
+-- Symbols
+local SEPARATOR_LEFT_BOLD = ""
+local SEPARATOR_LEFT_THIN = ""
+local SEPARATOR_RIGHT_BOLD = ""
+local SEPARATOR_RIGHT_THIN = ""
+local SEPARATOR_THIN = "│"
+
+local EDGE_LEFT = "▌"
+local EDGE_RIGHT = "▐"
 
 local is_windows = wezterm.target_triple:find("windows") ~= nil
 if is_windows then
@@ -24,28 +56,48 @@ end
 -- TMUX Keybindings
 config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
 config.keys = {
-	{ key = "phys:Space", mods = "LEADER", action = wezterm.action.ActivateCommandPalette },
-	{ key = "a", mods = "LEADER", action = wezterm.action.ActivateLastTab },
-	{ key = "a", mods = "LEADER|CTRL", action = wezterm.action.ActivateLastTab },
-	{ key = "m", mods = "LEADER", action = wezterm.action.TogglePaneZoomState },
-	{ key = "-", mods = "LEADER", action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) },
-	{ key = "\\", mods = "LEADER", action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
-	{ key = "c", mods = "LEADER", action = wezterm.action.SpawnTab("CurrentPaneDomain") },
-	{ key = "x", mods = "LEADER", action = wezterm.action.CloseCurrentPane({ confirm = true }) },
-	{ key = "n", mods = "LEADER", action = wezterm.action.ActivateTabRelative(1) },
-	{ key = "n", mods = "LEADER|CTRL", action = wezterm.action.ActivateTabRelative(1) },
-	{ key = "p", mods = "LEADER", action = wezterm.action.ActivateTabRelative(-1) },
-	{ key = "p", mods = "LEADER|CTRL", action = wezterm.action.ActivateTabRelative(-1) },
-	{ key = "1", mods = "LEADER", action = wezterm.action.ActivateTab(0) },
-	{ key = "2", mods = "LEADER", action = wezterm.action.ActivateTab(1) },
-	{ key = "3", mods = "LEADER", action = wezterm.action.ActivateTab(2) },
-	{ key = "4", mods = "LEADER", action = wezterm.action.ActivateTab(3) },
-	{ key = "5", mods = "LEADER", action = wezterm.action.ActivateTab(4) },
-	{ key = "6", mods = "LEADER", action = wezterm.action.ActivateTab(5) },
-	{ key = "7", mods = "LEADER", action = wezterm.action.ActivateTab(6) },
-	{ key = "8", mods = "LEADER", action = wezterm.action.ActivateTab(7) },
-	{ key = "9", mods = "LEADER", action = wezterm.action.ActivateTab(8) },
-	{ key = "0", mods = "LEADER", action = wezterm.action.ActivateTab(9) },
+	{ key = "phys:Space", mods = "LEADER", action = action.QuickSelect },
+	{ key = ":", mods = "LEADER", action = action.ActivateCommandPalette },
+	{ key = "/", mods = "LEADER", action = action.Search("CurrentSelectionOrEmptyString") },
+	{ key = "a", mods = "LEADER", action = action.ActivateLastTab },
+	{ key = "a", mods = "LEADER|CTRL", action = action.ActivateLastTab },
+	{ key = "m", mods = "LEADER", action = action.TogglePaneZoomState },
+	{ key = "v", mods = "LEADER", action = action.ActivateCopyMode },
+	{ key = "-", mods = "LEADER", action = action.SplitVertical({ domain = "CurrentPaneDomain" }) },
+	{ key = "\\", mods = "LEADER", action = action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+	{ key = "c", mods = "LEADER", action = action.SpawnTab("CurrentPaneDomain") },
+	{ key = "x", mods = "LEADER", action = action.CloseCurrentPane({ confirm = true }) },
+	{ key = "n", mods = "LEADER", action = action.ActivateTabRelative(1) },
+	{ key = "n", mods = "LEADER|CTRL", action = action.ActivateTabRelative(1) },
+	{ key = "p", mods = "LEADER", action = action.ActivateTabRelative(-1) },
+	{ key = "p", mods = "LEADER|CTRL", action = action.ActivateTabRelative(-1) },
+	{ key = "1", mods = "LEADER", action = action.ActivateTab(0) },
+	{ key = "2", mods = "LEADER", action = action.ActivateTab(1) },
+	{ key = "3", mods = "LEADER", action = action.ActivateTab(2) },
+	{ key = "4", mods = "LEADER", action = action.ActivateTab(3) },
+	{ key = "5", mods = "LEADER", action = action.ActivateTab(4) },
+	{ key = "6", mods = "LEADER", action = action.ActivateTab(5) },
+	{ key = "7", mods = "LEADER", action = action.ActivateTab(6) },
+	{ key = "8", mods = "LEADER", action = action.ActivateTab(7) },
+	{ key = "9", mods = "LEADER", action = action.ActivateTab(8) },
+	{ key = "0", mods = "LEADER", action = action.ActivateTab(9) },
+}
+
+local copy_mode = nil
+if gui then
+	copy_mode = wezterm.gui.default_key_tables().copy_mode
+	table.insert(copy_mode, {
+		key = "y",
+		mods = "NONE",
+		action = action.Multiple({
+			action.CopyTo("PrimarySelection"),
+			action.ClearSelection,
+			action.CopyMode("Close"),
+		}),
+	})
+end
+config.key_tables = {
+	copy_mode = copy_mode,
 }
 
 -- Font
@@ -60,58 +112,56 @@ config.switch_to_last_active_tab_when_closing_tab = true
 -- Window
 config.scrollback_lines = 3000
 config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
-config.integrated_title_buttons = { "Close", "Hide", "Maximize" }
-config.integrated_title_button_alignment = "Left"
-config.integrated_title_button_style = "Windows"
+config.window_close_confirmation = "AlwaysPrompt"
 config.window_padding = {
 	left = 0,
 	right = 0,
 	top = 0,
 	bottom = 0,
 }
-
--- Dim inactive panes
 config.inactive_pane_hsb = {
 	-- saturation = 0.8,
 	brightness = 0.8,
 }
 
 -- Tab Bar
-config.window_frame = {
-	font = wezterm.font("JetBrainsMono Nerd Font Mono", { weight = "Regular" }),
-	font_size = 14,
-}
+config.integrated_title_buttons = { "Close", "Hide", "Maximize" }
+config.integrated_title_button_alignment = "Left"
+config.integrated_title_button_style = "Windows"
 config.tab_bar_style = {
 	window_close = wezterm.format({
+		{ Background = { Color = STATUS_BAR_BG } },
 		{ Foreground = { Color = "#FF605C" } },
 		{ Text = " " .. wezterm.nerdfonts.md_circle_medium .. " " },
 	}),
 	window_close_hover = wezterm.format({
+		{ Background = { Color = STATUS_BAR_BG } },
 		{ Foreground = { Color = "#FF605C" } },
 		{ Text = " " .. wezterm.nerdfonts.md_close_circle .. " " },
 	}),
 	window_hide = wezterm.format({
+		{ Background = { Color = STATUS_BAR_BG } },
 		{ Foreground = { Color = "#FFBD44" } },
 		{ Text = wezterm.nerdfonts.md_circle_medium .. " " },
 	}),
 	window_hide_hover = wezterm.format({
+		{ Background = { Color = STATUS_BAR_BG } },
 		{ Foreground = { Color = "#FFBD44" } },
 		{ Text = wezterm.nerdfonts.md_minus_circle .. " " },
 	}),
 	window_maximize = wezterm.format({
+		{ Background = { Color = STATUS_BAR_BG } },
 		{ Foreground = { Color = "#00CA4E" } },
 		{ Text = wezterm.nerdfonts.md_circle_medium .. " " },
 	}),
 	window_maximize_hover = wezterm.format({
+		{ Background = { Color = STATUS_BAR_BG } },
 		{ Foreground = { Color = "#00CA4E" } },
-		{ Text = wezterm.nerdfonts.md_share_circle .. "  " },
+		{ Text = wezterm.nerdfonts.md_plus_circle .. " " },
 	}),
 }
 
 wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
-	local LEFT_HALF_BLOCK = "▌"
-	local RIGHT_HALF_BLOCK = "▐"
-
 	local pane = tab.active_pane
 	local index = tab.tab_index + 1 -- converting 0-based to 1-based
 	local cwd = basename(pane.current_working_dir.file_path)
@@ -120,7 +170,6 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 	local text = string.format("%d:%s❯%s", index, cwd, process)
 	config.text_background_opacity = 0.85
 
-	local STATUS_BAR_BG = "#32302f"
 	local ACTIVE_BG = "#ea6962"
 	local ACTIVE_FG = "#32302f"
 	local INACTIVE_BG = "#504945"
@@ -130,44 +179,45 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 		return {
 			{ Background = { Color = ACTIVE_BG } },
 			{ Foreground = { Color = STATUS_BAR_BG } },
-			{ Text = LEFT_HALF_BLOCK },
+			{ Text = EDGE_LEFT },
 			{ Background = { Color = ACTIVE_BG } },
 			{ Foreground = { Color = ACTIVE_FG } },
 			{ Text = text },
 			{ Background = { Color = ACTIVE_BG } },
 			{ Foreground = { Color = STATUS_BAR_BG } },
-			{ Text = RIGHT_HALF_BLOCK },
+			{ Text = EDGE_RIGHT },
 		}
 	else
 		return {
 			{ Background = { Color = INACTIVE_BG } },
 			{ Foreground = { Color = STATUS_BAR_BG } },
-			{ Text = LEFT_HALF_BLOCK },
+			{ Text = EDGE_LEFT },
 			{ Background = { Color = INACTIVE_BG } },
 			{ Foreground = { Color = INACTIVE_FG } },
 			{ Text = text },
 			{ Background = { Color = INACTIVE_BG } },
 			{ Foreground = { Color = STATUS_BAR_BG } },
-			{ Text = RIGHT_HALF_BLOCK },
+			{ Text = EDGE_RIGHT },
 		}
 	end
 end)
 
 -- TODO: add left status bar with current mode and window index
 wezterm.on("update-status", function(window, pane)
-	-- Workspace name
-	local stat = window:active_workspace()
+	-- Mode
+	local mode = "NORMAL"
+	local key_table = window:active_key_table()
+	if key_table == "copy_mode" then
+		mode = " COPY "
+	elseif key_table == "search_mode" then
+		mode = "SEARCH"
+	elseif key_table == "quick_select" then -- TODO: This doesn't work. Need to find a way to detect quick select mode
+		mode = "SELECT"
+	elseif window:leader_is_active() then
+		mode = "LEADER"
+	end
+
 	local stat_color = "#f7768e"
-	-- It's a little silly to have workspace name all the time
-	-- Utilize this to display LDR or current key table name
-	if window:active_key_table() then
-		stat = window:active_key_table()
-		stat_color = "#7dcfff"
-	end
-	if window:leader_is_active() then
-		stat = "LDR"
-		stat_color = "#bb9af7"
-	end
 
 	-- Current working directory
 	local cwd = pane:get_current_working_dir()
@@ -188,20 +238,16 @@ wezterm.on("update-status", function(window, pane)
 	-- CWD and CMD could be nil (e.g. viewing log using Ctrl-Alt-l)
 	cmd = cmd and basename(cmd) or ""
 
-	-- Time
 	local time = wezterm.strftime("%H:%M")
 
-	-- Left status (left of the tab line)
+	-- Left Status
 	window:set_left_status(wezterm.format({
 		{ Foreground = { Color = stat_color } },
-		{ Text = wezterm.nerdfonts.oct_table .. "  " .. stat },
-		{ Text = " |" },
+		{ Text = " " .. mode .. " " },
 	}))
 
-	-- Right status
+	-- Right Status
 	window:set_right_status(wezterm.format({
-		-- Wezterm has a built-in nerd fonts
-		-- https://wezfurlong.org/wezterm/config/lua/wezterm/nerdfonts.html
 		{ Text = wezterm.nerdfonts.md_folder .. "  " .. cwd },
 		{ Text = " | " },
 		{ Foreground = { Color = "#e0af68" } },
