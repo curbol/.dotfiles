@@ -41,6 +41,7 @@ local SEPARATOR_THIN = "│"
 local EDGE_LEFT = "▌"
 local EDGE_RIGHT = "▐"
 
+-- Windows specific settings
 local is_windows = wezterm.target_triple:find("windows") ~= nil
 if is_windows then
 	config.default_prog = { "zsh" }
@@ -51,6 +52,24 @@ end
 -- Given "c:\\foo\\bar" returns "bar"
 local function basename(s)
 	return string.gsub(s, "(.*[/\\])(.*)", "%2")
+end
+
+-- Get the 1-based index of the active tab
+local function active_tab_index(gui_window)
+	for i, item in ipairs(gui_window:mux_window():tabs_with_info()) do
+		if item.is_active then
+			return i
+		end
+	end
+end
+
+-- Get the 1-based index of the active pane
+local function active_pane_index(gui_window)
+	for i, item in ipairs(gui_window:active_tab():panes_with_info()) do
+		if item.is_active then
+			return i
+		end
+	end
 end
 
 -- Keybindings
@@ -104,11 +123,6 @@ config.key_tables = {
 config.font = wezterm.font("JetBrainsMono Nerd Font Mono", { weight = "Regular" })
 config.font_size = 15
 
--- Tab Bar
-config.use_fancy_tab_bar = false
-config.tab_max_width = 32
-config.switch_to_last_active_tab_when_closing_tab = true
-
 -- Window
 config.scrollback_lines = 3000
 config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
@@ -125,9 +139,14 @@ config.inactive_pane_hsb = {
 }
 
 -- Tab Bar
+config.tab_max_width = 32
+config.use_fancy_tab_bar = false
+config.switch_to_last_active_tab_when_closing_tab = true
+
 config.integrated_title_buttons = { "Close", "Hide", "Maximize" }
 config.integrated_title_button_alignment = "Left"
 config.integrated_title_button_style = "Windows"
+
 config.tab_bar_style = {
 	window_close = wezterm.format({
 		{ Background = { Color = STATUS_BAR_BG } },
@@ -169,10 +188,10 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, conf, hover, max_width
 
 	local text = string.format("%d:%s❯%s", index, cwd, process)
 
-	local ACTIVE_BG = "#ea6962"
-	local ACTIVE_FG = "#32302f"
-	local INACTIVE_BG = "#504945"
-	local INACTIVE_FG = "#a89984"
+	local ACTIVE_BG = GRUVBOX_ORANGE
+	local ACTIVE_FG = STATUS_BAR_BG
+	local INACTIVE_BG = GRUVBOX_GREY3
+	local INACTIVE_FG = GRUVBOX_GREY4
 
 	if tab.is_active then
 		return {
@@ -202,41 +221,60 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, conf, hover, max_width
 end)
 
 wezterm.on("update-status", function(window, pane)
+	-- window: https://wezfurlong.org/wezterm/config/lua/window/index.html
+	-- pane: https://wezfurlong.org/wezterm/config/lua/pane/index.html
+
 	-- Mode
-	local mode = "NORMAL"
+	local mode_color = GRUVBOX_GREY5
+	local mode = wezterm.nerdfonts.md_code_tags .. " " .. "NORMAL"
 	local key_table = window:active_key_table()
 	if key_table == "copy_mode" then
-		mode = " COPY "
+		mode_color = GRUVBOX_RED
+		mode = wezterm.nerdfonts.md_content_copy .. " " .. " COPY "
 	elseif key_table == "search_mode" then
-		mode = "SEARCH"
+		mode_color = GRUVBOX_YELLOW
+		mode = wezterm.nerdfonts.seti_search .. " " .. "SEARCH"
 	elseif key_table == "quick_select" then -- TODO: This doesn't work. Need to find a way to detect quick select mode
-		mode = "SELECT"
+		mode_color = GRUVBOX_GREEN
+		mode = wezterm.nerdfonts.md_select .. " " .. "SELECT"
 	elseif window:leader_is_active() then
-		mode = "LEADER"
+		mode_color = GRUVBOX_BLUE
+		mode = wezterm.nerdfonts.md_cog_outline .. " " .. "LEADER"
 	end
 
 	-- Window:Tab:Pane
-
-	local window_id = window:window_id() + 1
-	local tab_id = window:active_tab():tab_id() + 1
-	local pane_id = pane:pane_id() + 1
-	local index = window_id .. ":" .. tab_id .. ":" .. pane_id
+	local window_index = window:window_id() + 1 -- TODO: Need to find a way to get the window index (ID is not accurate)
+	local tab_index = active_tab_index(window)
+	local pane_index = active_pane_index(window)
+	local index = window_index .. ":" .. tab_index .. ":" .. pane_index
 
 	-- Time
 	local datetime = wezterm.strftime("%a %b %-d %H:%M")
 
-	-- Right Status
+	window:set_left_status(wezterm.format({}))
 	window:set_right_status(wezterm.format({
-		{ Foreground = { Color = GRUVBOX_YELLOW } },
-		{ Text = wezterm.nerdfonts.md_clock_outline .. " " .. mode },
-		{ Text = " | " },
-		{ Text = wezterm.nerdfonts.md_clock_outline .. " " .. index },
-		{ Text = " | " },
-		{ Foreground = { Color = "#e0af68" } },
+		{ Foreground = { Color = GRUVBOX_GREEN } },
+		{ Text = wezterm.nerdfonts.md_alpha_m_box .. " " .. window_index },
+		{ Text = " " },
+		{ Foreground = { Color = GRUVBOX_BLUE } },
+		{ Text = wezterm.nerdfonts.md_alpha_t_box .. " " .. tab_index },
+		{ Text = " " },
+		{ Foreground = { Color = GRUVBOX_RED } },
+		{ Text = wezterm.nerdfonts.md_alpha_p_box .. " " .. pane_index },
+
 		"ResetAttributes",
-		{ Text = " | " },
+		{ Text = " " .. SEPARATOR_THIN .. " " },
+
+		{ Foreground = { Color = mode_color } },
+		{ Text = mode },
+
+		"ResetAttributes",
+		{ Text = " " .. SEPARATOR_THIN .. " " },
+
+		{ Foreground = { Color = GRUVBOX_GREY5 } },
 		{ Text = wezterm.nerdfonts.md_clock_outline .. " " .. datetime },
-		{ Text = "  " },
+
+		{ Text = " " },
 	}))
 end)
 
@@ -244,7 +282,7 @@ end)
 config.color_scheme = "Gruvbox Material (Gogh)"
 config.colors = {
 	tab_bar = {
-		-- background = "#282828", -- main terminal background
+		-- background = GRUVBOX_GREY1,
 	},
 }
 
