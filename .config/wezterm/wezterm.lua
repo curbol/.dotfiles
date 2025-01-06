@@ -53,7 +53,7 @@ local function basename(s)
 	return string.gsub(s, "(.*[/\\])(.*)", "%2")
 end
 
--- TMUX Keybindings
+-- Keybindings
 config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
 config.keys = {
 	{ key = "phys:Space", mods = "LEADER", action = action.QuickSelect },
@@ -161,14 +161,13 @@ config.tab_bar_style = {
 	}),
 }
 
-wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
+wezterm.on("format-tab-title", function(tab, tabs, panes, conf, hover, max_width)
 	local pane = tab.active_pane
-	local index = tab.tab_index + 1 -- converting 0-based to 1-based
+	local index = tab.tab_index + 1
 	local cwd = basename(pane.current_working_dir.file_path)
 	local process = basename(pane.foreground_process_name)
 
 	local text = string.format("%d:%s❯%s", index, cwd, process)
-	config.text_background_opacity = 0.85
 
 	local ACTIVE_BG = "#ea6962"
 	local ACTIVE_FG = "#32302f"
@@ -202,7 +201,6 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 	end
 end)
 
--- TODO: add left status bar with current mode and window index
 wezterm.on("update-status", function(window, pane)
 	-- Mode
 	local mode = "NORMAL"
@@ -217,131 +215,30 @@ wezterm.on("update-status", function(window, pane)
 		mode = "LEADER"
 	end
 
-	local stat_color = "#f7768e"
+	-- Window:Tab:Pane
 
-	-- Current working directory
-	local cwd = pane:get_current_working_dir()
-	if cwd then
-		if type(cwd) == "userdata" then
-			-- Wezterm introduced the URL object in 20240127-113634-bbcac864
-			cwd = basename(cwd.file_path)
-		else
-			-- 20230712-072601-f4abf8fd or earlier version
-			cwd = basename(cwd)
-		end
-	else
-		cwd = ""
-	end
+	local window_id = window:window_id() + 1
+	local tab_id = window:active_tab():tab_id() + 1
+	local pane_id = pane:pane_id() + 1
+	local index = window_id .. ":" .. tab_id .. ":" .. pane_id
 
-	-- Current command
-	local cmd = pane:get_foreground_process_name()
-	-- CWD and CMD could be nil (e.g. viewing log using Ctrl-Alt-l)
-	cmd = cmd and basename(cmd) or ""
-
-	local time = wezterm.strftime("%H:%M")
-
-	-- Left Status
-	window:set_left_status(wezterm.format({
-		{ Foreground = { Color = stat_color } },
-		{ Text = " " .. mode .. " " },
-	}))
+	-- Time
+	local datetime = wezterm.strftime("%a %b %-d %H:%M")
 
 	-- Right Status
 	window:set_right_status(wezterm.format({
-		{ Text = wezterm.nerdfonts.md_folder .. "  " .. cwd },
+		{ Foreground = { Color = GRUVBOX_YELLOW } },
+		{ Text = wezterm.nerdfonts.md_clock_outline .. " " .. mode },
+		{ Text = " | " },
+		{ Text = wezterm.nerdfonts.md_clock_outline .. " " .. index },
 		{ Text = " | " },
 		{ Foreground = { Color = "#e0af68" } },
-		{ Text = wezterm.nerdfonts.fa_code .. "  " .. cmd },
 		"ResetAttributes",
 		{ Text = " | " },
-		{ Text = wezterm.nerdfonts.md_clock .. "  " .. time },
+		{ Text = wezterm.nerdfonts.md_clock_outline .. " " .. datetime },
 		{ Text = "  " },
 	}))
 end)
-
--- TODO: change right status bar style and formatting to include tab_index:pane_index
--- Right Status Bar
--- wezterm.on("update-right-status", function(window, pane)
--- 	-- Each element holds the text for a cell in a "powerline" style << fade
--- 	local cells = {}
---
--- 	-- Figure out the cwd and host of the current pane.
--- 	-- This will pick up the hostname for the remote host if your
--- 	-- shell is using OSC 7 on the remote host.
--- 	local cwd_uri = pane:get_current_working_dir()
--- 	if cwd_uri then
--- 		local cwd = ""
--- 		local hostname = ""
---
--- 		if type(cwd_uri) == "userdata" then
--- 			cwd = cwd_uri.file_path
--- 			hostname = cwd_uri.host or wezterm.hostname()
--- 		end
---
--- 		-- Remove the domain name portion of the hostname
--- 		local dot = hostname:find("[.]")
--- 		if dot then
--- 			hostname = hostname:sub(1, dot - 1)
--- 		end
--- 		if hostname == "" then
--- 			hostname = wezterm.hostname()
--- 		end
---
--- 		table.insert(cells, cwd)
--- 		table.insert(cells, hostname)
--- 	end
---
--- 	-- I like my date/time in this style: "Wed Mar 3 08:14"
--- 	local date = wezterm.strftime("%a %b %-d %H:%M")
--- 	table.insert(cells, date)
---
--- 	-- An entry for each battery (typically 0 or 1 battery)
--- 	for _, b in ipairs(wezterm.battery_info()) do
--- 		table.insert(cells, string.format("%.0f%%", b.state_of_charge * 100))
--- 	end
---
--- 	-- The powerline < symbol
--- 	local LEFT_ARROW = utf8.char(0xe0b3)
--- 	-- The filled in variant of the < symbol
--- 	local SOLID_LEFT_ARROW = utf8.char(0xe0b2)
---
--- 	-- Color palette for the backgrounds of each cell
--- 	local colors = {
--- 		"#3c1361",
--- 		"#52307c",
--- 		"#663a82",
--- 		"#7c5295",
--- 		"#b491c8",
--- 	}
---
--- 	-- Foreground color for the text across the fade
--- 	local text_fg = "#c0c0c0"
---
--- 	-- The elements to be formatted
--- 	local elements = {}
--- 	-- How many cells have been formatted
--- 	local num_cells = 0
---
--- 	-- Translate a cell into elements
--- 	function push(text, is_last)
--- 		local cell_no = num_cells + 1
--- 		table.insert(elements, { Foreground = { Color = text_fg } })
--- 		table.insert(elements, { Background = { Color = colors[cell_no] } })
--- 		table.insert(elements, { Text = " " .. text .. " " })
--- 		if not is_last then
--- 			table.insert(elements, { Foreground = { Color = colors[cell_no + 1] } })
--- 			table.insert(elements, { Text = SOLID_LEFT_ARROW })
--- 		end
--- 		num_cells = num_cells + 1
--- 	end
---
--- 	while #cells > 0 do
--- 		local cell = table.remove(cells, 1)
--- 		push(cell, #cells == 0)
--- 	end
---
--- 	window:set_right_status(wezterm.format(elements))
--- end)
 
 -- Theme https://wezfurlong.org/wezterm/colorschemes/g/index.html#gruvbox-material-gogh
 config.color_scheme = "Gruvbox Material (Gogh)"
