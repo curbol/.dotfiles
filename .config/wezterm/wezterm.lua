@@ -54,20 +54,33 @@ local function basename(s)
 	return string.gsub(s, "(.*[/\\])(.*)", "%2")
 end
 
--- Get the 1-based index of the active tab
-local function active_tab_index(gui_window)
-	for i, item in ipairs(gui_window:mux_window():tabs_with_info()) do
-		if item.is_active then
+-- Get the 1-based index of the window
+local function get_window_index(window_id)
+	-- https://wezfurlong.org/wezterm/config/lua/wezterm.mux/index.html
+	for i, item in ipairs(wezterm.mux.all_windows()) do
+		if item:window_id() == window_id then
 			return i
+		end
+	end
+	return nil
+end
+
+-- Get the 1-based index of the tab
+local function get_tab_index(window, tab_id)
+	-- https://wezfurlong.org/wezterm/config/lua/mux-window/tabs_with_info.html
+	for _, item in ipairs(window:tabs_with_info()) do
+		if item.tab:tab_id() == tab_id then
+			return item.index + 1
 		end
 	end
 end
 
--- Get the 1-based index of the active pane
-local function active_pane_index(gui_window)
-	for i, item in ipairs(gui_window:active_tab():panes_with_info()) do
-		if item.is_active then
-			return i
+-- Get the 1-based index of the pane
+local function get_pane_index(tab, pane_id)
+	-- https://wezfurlong.org/wezterm/config/lua/MuxTab/panes_with_info.html
+	for _, item in ipairs(tab:panes_with_info()) do
+		if item.pane:pane_id() == pane_id then
+			return item.index + 1
 		end
 	end
 end
@@ -242,11 +255,12 @@ wezterm.on("update-status", function(window, pane)
 		mode = wezterm.nerdfonts.md_cog_outline .. " " .. "LEADER"
 	end
 
-	-- Window:Tab:Pane
-	local window_index = window:window_id() + 1 -- TODO: Need to find a way to get the window index (ID is not accurate)
-	local tab_index = active_tab_index(window)
-	local pane_index = active_pane_index(window)
-	local index = window_index .. ":" .. tab_index .. ":" .. pane_index
+	-- Window-:Tab:Pane
+	local mux_window = window:mux_window()
+	local active_tab = mux_window:active_tab()
+	local window_index = get_window_index(mux_window:window_id())
+	local tab_index = get_tab_index(mux_window, active_tab:tab_id())
+	local pane_index = get_pane_index(active_tab, pane:pane_id())
 
 	-- Time
 	local datetime = wezterm.strftime("%a %b %-d %H:%M")
@@ -254,13 +268,13 @@ wezterm.on("update-status", function(window, pane)
 	window:set_left_status(wezterm.format({}))
 	window:set_right_status(wezterm.format({
 		{ Foreground = { Color = GRUVBOX_GREEN } },
-		{ Text = wezterm.nerdfonts.md_alpha_m_box .. " " .. window_index },
+		{ Text = wezterm.nerdfonts.md_alpha_m_box_outline .. " " .. window_index },
 		{ Text = " " },
 		{ Foreground = { Color = GRUVBOX_BLUE } },
-		{ Text = wezterm.nerdfonts.md_alpha_t_box .. " " .. tab_index },
+		{ Text = wezterm.nerdfonts.md_alpha_t_box_outline .. " " .. tab_index },
 		{ Text = " " },
 		{ Foreground = { Color = GRUVBOX_RED } },
-		{ Text = wezterm.nerdfonts.md_alpha_p_box .. " " .. pane_index },
+		{ Text = wezterm.nerdfonts.md_alpha_p_box_outline .. " " .. pane_index },
 
 		"ResetAttributes",
 		{ Text = " " .. SEPARATOR_THIN .. " " },
