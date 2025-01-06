@@ -301,12 +301,6 @@ config.colors = {
 }
 
 -- Plugins
-wezterm.plugin.require("https://github.com/mrjones2014/smart-splits.nvim").apply_to_config(config, {
-	direction_keys = { "h", "j", "k", "l" },
-	modifiers = {
-		move = "CTRL",
-		resize = "META",
-	},
-})
+wezterm.plugin.require("https://github.com/mrjones2014/smart-splits.nvim").apply_to_config(config)
 
 return config
