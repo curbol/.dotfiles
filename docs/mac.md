@@ -45,7 +45,7 @@ brew install go python pyenv nodejs zig
 ```
 
 ```sh
-npm i -g terraform-fmt
+npm i -g neovim terraform-fmt
 ```
 
 ## Terminal
