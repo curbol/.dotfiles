@@ -1,11 +1,10 @@
 # Easily jump around the file system by manually adding marks
 # marks are stored as symbolic links in the directory $MARKPATH (default $HOME/.marks)
 #
-# jump FOO: jump to a mark named FOO
-# mark FOO: create a mark named FOO
-# unmark FOO: delete a mark
+# jump foo: jump to a mark named foo 
+# mark foo: create a mark named foo
+# unmark foo: delete a mark
 # marks: lists all marks
-#
 
 source "$HOME/.dotfiles/scripts/ostype.sh"
 
@@ -16,12 +15,22 @@ else
 fi
 
 jump() {
-	if [[ $is_windows -eq 1 ]]; then
-		local markpath=$(cat "$MARKPATH/$1") || { echo "No such mark: $1"; return 1; }
-	else
-		local markpath="$(readlink "$MARKPATH/$1")" || { echo "No such mark: $1"; return 1; }
-	fi
-	builtin cd "$markpath" 2>/dev/null || { echo "Destination does not exist for mark [$1]: $markpath"; return 2; }
+  # First check if the mark file actually exists
+  if [[ ! -e "$MARKPATH/$1" ]]; then
+    echo "No such mark: $1"
+    return 1
+  fi
+
+  if [[ $is_windows -eq 1 ]]; then
+    local markpath=$(cat "$MARKPATH/$1") || { echo "No such mark: $1"; return 1; }
+  else
+    local markpath="$(readlink "$MARKPATH/$1")" || { echo "No such mark: $1"; return 1; }
+  fi
+
+  builtin cd "$markpath" 2>/dev/null || {
+    echo "Destination does not exist for mark [$1]: $markpath"
+    return 2
+  }
 }
 
 mark() {
@@ -51,32 +60,32 @@ unmark() {
 }
 
 marks() {
-	local link max=0
-	if [[ $is_windows -eq 1 ]]; then
-		for link in "$MARKPATH"/*; do
-			if [[ ${#link##*/} -gt $max ]]; then
-				max=${#link##*/}
-			fi
-		done
-		local printf_markname_template="$(printf -- "%%%us" "$max")"
-		for link in "$MARKPATH"/*; do
-			local markname=$(printf -- "$printf_markname_template" "${link##*/}")
-			local markpath=$(cat "$link")
-			printf -- "%s -> %s\n" "$markname" "$markpath"
-		done
-	else
-		for link in $MARKPATH/{,.}*; do
-			if [[ ${#link##*/} -gt $max ]]; then
-				max=${#link##*/}
-			fi
-		done
-		local printf_markname_template="$(printf -- "%%%us" "$max")"
-		for link in $MARKPATH/{,.}*; do
-			local markname=$(printf -- "$printf_markname_template" "${link##*/}")
-			local markpath=$(readlink "$link")
-			printf -- "%s -> %s\n" "$markname" "$markpath"
-		done
-	fi
+  setopt localoptions nullglob
+  local link max=0
+
+  if [[ $is_windows -eq 1 ]]; then
+    for link in "$MARKPATH"/*; do
+      (( ${#link##*/} > max )) && max=${#link##*/}
+    done
+    local printf_markname_template="$(printf -- "%%%us" "$max")"
+
+    for link in "$MARKPATH"/*; do
+      local markname=$(printf -- "$printf_markname_template" "${link##*/}")
+      local markpath=$(cat "$link")
+      printf -- "%s -> %s\n" "$markname" "$markpath"
+    done
+  else
+    for link in "$MARKPATH"/{,.}*; do
+      (( ${#link##*/} > max )) && max=${#link##*/}
+    done
+    local printf_markname_template="$(printf -- "%%%us" "$max")"
+
+    for link in "$MARKPATH"/{,.}*; do
+      local markname=$(printf -- "$printf_markname_template" "${link##*/}")
+      local markpath=$(readlink "$link")
+      printf -- "%s -> %s\n" "$markname" "$markpath"
+    done
+  fi
 }
 
 _completemarks() {

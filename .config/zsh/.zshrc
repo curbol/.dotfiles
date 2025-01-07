@@ -10,11 +10,11 @@ fi
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
-# Lazy-load (autoload) Zsh script files from a directory.
-Z_SCRIPT_DIR=$HOME/.dotfiles/scripts
-fpath=($Z_SCRIPT_DIR $fpath)
-autoload -Uz $Z_SCRIPT_DIR/*(.:t)
+#Load Scripts
+source "$HOME/.dotfiles/scripts/jump.sh"
+# ------------------------------------------------------------------------------
 
+# ------------------------------------------------------------------------------
 # Homebrew
 if [[ $is_mac_intel -eq 1 ]]; then
   eval "$(/usr/local/bin/brew shellenv)"
