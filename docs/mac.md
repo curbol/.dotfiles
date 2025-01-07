@@ -54,6 +54,14 @@ npm i -g neovim terraform-fmt
 brew install wezterm
 ```
 
+## Dotfiles
+
+Clone this repo to the home directory then run:
+
+```sh
+sh ~/.dotfiles/setup.sh
+```
+
 ## SSH
 
 Generate ssh key:
@@ -159,35 +167,19 @@ Copy the entire output (including -----BEGIN PGP PUBLIC KEY BLOCK----- and -----
 
 Add the public key to GitHub under Settings > SSH and GPG keys.
 
-## Dotfiles
-
-Clone this repo to the home directory then run:
-
-```sh
-sh ~/.dotfiles/setup.sh
-```
-
 ## ZSH
 
 (ZSH is the default shell on macOS)
 
 ### ZSH Addons (Antidote)
 
+(might not need to install antidote as it might install when .zshrc is loaded)
+
 ```sh
 brew install antidote
 ```
 
-#### Zsh-Vi-Mode
-
-```sh
-git clone https://github.com/jeffreytse/zsh-vi-mode ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-vi-mode
-```
-
 #### Powerlevel10k Prompt
-
-```sh
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-```
 
 > **Prompt Style:** Lean, Unicode, 8 colors, No time, Two lines, Disconnected, No frame, Sparse, Few icons, Concise, Yes transient, Verbose
 
