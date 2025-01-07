@@ -1,3 +1,5 @@
+# zmodload zsh/zprof
+
 # ------------------------------------------------------------------------------
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -18,11 +20,12 @@ if [[ $is_mac_arm -eq 1 ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# Autocomplete
+# Completions
 # example: appcfg completion zsh > ~/.zsh/completions/_appcfg
-autoload -U compinit; compinit
+autoload -U compinit;
 mkdir -p ~/.zsh/completions
 fpath+=(~/.zsh/completions)
+compinit -C
 
 # ------------------------------------------------------------------------------
 # Below code configures zsh-vi-mode to use system clipboard for yank, paste, change, delete
@@ -127,6 +130,13 @@ export XDG_CONFIG_HOME="$HOME/.config"
 # https://github.com/curbol/kickstart.nvim
 alias vim='nvim'
 
+# Preferred editor for local and remote sessions
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='nvim'
+fi
+
 # Go
 export GOPATH=~/go
 export PATH=$PATH:$GOPATH/bin
@@ -154,18 +164,6 @@ alias appcfg-local-beta="go run -tags=beta ~/code/supernova/tools/appcfg"
 
 # Fuzzy finder: https://github.com/junegunn/fzf
 eval "$(fzf --zsh)"
-
-# Attach to existing tmux session or create a new one
-tm() {
-    if [[ $# -eq 0 ]]; then
-        # No argument given, attach to the most recent session or create a new one
-        tmux attach || tmux new
-    else
-        # Argument given, use it as the session name
-        local session_name="$1"
-        tmux attach -t $session_name || tmux new -s $session_name
-    fi
-}
 
 # ------------------------------------------------------------------------------
 # Added by Powerlevel10k
@@ -216,10 +214,6 @@ source $ZSH/oh-my-zsh.sh
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
-else
-  export EDITOR='nvim'
-fi
 # ------------------------------------------------------------------------------
+
+# zprof
