@@ -171,12 +171,10 @@ sh ~/.dotfiles/setup.sh
 
 (ZSH is the default shell on macOS)
 
-### ZSH Addons
-
-#### OhMyZsh
+### ZSH Addons (Antidote)
 
 ```sh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --keep-zshrc
+brew install antidote
 ```
 
 #### Zsh-Vi-Mode
@@ -192,38 +190,6 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$
 ```
 
 > **Prompt Style:** Lean, Unicode, 8 colors, No time, Two lines, Disconnected, No frame, Sparse, Few icons, Concise, Yes transient, Verbose
-
-#### [zsh-completions](https://github.com/zsh-users/zsh-completions)
-
-Clone the repository inside your oh-my-zsh repo:
-
-```sh
-git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions
-```
-
-Add it to `FPATH` in your `.zshrc` by adding the following line before `source "$ZSH/oh-my-zsh.sh"`:
-
-```sh
-fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
-```
-
-## Tmux
-
-```sh
-brew install tmux
-```
-
-```sh
-git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
-```
-
-If needed, the config can be sourced like this:
-
-```sh
-tmux source ~/.config/tmux/tmux.conf
-```
-
-In tmux, do `prefix` then `shift`-I to install plugins. The prefix should be `ctrl`-a (default is `ctrl`-b)
 
 ## Neovim
 

@@ -5,13 +5,15 @@ source "$HOME/.dotfiles/scripts/ostype.sh"
 
 # Paths of dotfiles to symlink relative to the dotfiles directory
 linkfiles=(
-  ".config/tmux/tmux.conf"
-  ".config/tmux-powerline"
   ".config/wezterm/wezterm.lua"
+  ".config/zsh/scripts/jump.sh"
+  ".config/zsh/scripts/ostype.sh"
+  ".config/zsh/.zsh_plugins.txt"
+  ".config/zsh/.zshrc"
   ".gitignore"
   ".ideavimrc"
   ".vimrc"
-  ".zshrc"
+  ".zshenv"
 )
 
 # Paths of dotfiles to copy relative to the dotfiles directory
