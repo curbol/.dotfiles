@@ -65,7 +65,7 @@ scoop install git-with-openssh
 
 > **Note:** The download link should look something like this: `https://mirror.msys2.org/msys/x86_64/zsh-5.9-2-x86_64.pkg.tar.zst`.
 
-Extract the contents into the folder with `git-bash.exe`. The folder should be should be `C:\Users\curti\scoop\apps\git-with-openssh\2.45.1.windows.1\`.
+Extract the contents into the folder with `git-bash.exe`. The folder should be `C:\Users\curti\scoop\apps\git-with-openssh\2.45.1.windows.1\`.
 
 Add zsh (and bash, etc.) to `PATH`
 
