@@ -16,8 +16,6 @@ typeset -gU path fpath
 path=(
   # brew install pyenv
   $HOME/.pyenv/shims
-  $GOPATH/bin
-
   $HOME/{,s}bin(N)
   $HOME/.local/{,s}bin(N)
   /opt/{homebrew,local}/{,s}bin(N)
