@@ -50,6 +50,7 @@ source "$HOME/.dotfiles/gladly/pact.zsh"
 export GOPRIVATE=github.com/sagansystems,github.com/gladly
 export BUILD_HARNESS_PATH=$HOME/code/build-harness
 export DOCKER_COMPOSE_PATH=$HOME/code/docker-compose
+export APP_PLATFORM_INFRA=true # https://github.com/sagansystems/docker-compose
 alias auth-local='saganadmin localhost:8001'
 alias auth-master='saganadmin https://us-master.gladly.qa'
 alias auth-staging='saganadmin https://us-staging.gladly.qa'
