@@ -45,6 +45,13 @@ fi
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
+# NVM (brew install nvm)
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+# ------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
 # Gladly stuff
 source "$HOME/.dotfiles/gladly/pact.zsh"
 export GOPRIVATE=github.com/sagansystems,github.com/gladly
