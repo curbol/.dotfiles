@@ -10,7 +10,7 @@ fi
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
-#Load Scripts
+# Load Scripts
 source "$HOME/.dotfiles/scripts/jump.sh"
 # ------------------------------------------------------------------------------
 
@@ -45,10 +45,11 @@ fi
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
-# NVM (brew install nvm)
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+# Mise - https://github.com/jdx/mise
+# Examples:
+# > mise use -g node@20.12
+# > mise use -g python@3.11
+eval "$(mise activate zsh)"
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
@@ -57,6 +58,7 @@ source "$HOME/.dotfiles/gladly/pact.zsh"
 export GOPRIVATE=github.com/sagansystems,github.com/gladly
 export BUILD_HARNESS_PATH=$HOME/code/build-harness
 export DOCKER_COMPOSE_PATH=$HOME/code/docker-compose
+export PACT_PROVIDER_VERSION=dev_laptop
 export APP_PLATFORM_INFRA=true # https://github.com/sagansystems/docker-compose
 alias auth-local='saganadmin localhost:8001'
 alias auth-master='saganadmin https://us-master.gladly.qa'
@@ -171,6 +173,15 @@ fi
 # Source antidote and load.
 source ${ZDOTDIR:-$HOME}/.antidote/antidote.zsh
 antidote load
+# ------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
+# Configure Antidote Plugins
+ZSH_AUTOSUGGEST_ACCEPT_WIDGETS=(end-of-line vi-end-of-line vi-add-eol)
+ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(
+  forward-char vi-forward-char forward-word vi-forward-word vi-forward-word-end
+  vi-forward-blank-word vi-forward-blank-word-end vi-find-next-char vi-find-next-char-skip
+)
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------

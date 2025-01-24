@@ -14,8 +14,6 @@ typeset -gU path fpath
 
 # Set the list of directories that zsh searches for commands.
 path=(
-  # brew install pyenv
-  $HOME/.pyenv/shims
   $HOME/{,s}bin(N)
   $HOME/.local/{,s}bin(N)
   /opt/{homebrew,local}/{,s}bin(N)

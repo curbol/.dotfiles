@@ -41,11 +41,20 @@ brew install gh postgresql kubectl awscli automake
 ```
 
 ```sh
-brew install go python pyenv nodejs zig
+npm i -g neovim terraform-fmt
 ```
 
 ```sh
-npm i -g neovim terraform-fmt
+brew install go nodejs python zig
+```
+
+```sh
+brew install mise
+```
+
+```sh
+mise use -g node@20.12
+mise use -g python@3.11
 ```
 
 ## Terminal
