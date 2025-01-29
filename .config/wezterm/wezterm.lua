@@ -119,6 +119,7 @@ config.keys = {
 	{ key = "0", mods = "LEADER", action = action.ActivateTab(9) },
 }
 
+-- Clear copy mode selection after yanking
 local copy_mode = nil
 if gui then
 	copy_mode = wezterm.gui.default_key_tables().copy_mode
