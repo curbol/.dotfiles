@@ -78,84 +78,87 @@ export GLADLY_APP_CFG_ROOT="/Users/curtis/Gladly"
 # Below code configures zsh-vi-mode to use system clipboard for yank, paste, change, delete
 # https://github.com/jeffreytse/zsh-vi-mode/issues/19
 # pbcopy and pbpaste work on all OS because of the "belak/zsh-utils" plugin
-cbyank() {
-  pbcopy
-}
+cbyank() { pbcopy }
+cbpaste() { pbpaste }
 
-cbpaste() {
-  pbpaste
-}
-
+# Yank
 my_zvm_vi_yank() {
   zvm_vi_yank
   echo -en "${CUTBUFFER}" | cbyank
 }
 
-my_zvm_vi_delete() {
-  zvm_vi_delete
-  echo -en "${CUTBUFFER}" | cbyank
+# Put
+my_zvm_vi_put_after() {
+  CUTBUFFER=$(cbpaste)
+  zvm_vi_put_after
+  zvm_highlight clear # zvm_vi_put_after introduces weird highlighting
 }
-
-my_zvm_vi_change() {
-  zvm_vi_change
-  echo -en "${CUTBUFFER}" | cbyank
+my_zvm_vi_put_before() {
+  CUTBUFFER=$(cbpaste)
+  zvm_vi_put_before
+  zvm_highlight clear # zvm_vi_put_before introduces weird highlighting
 }
-
-my_zvm_vi_change_eol() {
-  zvm_vi_change_eol
-  echo -en "${CUTBUFFER}" | cbyank
-}
-
-my_zvm_vi_substitute() {
-  zvm_vi_substitute
-  echo -en "${CUTBUFFER}" | cbyank
-}
-
-my_zvm_vi_substitute_whole_line() {
-  zvm_vi_substitute_whole_line
-  echo -en "${CUTBUFFER}" | cbyank
-}
-
 my_zvm_vi_replace_selection() {
   CUTBUFFER=$(cbpaste)
   zvm_vi_replace_selection
   echo -en "${CUTBUFFER}" | cbyank
 }
 
-my_zvm_vi_put_after() {
-  CUTBUFFER=$(cbpaste)
-  zvm_vi_put_after
-  zvm_highlight clear # zvm_vi_put_after introduces weird highlighting
+# Change
+my_zvm_vi_change() {
+  zvm_vi_change
+  echo -en "${CUTBUFFER}" | cbyank
+}
+my_zvm_vi_change_eol() {
+  zvm_vi_change_eol
+  echo -en "${CUTBUFFER}" | cbyank
 }
 
-my_zvm_vi_put_before() {
-  CUTBUFFER=$(cbpaste)
-  zvm_vi_put_before
-  zvm_highlight clear # zvm_vi_put_before introduces weird highlighting
+# Delete
+my_zvm_vi_delete() {
+  zvm_vi_delete
+  echo -en "${CUTBUFFER}" | cbyank
+}
+
+# Substitute
+my_zvm_vi_substitute() {
+  zvm_vi_substitute
+  echo -en "${CUTBUFFER}" | cbyank
+}
+my_zvm_vi_substitute_whole_line() {
+  zvm_vi_substitute_whole_line
+  echo -en "${CUTBUFFER}" | cbyank
 }
 
 zvm_after_lazy_keybindings() {
+  # Yank
   zvm_define_widget my_zvm_vi_yank
-  zvm_define_widget my_zvm_vi_delete
-  zvm_define_widget my_zvm_vi_change
-  zvm_define_widget my_zvm_vi_change_eol
+  zvm_bindkey visual 'y' my_zvm_vi_yank
+
+  # Put
   zvm_define_widget my_zvm_vi_put_after
   zvm_define_widget my_zvm_vi_put_before
+  zvm_define_widget my_zvm_vi_replace_selection
+  zvm_bindkey vicmd 'P' my_zvm_vi_put_before
+  zvm_bindkey vicmd 'p' my_zvm_vi_put_after
+  zvm_bindkey visual 'p' my_zvm_vi_replace_selection
+
+  # Change
+  zvm_define_widget my_zvm_vi_change
+  zvm_define_widget my_zvm_vi_change_eol
+  zvm_bindkey visual 'c' my_zvm_vi_change
+  zvm_bindkey vicmd 'C' my_zvm_vi_change_eol
+
+  # Delete
+  zvm_define_widget my_zvm_vi_delete
+  zvm_bindkey visual 'x' my_zvm_vi_delete
+  zvm_bindkey visual 'd' my_zvm_vi_delete
+
+  # Substitute
   zvm_define_widget my_zvm_vi_substitute
   zvm_define_widget my_zvm_vi_substitute_whole_line
-  zvm_define_widget my_zvm_vi_replace_selection
-
-  zvm_bindkey vicmd 'C' my_zvm_vi_change_eol
-  zvm_bindkey vicmd 'P' my_zvm_vi_put_before
   zvm_bindkey vicmd 'S' my_zvm_vi_substitute_whole_line
-  zvm_bindkey vicmd 'p' my_zvm_vi_put_after
-
-  zvm_bindkey visual 'p' my_zvm_vi_replace_selection
-  zvm_bindkey visual 'c' my_zvm_vi_change
-  zvm_bindkey visual 'd' my_zvm_vi_delete
   zvm_bindkey visual 's' my_zvm_vi_substitute
-  zvm_bindkey visual 'x' my_zvm_vi_delete
-  zvm_bindkey visual 'y' my_zvm_vi_yank
 }
 # ------------------------------------------------------------------------------
 
