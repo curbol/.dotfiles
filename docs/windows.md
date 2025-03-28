@@ -49,6 +49,18 @@ OR
 
 [Download](https://wezfurlong.org/wezterm/install/windows.html#installing-on-windows)
 
+## GPG
+
+```sh
+scoop install gpg
+```
+
+Generate GPG Key:
+
+```sh
+gpg --full-generate-key
+```
+
 ## ZSH
 
 ### Bash Shell
@@ -76,7 +88,7 @@ Add zsh (and bash, etc.) to `PATH`
 ### ZSH Addons
 
 #### Powerlevel10k Prompt
->
+
 > **Prompt Style:** Lean, Unicode, 8 colors, No time, Two lines, Disconnected, No frame, Sparse, Few icons, Concise, Yes transient, Verbose
 
 ## Neovim
