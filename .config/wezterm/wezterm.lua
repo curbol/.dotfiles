@@ -32,10 +32,10 @@ local GRUVBOX_PURPLE = "#d3869b"
 local STATUS_BAR_BG = GRUVBOX_GREY2
 
 -- Symbols
-local SEPARATOR_LEFT_BOLD = ""
-local SEPARATOR_LEFT_THIN = ""
-local SEPARATOR_RIGHT_BOLD = ""
-local SEPARATOR_RIGHT_THIN = ""
+-- local SEPARATOR_LEFT_BOLD = ""
+-- local SEPARATOR_LEFT_THIN = ""
+-- local SEPARATOR_RIGHT_BOLD = ""
+-- local SEPARATOR_RIGHT_THIN = ""
 local SEPARATOR_THIN = "│"
 
 local EDGE_LEFT = "▌"
@@ -102,7 +102,7 @@ config.keys = {
 		key = "x",
 		mods = "LEADER",
 		action = action.Multiple({
-			action.CloseCurrentTab({ confirm = true }),
+			action.CloseCurrentTab({ confirm = false }),
 			action.ActivateTabRelative(1), -- Hack to set the last active tab after closing the current one so that leader+a works
 			action.ActivateTabRelative(-1),
 		}),
