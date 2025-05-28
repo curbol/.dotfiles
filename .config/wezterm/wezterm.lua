@@ -98,7 +98,15 @@ config.keys = {
 	{ key = "-", mods = "LEADER", action = action.SplitVertical({ domain = "CurrentPaneDomain" }) },
 	{ key = "\\", mods = "LEADER", action = action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
 	{ key = "c", mods = "LEADER", action = action.SpawnTab("CurrentPaneDomain") },
-	{ key = "x", mods = "LEADER", action = action.CloseCurrentPane({ confirm = true }) },
+	{
+		key = "x",
+		mods = "LEADER",
+		action = action.Multiple({
+			action.CloseCurrentTab({ confirm = true }),
+			action.ActivateTabRelative(1), -- Hack to set the last active tab after closing the current one so that leader+a works
+			action.ActivateTabRelative(-1),
+		}),
+	},
 	{ key = "n", mods = "LEADER", action = action.ActivateTabRelative(1) },
 	{ key = "n", mods = "LEADER|CTRL", action = action.ActivateTabRelative(1) },
 	{ key = "p", mods = "LEADER", action = action.ActivateTabRelative(-1) },
