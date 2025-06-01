@@ -15,10 +15,15 @@ if [ -f ~/.config/zsh/.zshrc_local ]; then
   . ~/.config/zsh/.zshrc_local
 fi
 if [ -n "$GIT_SIGNING_KEY_ID" ]; then
-  current_git_signing_key=$(git config --global --get user.signingkey)
-  if [ "$current_git_signing_key" != "$GIT_SIGNING_KEY_ID" ]; then
-    git config --global user.signingkey "$GIT_SIGNING_KEY_ID"
+  local_git_config_file="$HOME/.gitconfig_local"
+  if [[ ! -f "$local_git_config_file" ]]; then
+    touch "$local_git_config_file"
   fi
+  current_git_signing_key=$(git config --file "$local_git_config_file" --get user.signingkey 2>/dev/null)
+  if [ "$current_git_signing_key" != "$GIT_SIGNING_KEY_ID" ]; then
+    git config --file "$local_git_config_file" user.signingkey "$GIT_SIGNING_KEY_ID"
+  fi
+  git config --file "$local_git_config_file" commit.gpgsign true
 fi
 # ------------------------------------------------------------------------------
 

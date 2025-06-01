@@ -1,7 +1,26 @@
 #!/bin/bash
 
+# Color definitions
+COLOR_RESET='\033[0m'
+COLOR_GREEN='\033[0;32m'
+COLOR_YELLOW='\033[0;33m'
+COLOR_RED='\033[0;31m'
+COLOR_BLUE='\033[0;34m'
+COLOR_CYAN='\033[0;36m'
+
 # Source the OS detection script
 source "$HOME/.dotfiles/scripts/ostype.sh"
+
+# Initialize force_overwrite_copy flag
+force_overwrite_copy=0
+
+# Parse command-line options
+# If --force is passed as the first argument, enable overwriting for copy operations.
+if [[ "$1" == "--force" ]]; then
+  force_overwrite_copy=1
+  echo -e "${COLOR_YELLOW}Force overwrite enabled for copied files.${COLOR_RESET}"
+  shift # Consume the --force argument, so it's not processed by later parts of the script if any.
+fi
 
 # Paths of dotfiles to symlink relative to the dotfiles directory
 linkfiles=(
@@ -19,7 +38,7 @@ linkfiles=(
 
 # Paths of dotfiles to copy relative to the dotfiles directory
 copyfiles=(
-  # ".config/zsh/.zshrc_local"
+  ".config/zsh/.zshrc_local"
 )
 
 create_symlink() {
@@ -31,12 +50,12 @@ create_symlink() {
 
   # Remove the destination file if it already exists
   if [[ -e "$dest" || -L "$dest" ]]; then
-    echo "Removing existing file: $dest"
+    echo -e "${COLOR_RED}Removing existing file:${COLOR_RESET} $dest"
     rm -rf "$dest"
   fi
 
   # Create the symlink
-  echo "Creating symlink: $dest -> $src"
+  echo -e "${COLOR_GREEN}Creating symlink:${COLOR_RESET} $dest ${COLOR_CYAN}->${COLOR_RESET} $src"
   if [[ $is_windows -eq 1 ]]; then
     # Use mklink for Windows
     if [[ -d "$src" ]]; then
@@ -52,19 +71,24 @@ create_symlink() {
 copy_file() {
   local src=$1
   local dest=$2
+  local force_overwrite=$3
 
   # Create the parent directory of the destination if it doesn't exist
   mkdir -p "$(dirname "$dest")"
 
-  # Remove the destination file if it already exists
   if [[ -e "$dest" ]]; then
-    echo "Removing existing file: $dest"
-    rm -rf "$dest"
+    if [[ "$force_overwrite" -eq 1 ]]; then
+      echo -e "${COLOR_RED}Removing existing file (force overwrite):${COLOR_RESET} $dest"
+      rm -rf "$dest"
+      echo -e "${COLOR_GREEN}Copying file:${COLOR_RESET} $src ${COLOR_CYAN}->${COLOR_RESET} $dest"
+      cp -r "$src" "$dest"
+    else
+      echo -e "${COLOR_YELLOW}Skipping copy:${COLOR_RESET} $dest already exists. Use --force to overwrite."
+    fi
+  else
+    echo -e "${COLOR_GREEN}Copying file:${COLOR_RESET} $src ${COLOR_CYAN}->${COLOR_RESET} $dest"
+    cp -r "$src" "$dest"
   fi
-
-  # Copy the file
-  echo "Copying file: $src -> $dest"
-  cp -r "$src" "$dest"
 }
 
 # Directory containing your dotfiles
@@ -83,7 +107,7 @@ for file in "${copyfiles[@]}"; do
   src="$dotfiles_dir/$file"
   dest="$HOME/$file"
 
-  copy_file "$src" "$dest"
+  copy_file "$src" "$dest" "$force_overwrite_copy"
 done
 
-echo "Dotfiles have been processed!"
+echo -e "${COLOR_BLUE}Dotfiles have been processed!${COLOR_RESET}"

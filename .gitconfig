@@ -7,12 +7,9 @@
 [user]
 	name = curbol
 	email = curtis.bollinger@gmail.com
-	signingkey = XXXXXXXXXXXXXXXX
 [core]
 	editor = nvim --wait
-  excludesfile = ~/.gitignore 
-[commit]
-	gpgsign = true
+  excludesfile = ~/.gitignore
 [pull]
 	rebase = false
 [fetch]
@@ -25,3 +22,5 @@
 	tool = nvim
 [difftool "nvim"]
 	cmd = nvim -d $LOCAL $REMOTE
+[include]
+	path = ~/.gitconfig_local
