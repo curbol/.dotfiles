@@ -41,6 +41,10 @@ brew install gh postgresql kubectl awscli automake
 ```
 
 ```sh
+gh extension install github/gh-copilot
+```
+
+```sh
 npm i -g neovim terraform-fmt
 ```
 
