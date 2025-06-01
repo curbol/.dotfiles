@@ -10,6 +10,19 @@ fi
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
+# Load Secrets
+if [ -f ~/.config/zsh/.zshrc_local ]; then
+  . ~/.config/zsh/.zshrc_local
+fi
+if [ -n "$GIT_SIGNING_KEY_ID" ]; then
+  current_git_signing_key=$(git config --global --get user.signingkey)
+  if [ "$current_git_signing_key" != "$GIT_SIGNING_KEY_ID" ]; then
+    git config --global user.signingkey "$GIT_SIGNING_KEY_ID"
+  fi
+fi
+# ------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
 # Load Scripts
 source "$HOME/.dotfiles/scripts/jump.sh"
 # ------------------------------------------------------------------------------
@@ -54,11 +67,14 @@ eval "$(mise activate zsh)"
 
 # ------------------------------------------------------------------------------
 # Gladly stuff
-source "$HOME/.dotfiles/gladly/pact.zsh"
+export PATH=$PATH:/opt/pact/bin
+export PACT_PROVIDER_VERSION=dev_laptop
+export PACT_DISABLE_SSL_VERIFICATION=true
+export PACT_BROKER_URL=https://pact-broker.tools.gladly.qa
+export PACT_BROKER_USERNAME=basic_auth_user_read_only
 export GOPRIVATE=github.com/sagansystems,github.com/gladly
 export BUILD_HARNESS_PATH=$HOME/code/build-harness
 export DOCKER_COMPOSE_PATH=$HOME/code/docker-compose
-export PACT_PROVIDER_VERSION=dev_laptop
 export APP_PLATFORM_INFRA=true # https://github.com/sagansystems/docker-compose
 alias auth-local='saganadmin localhost:8001'
 alias auth-master='saganadmin https://us-master.gladly.qa'
