@@ -1,10 +1,15 @@
 {
   "mcpServers": {
-    "fetch": {
-      "command": "uvx",
+    "shortcut": {
+      "env": {
+        "SHORTCUT_API_TOKEN": "$SHORTCUT_API_TOKEN"
+      },
       "args": [
-        "mcp-server-fetch"
-      ]
+        "-y",
+        "@shortcut/mcp@latest"
+      ],
+      "command": "npx"
     }
-  }
+  },
+  "nativeMCPServers": []
 }
