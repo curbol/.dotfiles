@@ -1,6 +1,18 @@
 {
   "nativeMCPServers": [],
   "mcpServers": {
+    "appcfg": {
+      "command": "node",
+      "args": [
+        "$HOME/code/supernova/tools/appcfg/mcpserver/index.js"
+      ],
+      "env": {
+        "GLADLY_APP_CFG_HOST": "$GLADLY_APP_CFG_HOST",
+        "GLADLY_APP_CFG_USER": "$GLADLY_APP_CFG_USER",
+        "GLADLY_APP_CFG_TOKEN": "$GLADLY_APP_CFG_TOKEN",
+        "GLADLY_APP_CFG_ROOT": "$GLADLY_APP_CFG_ROOT"
+      }
+    },
     "cli": {
       "command": "npx",
       "args": [
