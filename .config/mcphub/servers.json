@@ -1,14 +1,45 @@
 {
+  "nativeMCPServers": [],
   "mcpServers": {
-    "shortcut": {
+    "cli": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-cli@latest"
+      ],
       "env": {
-        "SHORTCUT_API_TOKEN": "$SHORTCUT_API_TOKEN"
-      },
+        "ALLOWED_COMMANDS": "appcfg"
+      }
+    },
+    "shortcut": {
+      "command": "npx",
       "args": [
         "-y",
         "@shortcut/mcp@latest"
       ],
-      "command": "npx"
+      "env": {
+        "SHORTCUT_API_TOKEN": "$SHORTCUT_API_TOKEN"
+      }
+    },
+    "git": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "--mount",
+        "type=bind,src=$HOME/code,dst=$HOME/code",
+        "mcp/git"
+      ]
+    },
+    "time": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "mcp/time"
+      ]
     },
     "github": {
       "command": "docker",
@@ -24,13 +55,6 @@
         "GITHUB_PERSONAL_ACCESS_TOKEN": "$GITHUB_PERSONAL_ACCESS_TOKEN"
       }
     },
-    "git": {
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-git@latest"
-      ],
-      "command": "npx"
-    },
     "filesystem": {
       "command": "npx",
       "args": [
@@ -39,6 +63,5 @@
         "$HOME/code"
       ]
     }
-  },
-  "nativeMCPServers": []
+  }
 }
