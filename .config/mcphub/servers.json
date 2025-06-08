@@ -20,7 +20,7 @@
         "@modelcontextprotocol/server-cli@latest"
       ],
       "env": {
-        "ALLOWED_COMMANDS": "appcfg"
+        "ALLOWED_COMMANDS": "appcfg,make,bun,bunx,npm,npx"
       }
     },
     "shortcut": {
