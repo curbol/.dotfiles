@@ -49,7 +49,7 @@ npm i -g neovim terraform-fmt
 ```
 
 ```sh
-brew install go nodejs python zig
+brew install go nodejs python uv zig
 ```
 
 ```sh

@@ -13,15 +13,14 @@
         "GLADLY_APP_CFG_ROOT": "$GLADLY_APP_CFG_ROOT"
       }
     },
-    "cli": {
-      "command": "npx",
+    "fetch": {
+      "command": "docker",
       "args": [
-        "-y",
-        "@modelcontextprotocol/server-cli@latest"
-      ],
-      "env": {
-        "ALLOWED_COMMANDS": "appcfg,make,bun,bunx,npm,npx"
-      }
+        "run",
+        "-i",
+        "--rm",
+        "mcp/fetch"
+      ]
     },
     "shortcut": {
       "command": "npx",
@@ -40,7 +39,7 @@
         "--rm",
         "-i",
         "--mount",
-        "type=bind,src=$HOME/code,dst=$HOME/code",
+        "type=bind,src=$HOME/code,dst=/projects/code",
         "mcp/git"
       ]
     },
@@ -68,11 +67,35 @@
       }
     },
     "filesystem": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "--mount",
+        "type=bind,src=$HOME/code,dst=/projects/code",
+        "mcp/filesystem",
+        "/projects"
+      ]
+    },
+    "memory": {
       "command": "npx",
       "args": [
         "-y",
-        "@modelcontextprotocol/server-filesystem@latest",
-        "$HOME/code"
+        "@modelcontextprotocol/server-memory"
+      ]
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    },
+    "terminal-controller": {
+      "command": "uvx",
+      "args": [
+        "terminal_controller"
       ]
     }
   }
