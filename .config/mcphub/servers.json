@@ -32,17 +32,6 @@
         "SHORTCUT_API_TOKEN": "$SHORTCUT_API_TOKEN"
       }
     },
-    "git": {
-      "command": "docker",
-      "args": [
-        "run",
-        "--rm",
-        "-i",
-        "--mount",
-        "type=bind,src=$HOME/code,dst=/projects/code",
-        "mcp/git"
-      ]
-    },
     "time": {
       "command": "docker",
       "args": [
@@ -50,6 +39,25 @@
         "-i",
         "--rm",
         "mcp/time"
+      ]
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/curtis/code"
+      ]
+    },
+    "git": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "--mount",
+        "type=bind,src=/Users/curtis/code/,dst=/Users/curtis/code",
+        "mcp/git"
       ]
     },
     "github": {
@@ -65,18 +73,6 @@
       "env": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "$GITHUB_PERSONAL_ACCESS_TOKEN"
       }
-    },
-    "filesystem": {
-      "command": "docker",
-      "args": [
-        "run",
-        "-i",
-        "--rm",
-        "--mount",
-        "type=bind,src=$HOME/code,dst=/projects/code",
-        "mcp/filesystem",
-        "/projects"
-      ]
     },
     "memory": {
       "command": "npx",
@@ -96,6 +92,12 @@
       "command": "uvx",
       "args": [
         "terminal_controller"
+      ]
+    },
+    "mcp-server-docker": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-docker"
       ]
     }
   }
