@@ -1,63 +1,17 @@
 {
   "nativeMCPServers": [],
   "mcpServers": {
-    "appcfg": {
-      "command": "node",
-      "args": [
-        "$HOME/code/supernova/tools/appcfg/mcpserver/index.js"
-      ],
-      "env": {
-        "GLADLY_APP_CFG_HOST": "$GLADLY_APP_CFG_HOST",
-        "GLADLY_APP_CFG_USER": "$GLADLY_APP_CFG_USER",
-        "GLADLY_APP_CFG_TOKEN": "$GLADLY_APP_CFG_TOKEN",
-        "GLADLY_APP_CFG_ROOT": "$GLADLY_APP_CFG_ROOT"
-      }
-    },
-    "fetch": {
-      "command": "docker",
-      "args": [
-        "run",
-        "-i",
-        "--rm",
-        "mcp/fetch"
-      ]
-    },
-    "shortcut": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@shortcut/mcp@latest"
-      ],
-      "env": {
-        "SHORTCUT_API_TOKEN": "$SHORTCUT_API_TOKEN"
-      }
-    },
     "time": {
       "command": "docker",
+      "autoApprove": [
+        "get_current_time",
+        "convert_time"
+      ],
       "args": [
         "run",
         "-i",
         "--rm",
         "mcp/time"
-      ]
-    },
-    "filesystem": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "/Users/curtis/code"
-      ]
-    },
-    "git": {
-      "command": "docker",
-      "args": [
-        "run",
-        "--rm",
-        "-i",
-        "--mount",
-        "type=bind,src=/Users/curtis/code/,dst=/Users/curtis/code",
-        "mcp/git"
       ]
     },
     "github": {
@@ -74,31 +28,43 @@
         "GITHUB_PERSONAL_ACCESS_TOKEN": "$GITHUB_PERSONAL_ACCESS_TOKEN"
       }
     },
-    "memory": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-memory"
-      ]
-    },
-    "sequential-thinking": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-sequential-thinking"
-      ]
-    },
     "terminal-controller": {
       "command": "uvx",
       "args": [
         "terminal_controller"
       ]
     },
-    "mcp-server-docker": {
-      "command": "uvx",
+    "shortcut": {
+      "command": "npx",
       "args": [
-        "mcp-server-docker"
+        "-y",
+        "@shortcut/mcp@latest"
+      ],
+      "env": {
+        "SHORTCUT_API_TOKEN": "$SHORTCUT_API_TOKEN"
+      }
+    },
+    "git": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "--mount",
+        "type=bind,src=/Users/curtis/code/,dst=/Users/curtis/code",
+        "mcp/git"
       ]
+    },
+    "appcfg": {
+      "command": "node",
+      "args": [
+        "/Users/curtis/code/supernova/tools/appcfg/mcpserver/dist/main.js"
+      ],
+      "env": {
+        "GLADLY_APP_CFG_HOST": "us-master.gladly.qa",
+        "GLADLY_APP_CFG_USER": "curtis.bollinger@gladly.com",
+        "GLADLY_APP_CFG_ROOT": "/Users/curtis/Gladly"
+      }
     }
   }
 }
