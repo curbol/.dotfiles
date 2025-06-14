@@ -14,57 +14,11 @@
         "mcp/time"
       ]
     },
-    "github": {
-      "command": "docker",
-      "args": [
-        "run",
-        "-i",
-        "--rm",
-        "-e",
-        "GITHUB_PERSONAL_ACCESS_TOKEN",
-        "ghcr.io/github/github-mcp-server"
-      ],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "$GITHUB_PERSONAL_ACCESS_TOKEN"
-      }
-    },
     "terminal-controller": {
       "command": "uvx",
       "args": [
         "terminal_controller"
       ]
-    },
-    "shortcut": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@shortcut/mcp@latest"
-      ],
-      "env": {
-        "SHORTCUT_API_TOKEN": "$SHORTCUT_API_TOKEN"
-      }
-    },
-    "git": {
-      "command": "docker",
-      "args": [
-        "run",
-        "--rm",
-        "-i",
-        "--mount",
-        "type=bind,src=/Users/curtis/code/,dst=/Users/curtis/code",
-        "mcp/git"
-      ]
-    },
-    "appcfg": {
-      "command": "node",
-      "args": [
-        "/Users/curtis/code/supernova/tools/appcfg/mcpserver/dist/main.js"
-      ],
-      "env": {
-        "GLADLY_APP_CFG_HOST": "us-master.gladly.qa",
-        "GLADLY_APP_CFG_USER": "curtis.bollinger@gladly.com",
-        "GLADLY_APP_CFG_ROOT": "/Users/curtis/Gladly"
-      }
     }
   }
 }

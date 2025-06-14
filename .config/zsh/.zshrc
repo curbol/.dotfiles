@@ -34,6 +34,7 @@ source "$HOME/.dotfiles/scripts/jump.sh"
 
 # ------------------------------------------------------------------------------
 # Homebrew
+export HOMEBREW_AUTO_UPDATE_SECS=86400 # Set Homebrew auto-update interval to 24 hours
 if [[ $is_mac_intel -eq 1 ]]; then
   eval "$(/usr/local/bin/brew shellenv)"
 fi
