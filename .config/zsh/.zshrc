@@ -14,7 +14,7 @@ fi
 if [ -f ~/.config/zsh/.zshrc_local ]; then
   . ~/.config/zsh/.zshrc_local
 fi
-if [ -n "$GIT_SIGNING_KEY_ID" ]; then
+if [ -n "$GIT_SIGNING_KEY_ID" ]; then # Set GPG signing key in git config if defined
   local_git_config_file="$HOME/.gitconfig_local"
   if [[ ! -f "$local_git_config_file" ]]; then
     touch "$local_git_config_file"
