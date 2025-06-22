@@ -192,7 +192,11 @@ Add the public key to GitHub under Settings > SSH and GPG keys.
 brew install antidote
 ```
 
-#### Powerlevel10k Prompt
+#### Starship Prompt
+
+<https://github.com/starship/starship>
+
+#### [Old] Powerlevel10k Prompt
 
 > **Prompt Style:** Lean, Unicode, 8 colors, No time, Two lines, Disconnected, No frame, Sparse, Few icons, Concise, Yes transient, Verbose
 

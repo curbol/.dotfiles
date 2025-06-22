@@ -1,12 +1,8 @@
 # zmodload zsh/zprof
 
 # ------------------------------------------------------------------------------
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+# Starship prompt - https://github.com/starship/starship
+eval "$(starship init zsh)"
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
@@ -182,14 +178,6 @@ zvm_after_lazy_keybindings() {
   zvm_bindkey vicmd 'S' my_zvm_vi_substitute_whole_line
   zvm_bindkey visual 's' my_zvm_vi_substitute
 }
-# ------------------------------------------------------------------------------
-
-# ------------------------------------------------------------------------------
-# Added by Powerlevel10k
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-# Git status symbols: https://github.com/romkatv/powerlevel10k/blob/master/README.md#what-do-different-symbols-in-git-status-mean
-# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-[[ ! -f ${ZDOTDIR:-$HOME}/.p10k.zsh ]] || source ${ZDOTDIR:-$HOME}/.p10k.zsh
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------

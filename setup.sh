@@ -25,6 +25,7 @@ fi
 # Paths of dotfiles to symlink relative to the dotfiles directory
 linkfiles=(
   ".config/mcphub/servers.json"
+  ".config/starship.toml"
   ".config/wezterm/wezterm.lua"
   ".config/zsh/.zsh_plugins.txt"
   ".config/zsh/.zshrc"

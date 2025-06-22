@@ -25,9 +25,6 @@ ohmyzsh/ohmyzsh path:plugins/extract
 zdharma-continuum/fast-syntax-highlighting
 zsh-users/zsh-autosuggestions
 
-# Prompt
-romkatv/powerlevel10k
-
 # Vi mode
 jeffreytse/zsh-vi-mode
 
