@@ -27,4 +27,3 @@ zsh-users/zsh-autosuggestions
 
 # Vi mode
 jeffreytse/zsh-vi-mode
-
