@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Color definitions
+# Color definitions - Gruvbox-ish palette
 COLOR_RESET='\033[0m'
-COLOR_GREEN='\033[0;32m'
-COLOR_YELLOW='\033[0;33m'
-COLOR_RED='\033[0;31m'
-COLOR_BLUE='\033[0;34m'
-COLOR_CYAN='\033[0;36m'
+COLOR_GREEN='\033[38;2;123;167;124m'    # Sage Green: #7ba77c
+COLOR_YELLOW='\033[38;2;209;139;22m'    # Golden Amber: #d18b16
+COLOR_RED='\033[38;2;207;83;83m'        # Coral Red: #cf5353
+COLOR_BLUE='\033[38;2;120;155;141m'     # Seafoam Teal: #789b8d
+COLOR_CYAN='\033[38;2;205;123;144m'     # Dusty Rose: #cd7b90
 
 # Source the OS detection script
 source "$HOME/.dotfiles/scripts/ostype.sh"

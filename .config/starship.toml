@@ -15,17 +15,30 @@ $line_break\
 $character\
 """
 
+# Gruvbox-ish color palette
+# Coral Red: #cf5353
+# Burnt Orange: #e57e43
+# Golden Amber: #d18b16
+# Olive Gold: #8d8b18
+# Sage Green: #7ba77c
+# Seafoam Teal: #789b8d
+# Dusty Rose: #cd7b90
+
 [directory]
-style = "bold blue"
+style = "bold #789b8d"
 read_only = " 󰌾"
 
 [git_branch]
-style = "bold green"
+style = "bold #cd7b90"
 symbol = " "
 format = "[$symbol$branch(:$remote_branch)]($style) "
 
 [git_status]
-style = "bold yellow"
+style = "bold #d18b16"
 
 [git_commit]
 tag_symbol = '  '
+
+[character]
+success_symbol = "[❯](bold #8d8b18)"
+error_symbol = "[❯](bold #cf5353)"
