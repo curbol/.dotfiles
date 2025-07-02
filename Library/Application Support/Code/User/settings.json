@@ -455,9 +455,9 @@
   "mcp": {
     "servers": {
       "gladly-app-platform": {
-        "command": "node",
+        "command": "npx",
         "args": [
-          "/Users/curtis/code/app-platform-mcp/dist/main.js"
+          "@sagansystems/app-platform-mcp-server"
         ],
         "env": {
           "GLADLY_APP_CFG_HOST": "us-master.gladly.qa",

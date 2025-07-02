@@ -43,7 +43,7 @@ linkfiles=(
 
 # Paths of dotfiles to copy relative to the dotfiles directory
 copyfiles=(
-  ".config/zsh/.zshrc_local"
+  ".config/zsh/.zshrc.local"
 )
 
 create_symlink() {
