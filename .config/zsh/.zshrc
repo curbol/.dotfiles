@@ -7,7 +7,7 @@ eval "$(starship init zsh)"
 
 # ------------------------------------------------------------------------------
 # Load Secrets
-if [ -f ~/.config/zsh/.zshrc_local ]; then
+if [ -f ~/.config/zsh/.zshrc.local ]; then
   . ~/.config/zsh/.zshrc.local
 fi
 if [ -n "$GIT_SIGNING_KEY_ID" ]; then # Set GPG signing key in git config if defined
