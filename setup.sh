@@ -34,6 +34,7 @@ linkfiles=(
   ".gitconfig"
   ".gitignore"
   ".ideavimrc"
+  ".npmrc"
   ".vimrc"
   ".zshenv"
   "Library/Application Support/Code/User/keybindings.json"

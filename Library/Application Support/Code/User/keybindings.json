@@ -253,7 +253,11 @@
     "command": "workbench.action.closeSidebar",
     "when": "sideBarFocus"
   },
-  // Add file/folder to chat context from explorer
+  // {
+  //   "key": "shift+i",
+  //   "command": "github.copilot.chat.attachFolder",
+  //   "when": "filesExplorerFocus && !inputFocus"
+  // },
   {
     "key": "shift+i",
     "command": "github.copilot.chat.attachFile",

@@ -23,17 +23,14 @@
   "editor.insertSpaces": true,
   "editor.detectIndentation": true,
   "editor.accessibilitySupport": "off",
-  // Optimizations for vscode-neovim
   "editor.scrollBeyondLastLine": false,
   "editor.scrollbar.vertical": "auto",
   "editor.scrollbar.horizontal": "auto",
   "editor.smoothScrolling": false,
   "editor.find.autoFindInSelection": "never",
   "editor.find.seedSearchStringFromSelection": "selection",
-  // Better cursor and selection behavior with neovim
   "editor.cursorSurroundingLines": 10,
   "editor.wordSeparators": "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?",
-  // Disable animations for better performance with vscode-neovim
   "workbench.reduceMotion": "on",
   "workbench.list.smoothScrolling": false,
   "workbench.tree.indent": 8,
@@ -94,7 +91,7 @@
   // =============================================================================
   "markdown-preview-enhanced.previewColorScheme": "editorColorScheme",
   // =============================================================================
-  // PRETTIER CONFIGURATION
+  // LINTER CONFIGURATION
   // =============================================================================
   "prettier.jsxSingleQuote": true,
   "prettier.printWidth": 100,
@@ -102,14 +99,12 @@
   "prettier.endOfLine": "lf",
   "prettier.semi": false,
   "Prettier-SQL.SQLFlavourOverride": "postgresql",
-  // =============================================================================
-  // ESLINT CONFIGURATION
-  // =============================================================================
   "eslint.validate": [
     "vue",
     "html",
     "javascript"
   ],
+  "biome.requireConfiguration": true,
   // =============================================================================
   // WORKBENCH & UI
   // =============================================================================
@@ -327,55 +322,19 @@
   // =============================================================================
   // LANGUAGE TOOLS & FRAMEWORKS
   // =============================================================================
-  // TypeScript & JavaScript
   "typescript.updateImportsOnFileMove.enabled": "always",
-  "typescript.suggest.autoImports": true,
   "javascript.updateImportsOnFileMove.enabled": "always",
-  "javascript.suggest.autoImports": true,
   "typescript.preferences.quoteStyle": "single",
   "javascript.preferences.quoteStyle": "single",
-  // Other Languages
+  "typescript.suggest.autoImports": true,
+  "javascript.suggest.autoImports": true,
   "go.toolsManagement.autoUpdate": true,
   "omnisharp.useModernNet": false,
-  "razor.devmode": true,
-  "redhat.telemetry.enabled": true,
   // =============================================================================
   // CODE RUNNER
   // =============================================================================
   "code-runner.runInTerminal": true,
   "code-runner.clearPreviousOutput": true,
-  // =============================================================================
-  // YAML CONFIGURATION
-  // =============================================================================
-  "yaml.customTags": [
-    "!And",
-    "!And sequence",
-    "!If",
-    "!If sequence",
-    "!Not",
-    "!Not sequence",
-    "!Equals",
-    "!Equals sequence",
-    "!Or",
-    "!Or sequence",
-    "!FindInMap",
-    "!FindInMap sequence",
-    "!Base64",
-    "!Join",
-    "!Join sequence",
-    "!Cidr",
-    "!Ref",
-    "!Sub",
-    "!Sub sequence",
-    "!GetAtt",
-    "!GetAZs",
-    "!ImportValue",
-    "!ImportValue sequence",
-    "!Select",
-    "!Select sequence",
-    "!Split",
-    "!Split sequence"
-  ],
   // =============================================================================
   // KUBERNETES CONFIGURATION
   // =============================================================================
@@ -429,7 +388,6 @@
     "list.focusAndActiveSelectionBackground": "#e57e4380",
     "list.focusAndActiveSelectionForeground": "#ebdbb2",
   },
-  // Configure neovim highlight groups for better VSCode integration (using custom palette)
   "vscode-neovim.highlightGroups.highlights": {
     "FlashBackdrop": {
       "color": "#928374"
@@ -488,16 +446,9 @@
     "/",
     "]"
   ],
-  // Enhanced vscode-neovim settings for LazyVim compatibility
   "vscode-neovim.neovimViewportHeightExtend": 1000,
   "vscode-neovim.revealCursorScrollLine": true,
-  // Improve performance and responsiveness  
   "vscode-neovim.logOutputToConsole": false,
-  // =============================================================================
-  // WHICHKEY EXTENSION
-  // =============================================================================
-  "whichkey.delay": 200,
-  "whichkey.sortOrder": "custom",
   // =============================================================================
   // MCP (MODEL CONTEXT PROTOCOL) SERVERS
   // =============================================================================
@@ -570,5 +521,5 @@
       }
     ]
   },
-  "docker.extension.enableComposeLanguageServer": false,
+  "github.copilot.nextEditSuggestions.enabled": true,
 }
