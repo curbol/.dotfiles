@@ -84,8 +84,8 @@ alias auth-staging='saganadmin https://us-staging.gladly.qa'
 alias gladmin-local='docker run -it --rm --name gladmin-local-$(openssl rand -hex 4) -v /Users/curtis/Gladly:/host -e GLADLY_DN=host.docker.internal -e ORG=example.org -e GLADLY_JWT_TOKEN=$(saganadmin localhost:8001) sagan/gladmin'
 alias gladmin-master='docker run -it --rm --name gladmin-master-$(openssl rand -hex 4) -v /Users/curtis/Gladly:/host -e GLADLY_DN=us-master.gladly.qa -e ORG=gladly.com -e GLADLY_JWT_TOKEN=$(saganadmin https://us-master.gladly.qa) sagan/gladmin'
 alias gladmin-staging='docker run -it --rm --name gladmin-staging-$(openssl rand -hex 4) -v /Users/curtis/Gladly:/host -e GLADLY_DN=us-staging.gladly.qa -e ORG=gladly.com -e GLADLY_JWT_TOKEN=$(saganadmin https://us-staging.gladly.qa) sagan/gladmin'
-alias appcfg-local="go run ~/code/supernova/tools/appcfg"
-alias appcfg-local-beta="go run -tags=beta ~/code/supernova/tools/appcfg"
+alias appcfg-local="(cd ~/code/supernova && go run ./tools/appcfg)"
+alias appcfg-local-beta="(cd ~/code/supernova && go run -tags=beta ./tools/appcfg)"
 export GLADLY_APP_CFG_HOST="localhost"
 export GLADLY_APP_CFG_USER="michelle.smith@example.org"
 export GLADLY_APP_CFG_TOKEN="testtoken"
