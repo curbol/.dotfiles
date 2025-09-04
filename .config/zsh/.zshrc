@@ -89,6 +89,13 @@ export GLADLY_APP_CFG_USER="michelle.smith@example.org"
 export GLADLY_APP_CFG_TOKEN="testtoken"
 export GLADLY_APP_CFG_ROOT="/Users/curtis/Gladly"
 
+# Nix (For Gladly Thankful Repo)
+export PATH="$GOBIN:/nix/var/nix/profiles/default/bin:$HOME/.nix-profile/bin:$PATH"
+if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+  . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+fi
+# End Nix
+
 appcfg-local() {
     (cd ~/code/supernova && go run ./tools/appcfg "$@")
 }
