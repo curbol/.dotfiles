@@ -27,7 +27,7 @@ brew install obsidian slack discord spotify licecap
 ## Nerd Font
 
 ```sh
-brew install font-jetbrains-mono-nerd-font
+brew install --cask font-maple-mono-nf
 ```
 
 ## CLI Tools

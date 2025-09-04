@@ -26,7 +26,7 @@ scoop bucket add nerd-fonts
 ```
 
 ```sh
-scoop install JetBrainsMono-NF-Mono
+scoop install Maple-Mono-NF
 ```
 
 ## CLI Tools

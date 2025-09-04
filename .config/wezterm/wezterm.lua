@@ -146,7 +146,8 @@ config.key_tables = {
 }
 
 -- Font
-config.font = wezterm.font("JetBrainsMono Nerd Font Mono", { weight = "Regular" })
+-- config.font = wezterm.font("JetBrainsMono Nerd Font Mono", { weight = "Regular" })
+config.font = wezterm.font("Maple Mono NF", { weight = "Regular" })
 config.font_size = 15
 
 -- Window
@@ -177,7 +178,7 @@ config.tab_bar_style = {
 	window_close = wezterm.format({
 		{ Background = { Color = STATUS_BAR_BG } },
 		{ Foreground = { Color = "#FF605C" } },
-		{ Text = " " .. wezterm.nerdfonts.md_circle_medium .. " " },
+		{ Text = " " .. wezterm.nerdfonts.md_record_circle .. " " },
 	}),
 	window_close_hover = wezterm.format({
 		{ Background = { Color = STATUS_BAR_BG } },
@@ -187,7 +188,7 @@ config.tab_bar_style = {
 	window_hide = wezterm.format({
 		{ Background = { Color = STATUS_BAR_BG } },
 		{ Foreground = { Color = "#FFBD44" } },
-		{ Text = wezterm.nerdfonts.md_circle_medium .. " " },
+		{ Text = wezterm.nerdfonts.md_record_circle .. " " },
 	}),
 	window_hide_hover = wezterm.format({
 		{ Background = { Color = STATUS_BAR_BG } },
@@ -197,7 +198,7 @@ config.tab_bar_style = {
 	window_maximize = wezterm.format({
 		{ Background = { Color = STATUS_BAR_BG } },
 		{ Foreground = { Color = "#00CA4E" } },
-		{ Text = wezterm.nerdfonts.md_circle_medium .. " " },
+		{ Text = wezterm.nerdfonts.md_record_circle .. " " },
 	}),
 	window_maximize_hover = wezterm.format({
 		{ Background = { Color = STATUS_BAR_BG } },

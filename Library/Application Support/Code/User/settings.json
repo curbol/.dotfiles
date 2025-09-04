@@ -2,7 +2,7 @@
   // =============================================================================
   // EDITOR SETTINGS
   // =============================================================================
-  "editor.fontFamily": "JetBrainsMono Nerd Font Mono, Victor Mono SemiBold, Fira Code, Consolas, Menlo, 'Courier New', monospace",
+  "editor.fontFamily": "Maple Mono NF, JetBrainsMono Nerd Font Mono, Victor Mono SemiBold, Fira Code, Consolas, Menlo, 'Courier New', monospace",
   "editor.fontSize": 15,
   "editor.fontLigatures": true,
   "editor.lineNumbers": "relative",
@@ -51,7 +51,7 @@
   // =============================================================================
   // TERMINAL CONFIGURATION
   // =============================================================================
-  "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font Mono, Victor Mono SemiBold, Fira Code, Consolas, Menlo, 'Courier New', monospace",
+  "terminal.integrated.fontFamily": "Maple Mono NF, JetBrainsMono Nerd Font Mono, Victor Mono SemiBold, Fira Code, Consolas, Menlo, 'Courier New', monospace",
   "terminal.external.osxExec": "WezTerm.app",
   // =============================================================================
   // LANGUAGE-SPECIFIC FORMATTING
