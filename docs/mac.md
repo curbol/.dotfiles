@@ -33,7 +33,7 @@ brew install --cask font-maple-mono-nf
 ## CLI Tools
 
 ```sh
-brew install xclip jq cmake fzf ripgrep fd wget lazygit luarocks markdown-toc prettier
+brew install git xclip jq cmake fzf ripgrep fd wget lazygit luarocks markdown-toc prettier
 ```
 
 ```sh

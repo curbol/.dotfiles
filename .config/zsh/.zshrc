@@ -41,8 +41,6 @@ fi
 
 # ------------------------------------------------------------------------------
 # Go
-export GOPATH=~/go
-export PATH=$PATH:$GOPATH/bin
 alias gotidy='go mod tidy && go mod vendor'
 # ------------------------------------------------------------------------------
 
@@ -69,14 +67,14 @@ eval "$(mise activate zsh)"
 
 # ------------------------------------------------------------------------------
 # Gladly stuff
-export PATH=$PATH:/opt/pact/bin
-export PACT_PROVIDER_VERSION=dev_laptop
+export PATH="$PATH:/opt/pact/bin"
+export PACT_PROVIDER_VERSION="dev_laptop"
 export PACT_DISABLE_SSL_VERIFICATION=true
-export PACT_BROKER_URL=https://pact-broker.tools.gladly.qa
-export PACT_BROKER_USERNAME=basic_auth_user_read_only
-export GOPRIVATE=github.com/sagansystems,github.com/gladly
-export BUILD_HARNESS_PATH=$HOME/code/build-harness
-export DOCKER_COMPOSE_PATH=$HOME/code/docker-compose
+export PACT_BROKER_URL="https://pact-broker.tools.gladly.qa"
+export PACT_BROKER_USERNAME="basic_auth_user_read_only"
+export GOPRIVATE="github.com/sagansystems,github.com/gladly"
+export BUILD_HARNESS_PATH="$HOME/code/build-harness"
+export DOCKER_COMPOSE_PATH="$HOME/code/docker-compose"
 export APP_PLATFORM_INFRA=true # https://github.com/sagansystems/docker-compose
 alias auth-local='saganadmin localhost:8001'
 alias auth-master='saganadmin https://us-master.gladly.qa'
@@ -89,12 +87,16 @@ export GLADLY_APP_CFG_USER="michelle.smith@example.org"
 export GLADLY_APP_CFG_TOKEN="testtoken"
 export GLADLY_APP_CFG_ROOT="/Users/curtis/Gladly"
 
-# Nix (For Gladly Thankful Repo)
+# Thankful
+# Nix
 export PATH="$GOBIN:/nix/var/nix/profiles/default/bin:$HOME/.nix-profile/bin:$PATH"
 if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
   . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
 fi
-# End Nix
+
+export THANKFUL_PATH="$HOME/code/thankful"
+eval "$(direnv hook zsh)"
+# End Thankful
 
 appcfg-local() {
     (cd ~/code/supernova && go run ./tools/appcfg "$@")
