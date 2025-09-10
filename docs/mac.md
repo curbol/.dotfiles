@@ -33,19 +33,15 @@ brew install --cask font-maple-mono-nf
 ## CLI Tools
 
 ```sh
-brew install git xclip jq cmake fzf ripgrep fd wget lazygit luarocks markdown-toc prettier
+brew install git xclip jq cmake fzf ripgrep fd wget luarocks markdown-toc prettier
 ```
 
 ```sh
-brew install gh postgresql kubectl awscli automake
+brew install lazygit neovim gh terraform postgresql kubectl awscli automake
 ```
 
 ```sh
 gh extension install github/gh-copilot
-```
-
-```sh
-npm i -g neovim terraform-fmt
 ```
 
 ```sh
