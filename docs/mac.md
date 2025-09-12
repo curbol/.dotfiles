@@ -21,7 +21,7 @@ brew install trailer mac-mouse-fix
 ```
 
 ```sh
-brew install obsidian slack discord spotify licecap
+brew install inkscape obsidian slack discord spotify licecap
 ```
 
 ## Nerd Font
@@ -60,7 +60,7 @@ mise use -g python@3.11
 ## Terminal
 
 ```sh
-brew install wezterm
+brew install warp
 ```
 
 ## Dotfiles
