@@ -17,11 +17,11 @@ defaults write .GlobalPreferences com.apple.mouse.scaling -1
 ## Apps
 
 ```sh
-brew install trailer mac-mouse-fix
+brew install mac-mouse-fix flashspace raycast
 ```
 
 ```sh
-brew install inkscape obsidian slack discord spotify licecap
+brew install obsidian slack discord spotify licecap
 ```
 
 ## Nerd Font
