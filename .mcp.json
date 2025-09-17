@@ -1,15 +1,5 @@
 {
   "mcpServers": {
-    "notion": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@makenotion/notion-mcp-server"
-      ],
-      "env": {
-        "NOTION_API_KEY": "${NOTION_API_KEY}"
-      }
-    },
     "github": {
       "command": "npx",
       "args": [
@@ -38,14 +28,16 @@
         "/Users/curtis"
       ]
     },
-    "postgres": {
+    "gladly-app-platform": {
       "command": "npx",
       "args": [
-        "-y",
-        "@modelcontextprotocol/server-postgres"
+        "@sagansystems/app-platform-mcp-server"
       ],
       "env": {
-        "POSTGRES_CONNECTION_STRING": "${POSTGRES_CONNECTION_STRING}"
+        "GLADLY_APP_CFG_HOST": "us-master.gladly.qa",
+        "GLADLY_APP_CFG_USER": "curtis.bollinger@gladly.com",
+        "GLADLY_APP_CFG_TOKEN": "${GLADLY_APP_CFG_TOKEN}",
+        "GLADLY_APP_CFG_ROOT": "/Users/curtis/Gladly"
       }
     }
   }
