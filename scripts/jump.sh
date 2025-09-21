@@ -112,7 +112,9 @@ mark() {
 		else
 			command ln -sfn "$PWD" "$MARKPATH/$MARK"
 		fi
-		echo "Mark '$MARK' created."
+		echo "${GREEN}Mark '$MARK' created.${RESET}"
+	else
+		echo "${RED}Cancelled.${RESET}"
 	fi
 }
 
@@ -145,7 +147,9 @@ unmark() {
 		else
 			LANG= command rm "$MARKPATH/$mark"
 		fi
-		echo "Mark '$mark' removed."
+		echo "${GREEN}Mark '$mark' removed.${RESET}"
+	else
+		echo "${RED}Cancelled.${RESET}"
 	fi
 }
 
