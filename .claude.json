@@ -40,5 +40,32 @@
         "GLADLY_APP_CFG_ROOT": "/Users/curtis/Gladly"
       }
     }
+  },
+  "projects": {
+    "/Users/curtis/.dotfiles": {
+      "allowedTools": [],
+      "history": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": false,
+      "ignorePatterns": [],
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "lastCost": 0.34781575,
+      "lastAPIDuration": 66653,
+      "lastToolDuration": 905,
+      "lastDuration": 5093568,
+      "lastLinesAdded": 0,
+      "lastLinesRemoved": 0,
+      "lastTotalInputTokens": 4828,
+      "lastTotalOutputTokens": 1822,
+      "lastTotalCacheCreationInputTokens": 58611,
+      "lastTotalCacheReadInputTokens": 335255,
+      "lastTotalWebSearchRequests": 0,
+      "lastSessionId": "2387f5a7-7058-42da-8d7e-0c4644e5e0a0"
+    }
   }
 }
