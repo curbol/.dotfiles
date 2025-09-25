@@ -34,7 +34,7 @@ linkfiles=(
   ".gitconfig"
   ".gitignore"
   ".ideavimrc"
-  ".claude.json"
+  ".mcp.json"
   ".npmrc"
   ".vimrc"
   ".zshenv"
