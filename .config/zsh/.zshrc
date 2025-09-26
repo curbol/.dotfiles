@@ -47,6 +47,7 @@ alias gotidy='go mod tidy && go mod vendor'
 # ------------------------------------------------------------------------------
 # Neovim
 # https://github.com/curbol/kickstart.nvim
+alias vi='nvim'
 alias vim='nvim'
 
 # Preferred editor for local and remote sessions
