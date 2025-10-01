@@ -1,5 +1,17 @@
 {
   "mcpServers": {
+    "gladly-app-platform": {
+      "command": "npx",
+      "args": [
+        "@sagansystems/app-platform-mcp-server"
+      ],
+      "env": {
+        "GLADLY_APP_CFG_HOST": "us-master.gladly.qa",
+        "GLADLY_APP_CFG_USER": "curtis.bollinger@gladly.com",
+        "GLADLY_APP_CFG_TOKEN": "${GLADLY_API_TOKEN_MASTER}",
+        "GLADLY_APP_CFG_ROOT": "/Users/curtis/Gladly"
+      }
+    },
     "github": {
       "command": "npx",
       "args": [
@@ -27,6 +39,14 @@
         "@modelcontextprotocol/server-filesystem",
         "/Users/curtis"
       ]
+    },
+    "sentry": {
+      "type": "http",
+      "url": "https://mcp.sentry.dev/mcp"
+    },
+    "notion": {
+      "type": "http",
+      "url": "https://mcp.notion.com/mcp"
     }
   }
 }
