@@ -25,7 +25,6 @@ fi
 # Paths of dotfiles to symlink relative to the dotfiles directory
 linkfiles=(
   ".config/aerospace/aerospace.toml"
-  ".config/mcphub/servers.json"
   ".config/starship.toml"
   ".config/wezterm/wezterm.lua"
   ".config/zsh/.zsh_plugins.txt"
@@ -37,10 +36,7 @@ linkfiles=(
   ".ideavimrc"
   ".mcp.json"
   ".npmrc"
-  ".vimrc"
   ".zshenv"
-  "Library/Application Support/Code/User/keybindings.json"
-  "Library/Application Support/Code/User/settings.json"
 )
 
 # Paths of dotfiles to copy relative to the dotfiles directory
