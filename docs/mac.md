@@ -17,7 +17,11 @@ defaults write .GlobalPreferences com.apple.mouse.scaling -1
 ## Apps
 
 ```sh
-brew install mac-mouse-fix flashspace raycast
+brew install mac-mouse-fix raycast
+```
+
+```sh
+brew install --cask nikitabobko/tap/aerospace
 ```
 
 ```sh

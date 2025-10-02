@@ -24,6 +24,7 @@ fi
 
 # Paths of dotfiles to symlink relative to the dotfiles directory
 linkfiles=(
+  ".config/aerospace/aerospace.toml"
   ".config/mcphub/servers.json"
   ".config/starship.toml"
   ".config/wezterm/wezterm.lua"
