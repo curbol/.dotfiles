@@ -1,0 +1,44 @@
+{
+  "mcpServers": {
+    "gladly-app-platform": {
+      "command": "npx",
+      "args": [
+        "@sagansystems/app-platform-mcp-server"
+      ],
+      "env": {
+        "GLADLY_APP_CFG_HOST": "us-master.gladly.qa",
+        "GLADLY_APP_CFG_USER": "curtis.bollinger@gladly.com",
+        "GLADLY_APP_CFG_TOKEN": "${GLADLY_API_TOKEN_MASTER}",
+        "GLADLY_APP_CFG_ROOT": "/Users/curtis/Gladly"
+      }
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      }
+    },
+    "shortcut": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@shortcut/mcp@latest"
+      ],
+      "env": {
+        "SHORTCUT_API_TOKEN": "${SHORTCUT_API_TOKEN}"
+      }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/curtis"
+      ]
+    }
+  }
+}

@@ -91,7 +91,6 @@ outer.left = 6
 # App shortcuts
 alt-b = 'exec-and-forget open -a /Applications/Google\ Chrome.app'
 alt-s = 'exec-and-forget open -a /Applications/Slack.app'
-alt-d = 'exec-and-forget open -a /Applications/Discord.app'
 alt-n = 'exec-and-forget open -a /Applications/Notion.app'
 alt-t = 'exec-and-forget open -a /Applications/Warp.app'
 alt-m = 'exec-and-forget open -a /Applications/Messages.app'
@@ -191,9 +190,13 @@ run = ['move-node-to-workspace 3']
 if.app-id = 'com.apple.MobileSMS'
 run = ['move-node-to-workspace 3']
 
-# Workspace 9: Safari
+# Workspace 9: Safari, Google Meet
 [[on-window-detected]]
 if.app-id = 'com.apple.Safari'
+run = ['move-node-to-workspace 9']
+
+[[on-window-detected]]
+if.app-id = 'com.google.Meet'
 run = ['move-node-to-workspace 9']
 
 # force certain workspaces to certain monitors
