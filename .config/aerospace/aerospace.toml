@@ -89,7 +89,7 @@ outer.left = 6
 # '''
 
 # App shortcuts
-alt-b = 'exec-and-forget open -a /Applications/Google\ Chrome.app'
+alt-b = 'exec-and-forget open -a /Applications/Arc.app'
 alt-s = 'exec-and-forget open -a /Applications/Slack.app'
 alt-n = 'exec-and-forget open -a /Applications/Notion.app'
 alt-t = 'exec-and-forget open -a /Applications/Warp.app'
@@ -163,7 +163,7 @@ alt-shift-down = ['join-with down', 'mode main']
 alt-shift-up = ['join-with up', 'mode main']
 alt-shift-right = ['join-with right', 'mode main']
 
-# Workspace 1: Notion, Slack, Chrome
+# Workspace 1: Notion, Slack, Arc
 [[on-window-detected]]
 if.app-id = 'notion.id'
 run = ['move-node-to-workspace 1']
@@ -173,7 +173,7 @@ if.app-id = 'com.tinyspeck.slackmacgap'
 run = ['move-node-to-workspace 1']
 
 [[on-window-detected]]
-if.app-id = 'com.google.Chrome'
+if.app-id = 'company.thebrowser.Browser'
 run = ['move-node-to-workspace 1']
 
 # Workspace 2: Warp
