@@ -102,10 +102,10 @@ alt-f = 'fullscreen'
 alt-y = ['focus right', 'join-with down', 'layout tiles horizontal']
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
-alt-left = 'focus left'
-alt-down = 'focus down'
-alt-up = 'focus up'
-alt-right = 'focus right'
+# alt-left = 'focus left'
+# alt-down = 'focus down'
+# alt-up = 'focus up'
+# alt-right = 'focus right'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move
 alt-shift-left = 'move left'
@@ -158,10 +158,10 @@ f = [
 ] # Toggle between floating and tiling layout
 backspace = ['close-all-windows-but-current', 'mode main']
 
-alt-shift-left = ['join-with left', 'mode main']
-alt-shift-down = ['join-with down', 'mode main']
-alt-shift-up = ['join-with up', 'mode main']
-alt-shift-right = ['join-with right', 'mode main']
+# alt-shift-left = ['join-with left', 'mode main']
+# alt-shift-down = ['join-with down', 'mode main']
+# alt-shift-up = ['join-with up', 'mode main']
+# alt-shift-right = ['join-with right', 'mode main']
 
 # Workspace 1: Notion, Slack, Arc
 [[on-window-detected]]
