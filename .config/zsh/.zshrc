@@ -81,6 +81,7 @@ export PACT_BROKER_USERNAME="basic_auth_user_read_only"
 export GOPRIVATE="github.com/sagansystems,github.com/gladly"
 export BUILD_HARNESS_PATH="$HOME/code/build-harness"
 export DOCKER_COMPOSE_PATH="$HOME/code/docker-compose"
+export TELEPORT_PROXY="gladly.teleport.sh"
 export APP_PLATFORM_INFRA=true # https://github.com/sagansystems/docker-compose
 alias auth-local='saganadmin localhost:8001'
 alias auth-master='saganadmin https://us-master.gladly.qa'
