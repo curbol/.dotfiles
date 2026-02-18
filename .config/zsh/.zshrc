@@ -113,12 +113,16 @@ export THANKFUL_PATH="$HOME/code/thankful"
 eval "$(direnv hook zsh)"
 # End Thankful
 
-appcfg-local() {
+appcfg-source() {
     (cd ~/code/supernova && go run ./tools/appcfg "$@")
 }
 
-appcfg-local-beta() {
+appcfg-source-beta() {
     (cd ~/code/supernova && go run -tags=beta ./tools/appcfg "$@")
+}
+
+gladmin-source() {
+    (cd ~/code/gladmin-cli && go run ./ "$@")
 }
 # ------------------------------------------------------------------------------
 

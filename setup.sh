@@ -33,7 +33,7 @@ linkfiles=(
   ".config/zsh/.zshrc"
   ".config/zsh/scripts/jump.sh"
   ".config/zsh/scripts/ostype.sh"
-  ".cursor/mcp.json"
+  ".gladmin/config.yaml"
   ".gitconfig"
   ".gitignore"
   ".ideavimrc"

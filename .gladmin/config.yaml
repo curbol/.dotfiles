@@ -1,0 +1,27 @@
+default_profile: master
+profiles:
+    local:
+        host: localhost:8001
+        org: example.org
+        token: ""
+        auth_type: sagan
+    master:
+        host: https://us-master.gladly.qa
+        org: gladly.com
+        token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzE0MDE3NzEsImlhdCI6MTc3MTM5NDU3MSwidXNlcklkIjoic2FnYW5BZG1pbiIsIm9yZ0lkIjoic2FnYW4iLCJyb2xlSWRzIjpbInNhZ2FuLWFkbWluIl0sInNhZ2FuVXNlciI6ImN1cnRpcy5ib2xsaW5nZXJAZ2xhZGx5LmNvbSIsInNjb3BlIjpbInNhZ2FuLWFkbWluIl0sInNlc3Npb24iOnsiaWQiOiIifX0.bmN_vrBIop6DU5_WSUzfNwNhVr7Gut_mrQKuVTP1YlrSeBhijzPTIVdnXWYGbSI6yXGE7HpGHuBjXacnplwHjiKcceze5veeaz-m41Mk20W2ruPTycN7gRnqW-wErkXEsJ2bNHksNv3SlFh5BM7k3LDnACMhXbqMqEu6Nu2mncVxY244S_UosIA44Mde_5CcyJ7RJuk8tjHqlCPLK5bzj9OEB47rC8sAKy1OmPurnrD3goYO6Py1f0r-ouF9eaQE6hn4nuWZY0wqUz-p20o0jDiMndudlB34VxatgPhktQvNqFck5PkbufUN7jbNQKSgBfE_hATUs8rc8ATywdJ16g
+        auth_type: sagan
+    production:
+        host: https://us-1.gladly.com
+        org: gladly.com
+        token: ""
+        auth_type: sagan
+    staging:
+        host: https://us-staging.gladly.qa
+        org: gladly.com
+        token: ""
+        auth_type: sagan
+    uat:
+        host: https://us-uat.gladly.qa
+        org: gladly.com
+        token: ""
+        auth_type: sagan
