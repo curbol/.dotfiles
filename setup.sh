@@ -25,6 +25,8 @@ fi
 # Paths of dotfiles to symlink relative to the dotfiles directory
 linkfiles=(
   ".config/aerospace/aerospace.toml"
+  ".config/aerospace/tmux.conf"
+  ".config/aerospace/tmux-powerline"
   ".config/starship.toml"
   ".config/wezterm/wezterm.lua"
   ".config/zsh/.zsh_plugins.txt"

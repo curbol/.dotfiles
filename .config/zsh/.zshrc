@@ -45,8 +45,15 @@ alias gotidy='go mod tidy && go mod vendor'
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
+# Tmux
+alias tm='tmux new-session -A -s main' # Create or attach to default session
+alias tmn='tmux new-session -s' # Create new named session (tmn myname)
+alias tmk='tmux kill-session -t' # Kill session by name (tmk myname)
+alias tmka='tmux kill-server' # Kill all tmux sessions
+# ------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
 # Neovim
-# https://github.com/curbol/kickstart.nvim
 alias vi='nvim'
 alias vim='nvim'
 
