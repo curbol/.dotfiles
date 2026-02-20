@@ -25,6 +25,7 @@ fi
 # Paths of dotfiles to symlink relative to the dotfiles directory
 linkfiles=(
   ".claude/CLAUDE.md"
+  ".claude/settings.json"
   ".config/aerospace/aerospace.toml"
   ".config/aerospace/tmux.conf"
   ".config/aerospace/tmux-powerline"
