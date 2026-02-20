@@ -34,6 +34,7 @@ linkfiles=(
   ".config/zsh/.zshrc"
   ".config/zsh/scripts/jump.sh"
   ".config/zsh/scripts/ostype.sh"
+  ".markdownlint.jsonc"
   ".gitconfig"
   ".gitignore"
   ".ideavimrc"
