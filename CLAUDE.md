@@ -14,6 +14,7 @@ sh ~/.dotfiles/setup.sh --force  # overwrite copied files too
 ```
 
 The setup script does two things:
+
 1. **Symlinks** config files from this repo to their expected locations in `$HOME` (e.g., `.gitconfig`, `.zshenv`, `.config/zsh/.zshrc`)
 2. **Copies** files that are meant to be locally customized (e.g., `.zshrc.local` for secrets, `.gladmin/config.yaml`)
 
@@ -31,6 +32,7 @@ The setup script does two things:
 ### Shell Configuration Chain
 
 `.zshenv` (always loaded) sets XDG paths and `ZDOTDIR=$XDG_CONFIG_HOME/zsh`, which redirects zsh to load `.config/zsh/.zshrc`. That file loads:
+
 1. Starship prompt
 2. Secrets from `.zshrc.local` (copied, not symlinked — contains API keys)
 3. `jump.sh` for directory bookmarks
