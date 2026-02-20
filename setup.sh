@@ -24,6 +24,7 @@ fi
 
 # Paths of dotfiles to symlink relative to the dotfiles directory
 linkfiles=(
+  ".claude/CLAUDE.md"
   ".config/aerospace/aerospace.toml"
   ".config/aerospace/tmux.conf"
   ".config/aerospace/tmux-powerline"
@@ -33,7 +34,6 @@ linkfiles=(
   ".config/zsh/.zshrc"
   ".config/zsh/scripts/jump.sh"
   ".config/zsh/scripts/ostype.sh"
-  ".gladmin/config.yaml"
   ".gitconfig"
   ".gitignore"
   ".ideavimrc"
@@ -44,6 +44,7 @@ linkfiles=(
 # Paths of dotfiles to copy relative to the dotfiles directory
 copyfiles=(
   ".config/zsh/.zshrc.local"
+  ".gladmin/config.yaml"
 )
 
 create_symlink() {
