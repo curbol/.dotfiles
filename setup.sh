@@ -46,7 +46,7 @@ linkfiles=(
 # Paths of dotfiles to copy relative to the dotfiles directory
 copyfiles=(
   ".config/zsh/.zshrc.local"
-  ".gladmin/config.yaml"
+  ".config/gladmin/config.yaml"
 )
 
 create_symlink() {
