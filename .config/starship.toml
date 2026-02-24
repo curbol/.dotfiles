@@ -11,6 +11,7 @@ $git_branch\
 $git_commit\
 $git_state\
 $git_status\
+${custom.gladmin}\
 $line_break\
 $character\
 """
@@ -38,6 +39,12 @@ style = "bold #d18b16"
 
 [git_commit]
 tag_symbol = '  '
+
+[custom.gladmin]
+command = "gladmin config current"
+when = "command -v gladmin"
+format = "[$output]($style) "
+style = "bold #e57e43"
 
 [character]
 success_symbol = "[❯](bold #8d8b18)"
