@@ -105,6 +105,17 @@ Create PRs only when requested.
 - Always check for repos locally in `~/code/` first
 - Prefer CLI (`gh` via Bash tool) over MCP tools for GitHub operations
 
+## Agent Isolation
+
+When spawning parallel agents, consider using `isolation: "worktree"` for tasks that involve significant file changes or where agents might conflict with each other or the current working tree. Use your judgment — small read-only or single-file tasks don't need it.
+
+## Agent Teams vs. Parallel Agents
+
+- **Parallel agents** (Task tool): Use for independent, fire-and-forget work — research, exploration, or isolated file changes that don't need coordination. Prefer this for most cases.
+- **Agent teams** (TeamCreate): Use when tasks require coordination, sequencing, or shared state awareness — e.g., one agent's output informs another's work, or multiple agents need to modify related files without conflicts.
+
+Default to parallel agents. Only reach for teams when you need inter-agent communication or task dependency management.
+
 ## Architectural Guidance
 
 Primary reference: [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
