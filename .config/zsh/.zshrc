@@ -104,7 +104,6 @@ export GLADLY_APP_CFG_ROOT="/Users/curtis/Gladly"
 
 # Thankful
 # Nix
-export PATH="$GOBIN:/nix/var/nix/profiles/default/bin:$HOME/.nix-profile/bin:$PATH"
 if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
   . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
 fi
@@ -124,6 +123,7 @@ appcfg-source-beta() {
 gladmin-source() {
     (cd ~/code/gladmin-cli && go run ./ "$@")
 }
+compdef gladmin-source=gladmin
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
