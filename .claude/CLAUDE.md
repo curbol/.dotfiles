@@ -4,6 +4,8 @@
 
 When I ask to 'discuss', 'brainstorm', 'think about', or 'talk through' something, DO NOT jump into implementation. Have the conversation first and wait for explicit approval before writing code or making changes.
 
+When I ask a question, treat it as a genuine question — answer it and wait. Do not interpret questions as implicit instructions to go do something. "Should we extract this?" means I want your opinion, not for you to start extracting.
+
 ## Before Modifying Files
 
 **IMPORTANT**: Before making any file changes, ensure you're on the correct branch:
@@ -44,6 +46,7 @@ When I ask to 'discuss', 'brainstorm', 'think about', or 'talk through' somethin
 - Minimal scope: implement the smallest viable solution
 - Prefer small, focused changes over large refactors
 - Always check locally first — prefer checked-out repos in `~/code/` over web/remote sources
+- Don't ask me to choose execution strategies (which agent type, parallel vs sequential, worktree vs not). These are implementation details — use your judgment and just do the work.
 
 ## Testing & Verification
 

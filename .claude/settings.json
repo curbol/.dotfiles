@@ -1,15 +1,6 @@
 {
-  "model": "opus",
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
-  },
-  "enabledPlugins": {
-    "hookify@claude-plugins-official": true,
-    "github@claude-plugins-official": true,
-    "gopls-lsp@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": true,
-    "feature-dev@claude-plugins-official": true
   },
   "permissions": {
     "allow": [
@@ -51,7 +42,10 @@
       "Bash(head *)",
       "Bash(tail *)",
       "Bash(pwd)",
-      "Bash(brew *)"
+      "Bash(brew *)",
+      "Read(/tmp/**)",
+      "Write(/tmp/**)",
+      "Edit(/tmp/**)"
     ],
     "deny": [
       "Bash(git push *)",
@@ -71,5 +65,13 @@
         ]
       }
     ]
+  },
+  "enabledPlugins": {
+    "hookify@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
+    "gopls-lsp@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": true
   }
 }
