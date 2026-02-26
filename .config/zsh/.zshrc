@@ -45,6 +45,16 @@ alias gotidy='go mod tidy && go mod vendor'
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
+# ZSH Completions
+# Usage: install-completion <tool>  (tool must support 'completion zsh')
+install-completion() {
+  local cmd="$1"
+  "$cmd" completion zsh > "${fpath[1]}/_${cmd}" \
+    && echo "Installed completions for ${cmd} — restart shell to apply"
+}
+# ------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
 # Tmux
 alias tm='tmux new-session -A -s main' # Create or attach to default session
 alias tmn='tmux new-session -s' # Create new named session (tmn myname)
@@ -123,7 +133,7 @@ appcfg-source-beta() {
 gladmin-source() {
     (cd ~/code/gladmin-cli && go run ./ "$@")
 }
-compdef gladmin-source=gladmin
+compdef _gladmin gladmin-source
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------

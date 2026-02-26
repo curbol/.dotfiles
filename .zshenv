@@ -25,3 +25,10 @@ path=(
   $HOME/.nix-profile/bin(N)            # Gladly (Nix)
   $path
 )
+
+# fpath[1] is a reliable user completions dir, always first so tools that
+# recommend `${fpath[1]}/_tool` install to the right place.
+fpath=(
+  $HOME/.local/share/zsh/site-functions
+  $fpath
+)
