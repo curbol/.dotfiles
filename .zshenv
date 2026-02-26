@@ -23,6 +23,7 @@ path=(
   /usr/local/{,s}bin(N)
   /nix/var/nix/profiles/default/bin(N) # Gladly (Nix)
   $HOME/.nix-profile/bin(N)            # Gladly (Nix)
+  /opt/pact/bin(N)                     # Gladly (Pact)
   $path
 )
 

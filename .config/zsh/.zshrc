@@ -1,8 +1,23 @@
 # zmodload zsh/zprof
 
 # ------------------------------------------------------------------------------
+# Cache eval output to avoid subprocess forks on every shell start.
+# Regenerates when the binary is newer than the cache, or cache is missing.
+_eval_cached() {
+  local name="$1" cmd="$2"
+  shift 2
+  local cache="$XDG_CACHE_HOME/zsh/${name}.zsh"
+  local binary="${commands[$cmd]}"
+  if [[ ! -f "$cache" || ( -n "$binary" && "$binary" -nt "$cache" ) ]]; then
+    "$@" > "$cache"
+  fi
+  source "$cache"
+}
+# ------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
 # Starship prompt - https://github.com/starship/starship
-eval "$(starship init zsh)"
+_eval_cached starship-init starship starship init zsh
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
@@ -32,10 +47,10 @@ source "$HOME/.dotfiles/scripts/jump.sh"
 # Homebrew
 export HOMEBREW_AUTO_UPDATE_SECS=86400 # Set Homebrew auto-update interval to 24 hours
 if [[ $is_mac_intel -eq 1 ]]; then
-  eval "$(/usr/local/bin/brew shellenv)"
+  _eval_cached brew-shellenv brew /usr/local/bin/brew shellenv
 fi
 if [[ $is_mac_arm -eq 1 ]]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
+  _eval_cached brew-shellenv brew /opt/homebrew/bin/brew shellenv
 fi
 # ------------------------------------------------------------------------------
 
@@ -80,7 +95,7 @@ fi
 # Examples:
 # > mise use -g node@20.12
 # > mise use -g python@3.11
-eval "$(mise activate zsh)"
+_eval_cached mise-activate mise mise activate zsh
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
@@ -90,7 +105,6 @@ alias claude-w="CLAUDE_CONFIG_DIR=~/.claude-work claude"
 
 # ------------------------------------------------------------------------------
 # Gladly stuff
-export PATH="$PATH:/opt/pact/bin"
 export PACT_PROVIDER_VERSION="dev_laptop"
 export PACT_DISABLE_SSL_VERIFICATION=true
 export PACT_BROKER_URL="https://pact-broker.tools.gladly.qa"
@@ -119,7 +133,7 @@ if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
 fi
 
 export THANKFUL_PATH="$HOME/code/thankful"
-eval "$(direnv hook zsh)"
+_eval_cached direnv-hook direnv direnv hook zsh
 # End Thankful
 
 appcfg-source() {
