@@ -12,6 +12,7 @@ local wezterm = require("wezterm")
 local gui = wezterm.gui
 local action = wezterm.action
 local config = wezterm.config_builder()
+local resurrect = wezterm.plugin.require("https://github.com/MLFlexer/resurrect.wezterm")
 
 -- Gruvbox Material (https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/themes/gruvbox-material.lua)
 local GRUVBOX_GREY1 = "#282828"
@@ -433,5 +434,14 @@ config.colors = {
 -- cmd+arrows: wezterm pane navigation
 -- cmd+shift+arrows: wezterm pane swap (picker)
 -- leader (ctrl+space): management (s/v/t/d/m/o/[/]/r)
+
+-- Session persistence (resurrect)
+resurrect.state_manager.periodic_save({
+	interval_seconds = 300,
+	save_workspaces = true,
+	save_windows = true,
+	save_tabs = true,
+})
+wezterm.on("gui-startup", resurrect.state_manager.resurrect_on_gui_startup)
 
 return config
