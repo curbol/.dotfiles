@@ -87,6 +87,42 @@ end
 
 -- Keybindings
 config.leader = { key = "Space", mods = "CTRL", timeout_milliseconds = 1000 }
+
+-- Equalize all panes in the current tab (adapted from https://gist.github.com/fcpg/eb3c05be5b480f4cad767199dac5cecd)
+local function equalize_panes()
+	return wezterm.action_callback(function(window, pane)
+		local tab = window:active_tab()
+		local panes = tab:panes_with_info()
+		if #panes <= 1 then return end
+
+		local active_idx = 0
+		for _, pi in ipairs(panes) do
+			if pi.is_active then active_idx = pi.index end
+		end
+
+		local size = tab:get_size()
+		for _, axis in ipairs({ "x", "y" }) do
+			local total = axis == "x" and size.cols or size.rows
+			local size_key = axis == "x" and "width" or "height"
+			local target = math.floor(total / #panes)
+			local shrink_dir = axis == "x" and "Left" or "Up"
+			local grow_dir = axis == "x" and "Right" or "Down"
+			for _, pi in ipairs(panes) do
+				window:perform_action(action.ActivatePaneByIndex(pi.index), tab:active_pane())
+				local diff = pi[size_key] - target
+				if diff ~= 0 then
+					window:perform_action(
+						action.AdjustPaneSize({ diff > 0 and shrink_dir or grow_dir, math.abs(diff) }),
+						tab:active_pane()
+					)
+				end
+			end
+		end
+
+		window:perform_action(action.ActivatePaneByIndex(active_idx), tab:active_pane())
+	end)
+end
+
 -- Split and equalize all panes in the current tab
 local function split_and_equalize(direction)
 	return wezterm.action_callback(function(window, pane)
@@ -113,12 +149,6 @@ config.keys = {
 	{ key = "RightArrow", mods = "SUPER", action = action.ActivatePaneDirection("Right") },
 	{ key = "UpArrow",    mods = "SUPER", action = action.ActivatePaneDirection("Up") },
 	{ key = "DownArrow",  mods = "SUPER", action = action.ActivatePaneDirection("Down") },
-
-	-- Wezterm pane move (cmd+shift+arrows) — opens interactive pane picker
-	{ key = "LeftArrow",  mods = "SUPER|SHIFT", action = action.PaneSelect({ mode = "SwapWithActiveKeepFocus" }) },
-	{ key = "RightArrow", mods = "SUPER|SHIFT", action = action.PaneSelect({ mode = "SwapWithActiveKeepFocus" }) },
-	{ key = "UpArrow",    mods = "SUPER|SHIFT", action = action.PaneSelect({ mode = "SwapWithActiveKeepFocus" }) },
-	{ key = "DownArrow",  mods = "SUPER|SHIFT", action = action.PaneSelect({ mode = "SwapWithActiveKeepFocus" }) },
 
 	-- Wezterm tab jump (cmd+[1-9])
 	{ key = "1", mods = "SUPER", action = action.ActivateTab(0) },
@@ -163,14 +193,19 @@ config.keys = {
 	{ key = "m", mods = "LEADER", action = action.TogglePaneZoomState },
 	{ key = "[", mods = "LEADER", action = action.ActivateTabRelative(-1) },
 	{ key = "]", mods = "LEADER", action = action.ActivateTabRelative(1) },
+	{ key = "=", mods = "LEADER", action = equalize_panes() },
 	{
 		key = "o",
 		mods = "LEADER",
-		action = action.Multiple({
-			action.CloseCurrentTab({ confirm = false }),
-			action.ActivateTabRelative(1), -- keep last-active tab tracking working
-			action.ActivateTabRelative(-1),
-		}),
+		action = wezterm.action_callback(function(window, pane)
+			local tab = window:active_tab()
+			local active_id = pane:pane_id()
+			for _, pi in ipairs(tab:panes_with_info()) do
+				if pi.pane:pane_id() ~= active_id then
+					window:perform_action(action.CloseCurrentPane({ confirm = false }), pi.pane)
+				end
+			end
+		end),
 	},
 
 	-- Leader: enter resize key table (hold arrows to resize, auto-exits after 1s)

@@ -21,7 +21,7 @@
 | `alt+b` | Open Arc |
 | `alt+s` | Open Slack |
 | `alt+n` | Open Notion |
-| `alt+t` | Open Warp |
+| `alt+t` | Open WezTerm |
 | `alt+m` | Open Messages |
 
 ### Service mode (`alt+space`)
@@ -54,7 +54,6 @@
 | Key | Action |
 |-----|--------|
 | `cmd+arrows` | Navigate panes |
-| `cmd+shift+arrows` | Swap panes (interactive picker) |
 | `cmd+[1–9]` | Jump to tab |
 | `cmd+v` | Paste (text or image) |
 
@@ -74,7 +73,8 @@
 | `m` | Zoom / unzoom pane |
 | `[` | Prev tab |
 | `]` | Next tab |
-| `o` | Close tab |
+| `=` | Equalize pane sizes |
+| `o` | Close other panes |
 | `r` | **Enter resize mode** |
 
 ### Resize mode (`ctrl+space r`)
