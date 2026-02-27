@@ -153,7 +153,7 @@ config.keys = {
 	{ key = "/",          mods = "LEADER", action = action.Search("CurrentSelectionOrEmptyString") },
 	{ key = "a",          mods = "LEADER",      action = action.ActivateLastTab },
 	{ key = "a",          mods = "LEADER|CTRL", action = action.ActivateLastTab },
-	{ key = "c",          mods = "LEADER", action = action.ActivateCopyMode },
+	{ key = "y",          mods = "LEADER", action = action.ActivateCopyMode },
 
 	-- Leader: management (matching nvim space+w vocabulary)
 	{ key = "s", mods = "LEADER", action = split_and_equalize("vertical") },
