@@ -10,6 +10,7 @@ _eval_cached() {
   local binary="${commands[$cmd]}"
   if [[ ! -f "$cache" || ( -n "$binary" && "$binary" -nt "$cache" ) ]]; then
     "$@" > "$cache"
+    zcompile "$cache"
   fi
   source "$cache"
 }
@@ -26,15 +27,15 @@ if [ -f ~/.config/zsh/.zshrc.local ]; then
   . ~/.config/zsh/.zshrc.local
 fi
 if [ -n "$GIT_SIGNING_KEY_ID" ]; then # Set GPG signing key in git config if defined
-  local_git_config_file="$HOME/.gitconfig.local"
-  if [[ ! -f "$local_git_config_file" ]]; then
-    touch "$local_git_config_file"
-  fi
-  current_git_signing_key=$(git config --file "$local_git_config_file" --get user.signingkey 2>/dev/null)
-  if [ "$current_git_signing_key" != "$GIT_SIGNING_KEY_ID" ]; then
-    git config --file "$local_git_config_file" user.signingkey "$GIT_SIGNING_KEY_ID"
-  fi
-  git config --file "$local_git_config_file" commit.gpgsign true
+  {
+    local_git_config_file="$HOME/.gitconfig.local"
+    [[ ! -f "$local_git_config_file" ]] && touch "$local_git_config_file"
+    current_git_signing_key=$(git config --file "$local_git_config_file" --get user.signingkey 2>/dev/null)
+    if [ "$current_git_signing_key" != "$GIT_SIGNING_KEY_ID" ]; then
+      git config --file "$local_git_config_file" user.signingkey "$GIT_SIGNING_KEY_ID"
+    fi
+    git config --file "$local_git_config_file" commit.gpgsign true
+  } &!
 fi
 # ------------------------------------------------------------------------------
 
@@ -95,7 +96,9 @@ fi
 # Examples:
 # > mise use -g node@20.12
 # > mise use -g python@3.11
-_eval_cached mise-activate mise mise activate zsh
+# Using shims instead of `mise activate` to avoid the chpwd hook overhead (~160ms).
+# Run `mise reshim` after installing new tools if a shim is missing.
+export PATH="$HOME/.local/share/mise/shims:$PATH"
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
@@ -133,6 +136,8 @@ if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
 fi
 
 export THANKFUL_PATH="$CODE_DIR/thankful"
+# direnv hook — only needed for ~/code/thankful (uses use_flake in .envrc).
+# Remove once no longer actively working in that repo.
 _eval_cached direnv-hook direnv direnv hook zsh
 # End Thankful
 
@@ -239,14 +244,20 @@ zvm_after_lazy_keybindings() {
 
 # ------------------------------------------------------------------------------
 # Antidote
-# Clone antidote if necessary.
-if [[ ! -d ${ZDOTDIR:-$HOME}/.antidote ]]; then
-  git clone https://github.com/mattmc3/antidote ${ZDOTDIR:-$HOME}/.antidote
-fi
+# ez-compinit: use cached zcompdump (skips compaudit when <20h old).
+zstyle ':plugin:ez-compinit' 'use-cache' 'yes'
 
-# Source antidote and load.
-source ${ZDOTDIR:-$HOME}/.antidote/antidote.zsh
-antidote load
+# Source a static plugin bundle; only load antidote itself when regeneration is needed.
+zsh_plugins_bundle="${XDG_CACHE_HOME}/zsh/plugins.zsh"
+if [[ ! -f "$zsh_plugins_bundle" || "${ZDOTDIR:-$HOME}/.zsh_plugins.txt" -nt "$zsh_plugins_bundle" ]]; then
+  if [[ ! -d ${ZDOTDIR:-$HOME}/.antidote ]]; then
+    git clone https://github.com/mattmc3/antidote ${ZDOTDIR:-$HOME}/.antidote
+  fi
+  source ${ZDOTDIR:-$HOME}/.antidote/antidote.zsh
+  antidote bundle < "${ZDOTDIR:-$HOME}/.zsh_plugins.txt" > "$zsh_plugins_bundle"
+  zcompile "$zsh_plugins_bundle"
+fi
+source "$zsh_plugins_bundle"
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------

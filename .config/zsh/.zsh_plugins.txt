@@ -19,8 +19,6 @@ belak/zsh-utils path:history
 
 # Utilities
 belak/zsh-utils path:utility
-ohmyzsh/ohmyzsh path:plugins/extract
-
 # Other
 zdharma-continuum/fast-syntax-highlighting
 zsh-users/zsh-autosuggestions

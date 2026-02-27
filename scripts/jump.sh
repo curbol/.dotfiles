@@ -186,7 +186,6 @@ _completemarks() {
 	reply=("${(f)$(ls -1 "$MARKPATH")}")
 }
 
-autoload -U compinit && compinit
 compctl -K _completemarks jump
 compctl -K _completemarks unmark
 
