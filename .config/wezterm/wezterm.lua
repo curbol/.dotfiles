@@ -86,8 +86,51 @@ local function get_pane_index(tab, pane_id)
 end
 
 -- Keybindings
-config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
+config.leader = { key = "Space", mods = "CTRL", timeout_milliseconds = 1000 }
+-- Split and equalize all panes in the current tab
+local function split_and_equalize(direction)
+	return wezterm.action_callback(function(window, pane)
+		local tab = window:active_tab()
+		local n = #tab:panes()
+		local fraction = 1.0 / (n + 1)
+		if direction == "vertical" then
+			window:perform_action(
+				action.SplitPane({ direction = "Down", size = { Percent = math.floor(fraction * 100) } }),
+				pane
+			)
+		else
+			window:perform_action(
+				action.SplitPane({ direction = "Right", size = { Percent = math.floor(fraction * 100) } }),
+				pane
+			)
+		end
+	end)
+end
+
 config.keys = {
+	-- Wezterm pane navigation (cmd+arrows)
+	{ key = "LeftArrow",  mods = "SUPER", action = action.ActivatePaneDirection("Left") },
+	{ key = "RightArrow", mods = "SUPER", action = action.ActivatePaneDirection("Right") },
+	{ key = "UpArrow",    mods = "SUPER", action = action.ActivatePaneDirection("Up") },
+	{ key = "DownArrow",  mods = "SUPER", action = action.ActivatePaneDirection("Down") },
+
+	-- Wezterm pane move (cmd+shift+arrows) — opens interactive pane picker
+	{ key = "LeftArrow",  mods = "SUPER|SHIFT", action = action.PaneSelect({ mode = "SwapWithActiveKeepFocus" }) },
+	{ key = "RightArrow", mods = "SUPER|SHIFT", action = action.PaneSelect({ mode = "SwapWithActiveKeepFocus" }) },
+	{ key = "UpArrow",    mods = "SUPER|SHIFT", action = action.PaneSelect({ mode = "SwapWithActiveKeepFocus" }) },
+	{ key = "DownArrow",  mods = "SUPER|SHIFT", action = action.PaneSelect({ mode = "SwapWithActiveKeepFocus" }) },
+
+	-- Wezterm tab jump (cmd+[1-9])
+	{ key = "1", mods = "SUPER", action = action.ActivateTab(0) },
+	{ key = "2", mods = "SUPER", action = action.ActivateTab(1) },
+	{ key = "3", mods = "SUPER", action = action.ActivateTab(2) },
+	{ key = "4", mods = "SUPER", action = action.ActivateTab(3) },
+	{ key = "5", mods = "SUPER", action = action.ActivateTab(4) },
+	{ key = "6", mods = "SUPER", action = action.ActivateTab(5) },
+	{ key = "7", mods = "SUPER", action = action.ActivateTab(6) },
+	{ key = "8", mods = "SUPER", action = action.ActivateTab(7) },
+	{ key = "9", mods = "SUPER", action = action.ActivateTab(8) },
+
 	-- Fix image paste (https://github.com/wezterm/wezterm/issues/7272):
 	-- WezTerm's default Cmd+V only pastes text, silently dropping image-only clipboard.
 	-- Send raw \x16 instead so apps like Claude Code can read the image from the OS clipboard.
@@ -103,43 +146,43 @@ config.keys = {
 			end
 		end),
 	},
+
+	-- Leader: utility
 	{ key = "phys:Space", mods = "LEADER", action = action.QuickSelect },
-	{ key = ":", mods = "LEADER", action = action.ActivateCommandPalette },
-	{ key = "/", mods = "LEADER", action = action.Search("CurrentSelectionOrEmptyString") },
-	{ key = "a", mods = "LEADER", action = action.ActivateLastTab },
-	{ key = "a", mods = "LEADER|CTRL", action = action.ActivateLastTab },
+	{ key = ":",          mods = "LEADER", action = action.ActivateCommandPalette },
+	{ key = "/",          mods = "LEADER", action = action.Search("CurrentSelectionOrEmptyString") },
+	{ key = "a",          mods = "LEADER",      action = action.ActivateLastTab },
+	{ key = "a",          mods = "LEADER|CTRL", action = action.ActivateLastTab },
+	{ key = "c",          mods = "LEADER", action = action.ActivateCopyMode },
+
+	-- Leader: management (matching nvim space+w vocabulary)
+	{ key = "s", mods = "LEADER", action = split_and_equalize("vertical") },
+	{ key = "v", mods = "LEADER", action = split_and_equalize("horizontal") },
+	{ key = "t", mods = "LEADER", action = action.SpawnTab("CurrentPaneDomain") },
+	{ key = "d", mods = "LEADER", action = action.CloseCurrentPane({ confirm = false }) },
 	{ key = "m", mods = "LEADER", action = action.TogglePaneZoomState },
-	{ key = "v", mods = "LEADER", action = action.ActivateCopyMode },
-	{ key = "-", mods = "LEADER", action = action.SplitVertical({ domain = "CurrentPaneDomain" }) },
-	{ key = "\\", mods = "LEADER", action = action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
-	{ key = "c", mods = "LEADER", action = action.SpawnTab("CurrentPaneDomain") },
+	{ key = "[", mods = "LEADER", action = action.ActivateTabRelative(-1) },
+	{ key = "]", mods = "LEADER", action = action.ActivateTabRelative(1) },
 	{
-		key = "x",
+		key = "o",
 		mods = "LEADER",
 		action = action.Multiple({
 			action.CloseCurrentTab({ confirm = false }),
-			action.ActivateTabRelative(1), -- Hack to set the last active tab after closing the current one so that leader+a works
+			action.ActivateTabRelative(1), -- keep last-active tab tracking working
 			action.ActivateTabRelative(-1),
 		}),
 	},
-	{ key = "n", mods = "LEADER", action = action.ActivateTabRelative(1) },
-	{ key = "n", mods = "LEADER|CTRL", action = action.ActivateTabRelative(1) },
-	{ key = "p", mods = "LEADER", action = action.ActivateTabRelative(-1) },
-	{ key = "p", mods = "LEADER|CTRL", action = action.ActivateTabRelative(-1) },
-	{ key = "[", mods = "LEADER", action = action.MoveTabRelative(-1) },
-	{ key = "[", mods = "LEADER|CTRL", action = action.MoveTabRelative(-1) },
-	{ key = "]", mods = "LEADER", action = action.MoveTabRelative(1) },
-	{ key = "]", mods = "LEADER|CTRL", action = action.MoveTabRelative(1) },
-	{ key = "1", mods = "LEADER", action = action.ActivateTab(0) },
-	{ key = "2", mods = "LEADER", action = action.ActivateTab(1) },
-	{ key = "3", mods = "LEADER", action = action.ActivateTab(2) },
-	{ key = "4", mods = "LEADER", action = action.ActivateTab(3) },
-	{ key = "5", mods = "LEADER", action = action.ActivateTab(4) },
-	{ key = "6", mods = "LEADER", action = action.ActivateTab(5) },
-	{ key = "7", mods = "LEADER", action = action.ActivateTab(6) },
-	{ key = "8", mods = "LEADER", action = action.ActivateTab(7) },
-	{ key = "9", mods = "LEADER", action = action.ActivateTab(8) },
-	{ key = "0", mods = "LEADER", action = action.ActivateTab(9) },
+
+	-- Leader: enter resize key table (hold arrows to resize, auto-exits after 1s)
+	{
+		key = "r",
+		mods = "LEADER",
+		action = action.ActivateKeyTable({
+			name = "resize_pane",
+			one_shot = false,
+			timeout_milliseconds = 1000,
+		}),
+	},
 }
 
 -- Clear copy mode selection after yanking
@@ -158,6 +201,13 @@ if gui then
 end
 config.key_tables = {
 	copy_mode = copy_mode,
+	resize_pane = {
+		{ key = "LeftArrow",  mods = "NONE", action = action.AdjustPaneSize({ "Left",  5 }) },
+		{ key = "RightArrow", mods = "NONE", action = action.AdjustPaneSize({ "Right", 5 }) },
+		{ key = "UpArrow",    mods = "NONE", action = action.AdjustPaneSize({ "Up",    5 }) },
+		{ key = "DownArrow",  mods = "NONE", action = action.AdjustPaneSize({ "Down",  5 }) },
+		{ key = "Escape",     mods = "NONE", action = action.PopKeyTable },
+	},
 }
 
 -- Keyboard
@@ -332,7 +382,9 @@ config.colors = {
 	},
 }
 
--- Plugins
-wezterm.plugin.require("https://github.com/mrjones2014/smart-splits.nvim").apply_to_config(config)
+-- ctrl+arrows: stays in nvim (window nav) / passes through wezterm
+-- cmd+arrows: wezterm pane navigation
+-- cmd+shift+arrows: wezterm pane swap (picker)
+-- leader (ctrl+space): management (s/v/t/d/m/o/[/]/r)
 
 return config
