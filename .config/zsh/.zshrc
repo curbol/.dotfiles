@@ -110,8 +110,8 @@ export PACT_DISABLE_SSL_VERIFICATION=true
 export PACT_BROKER_URL="https://pact-broker.tools.gladly.qa"
 export PACT_BROKER_USERNAME="basic_auth_user_read_only"
 export GOPRIVATE="github.com/sagansystems,github.com/gladly"
-export BUILD_HARNESS_PATH="$HOME/code/build-harness"
-export DOCKER_COMPOSE_PATH="$HOME/code/docker-compose"
+export BUILD_HARNESS_PATH="$CODE_DIR/build-harness"
+export DOCKER_COMPOSE_PATH="$CODE_DIR/docker-compose"
 export TELEPORT_PROXY="gladly.teleport.sh"
 export APP_PLATFORM_INFRA=true # https://github.com/sagansystems/docker-compose
 alias auth-local='saganadmin localhost:8001'
@@ -132,22 +132,21 @@ if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
   . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
 fi
 
-export THANKFUL_PATH="$HOME/code/thankful"
+export THANKFUL_PATH="$CODE_DIR/thankful"
 _eval_cached direnv-hook direnv direnv hook zsh
 # End Thankful
 
-appcfg-source() {
-    (cd ~/code/supernova && go run ./tools/appcfg "$@")
+appcfg-src() {
+    (cd "$CODE_DIR/supernova" && go run ./tools/appcfg "$@")
 }
 
-appcfg-source-beta() {
-    (cd ~/code/supernova && go run -tags=beta ./tools/appcfg "$@")
+appcfg-beta-src() {
+    (cd "$CODE_DIR/supernova" && go run -tags=beta ./tools/appcfg "$@")
 }
 
-gladmin-source() {
-    (cd ~/code/gladmin-cli && go run ./ "$@")
+gladmin-src() {
+    (cd "$CODE_DIR/gladmin-cli" && go run ./ "$@")
 }
-compdef _gladmin gladmin-source
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
@@ -248,6 +247,13 @@ fi
 # Source antidote and load.
 source ${ZDOTDIR:-$HOME}/.antidote/antidote.zsh
 antidote load
+# ------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
+# ZSH Completions (post-compinit)
+compdef gladmin-src=gladmin
+compdef appcfg-src=appcfg
+compdef appcfg-beta-src=appcfg
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
