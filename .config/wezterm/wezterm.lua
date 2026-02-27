@@ -93,11 +93,15 @@ local function equalize_panes()
 	return wezterm.action_callback(function(window, pane)
 		local tab = window:active_tab()
 		local panes = tab:panes_with_info()
-		if #panes <= 1 then return end
+		if #panes <= 1 then
+			return
+		end
 
 		local active_idx = 0
 		for _, pi in ipairs(panes) do
-			if pi.is_active then active_idx = pi.index end
+			if pi.is_active then
+				active_idx = pi.index
+			end
 		end
 
 		local size = tab:get_size()
@@ -150,6 +154,14 @@ config.keys = {
 	{ key = "UpArrow",    mods = "SUPER", action = action.ActivatePaneDirection("Up") },
 	{ key = "DownArrow",  mods = "SUPER", action = action.ActivatePaneDirection("Down") },
 
+	-- Pass ctrl+shift+arrows through to the terminal (nvim window move/mini.move).
+	-- WezTerm defaults bind these to ActivatePaneDirection; SendString bypasses the pipeline.
+	-- Sequences: \x1b[1;6A/B/C/D = ctrl+shift+up/down/right/left (VT modifier 6 = ctrl+shift)
+	{ key = "LeftArrow",  mods = "CTRL|SHIFT", action = action.SendString("\x1b[1;6D") },
+	{ key = "RightArrow", mods = "CTRL|SHIFT", action = action.SendString("\x1b[1;6C") },
+	{ key = "UpArrow",    mods = "CTRL|SHIFT", action = action.SendString("\x1b[1;6A") },
+	{ key = "DownArrow",  mods = "CTRL|SHIFT", action = action.SendString("\x1b[1;6B") },
+
 	-- Wezterm tab jump (cmd+[1-9])
 	{ key = "1", mods = "SUPER", action = action.ActivateTab(0) },
 	{ key = "2", mods = "SUPER", action = action.ActivateTab(1) },
@@ -179,11 +191,11 @@ config.keys = {
 
 	-- Leader: utility
 	{ key = "phys:Space", mods = "LEADER", action = action.QuickSelect },
-	{ key = ":",          mods = "LEADER", action = action.ActivateCommandPalette },
-	{ key = "/",          mods = "LEADER", action = action.Search("CurrentSelectionOrEmptyString") },
-	{ key = "a",          mods = "LEADER",      action = action.ActivateLastTab },
-	{ key = "a",          mods = "LEADER|CTRL", action = action.ActivateLastTab },
-	{ key = "y",          mods = "LEADER", action = action.ActivateCopyMode },
+	{ key = ":", mods = "LEADER", action = action.ActivateCommandPalette },
+	{ key = "/", mods = "LEADER", action = action.Search("CurrentSelectionOrEmptyString") },
+	{ key = "a", mods = "LEADER", action = action.ActivateLastTab },
+	{ key = "a", mods = "LEADER|CTRL", action = action.ActivateLastTab },
+	{ key = "y", mods = "LEADER", action = action.ActivateCopyMode },
 
 	-- Leader: management (matching nvim space+w vocabulary)
 	{ key = "s", mods = "LEADER", action = split_and_equalize("vertical") },
@@ -237,11 +249,11 @@ end
 config.key_tables = {
 	copy_mode = copy_mode,
 	resize_pane = {
-		{ key = "LeftArrow",  mods = "NONE", action = action.AdjustPaneSize({ "Left",  5 }) },
+		{ key = "LeftArrow", mods = "NONE", action = action.AdjustPaneSize({ "Left", 5 }) },
 		{ key = "RightArrow", mods = "NONE", action = action.AdjustPaneSize({ "Right", 5 }) },
-		{ key = "UpArrow",    mods = "NONE", action = action.AdjustPaneSize({ "Up",    5 }) },
-		{ key = "DownArrow",  mods = "NONE", action = action.AdjustPaneSize({ "Down",  5 }) },
-		{ key = "Escape",     mods = "NONE", action = action.PopKeyTable },
+		{ key = "UpArrow", mods = "NONE", action = action.AdjustPaneSize({ "Up", 5 }) },
+		{ key = "DownArrow", mods = "NONE", action = action.AdjustPaneSize({ "Down", 5 }) },
+		{ key = "Escape", mods = "NONE", action = action.PopKeyTable },
 	},
 }
 
@@ -264,8 +276,8 @@ config.window_padding = {
 	bottom = 0,
 }
 config.inactive_pane_hsb = {
-	-- saturation = 0.8,
-	brightness = 0.8,
+	saturation = 0.9,
+	brightness = 0.7,
 }
 
 -- Tab Bar
