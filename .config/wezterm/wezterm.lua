@@ -88,6 +88,21 @@ end
 -- Keybindings
 config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
 config.keys = {
+	-- Fix image paste (https://github.com/wezterm/wezterm/issues/7272):
+	-- WezTerm's default Cmd+V only pastes text, silently dropping image-only clipboard.
+	-- Send raw \x16 instead so apps like Claude Code can read the image from the OS clipboard.
+	{
+		key = "v",
+		mods = "SUPER",
+		action = wezterm.action_callback(function(window, pane)
+			local ok, stdout, _ = wezterm.run_child_process({ "pbpaste" })
+			if ok and stdout and #stdout > 0 then
+				window:perform_action(action.PasteFrom("Clipboard"), pane)
+			else
+				window:perform_action(action.SendString("\x16"), pane)
+			end
+		end),
+	},
 	{ key = "phys:Space", mods = "LEADER", action = action.QuickSelect },
 	{ key = ":", mods = "LEADER", action = action.ActivateCommandPalette },
 	{ key = "/", mods = "LEADER", action = action.Search("CurrentSelectionOrEmptyString") },
@@ -144,6 +159,9 @@ end
 config.key_tables = {
 	copy_mode = copy_mode,
 }
+
+-- Keyboard
+config.enable_kitty_keyboard = true
 
 -- Font
 -- config.font = wezterm.font("JetBrainsMono Nerd Font Mono", { weight = "Regular" })
