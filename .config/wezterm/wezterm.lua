@@ -212,7 +212,7 @@ config.keys = {
 			action.ActivateTabRelative(-1),
 		}),
 	},
-	{ key = "x", mods = "LEADER", action = action.RotatePaneDirection("Clockwise") },
+	{ key = "x", mods = "LEADER", action = action.RotatePanes("Clockwise") },
 	{ key = "m", mods = "LEADER", action = action.TogglePaneZoomState },
 	{ key = "[", mods = "LEADER", action = action.ActivateTabRelative(-1) },
 	{ key = "]", mods = "LEADER", action = action.ActivateTabRelative(1) },
@@ -345,8 +345,8 @@ config.tab_bar_style = {
 wezterm.on("format-tab-title", function(tab, tabs, panes, conf, hover, max_width)
 	local pane = tab.active_pane
 	local index = tab.tab_index + 1
-	local cwd = basename(pane.current_working_dir.file_path)
-	local process = basename(pane.foreground_process_name)
+	local cwd = pane.current_working_dir and basename(pane.current_working_dir.file_path) or "?"
+	local process = pane.foreground_process_name and basename(pane.foreground_process_name) or "?"
 
 	local text = string.format("%d:%s❯%s", index, cwd, process)
 
@@ -407,9 +407,9 @@ wezterm.on("update-status", function(window, pane)
 	-- Window-:Tab:Pane
 	local mux_window = window:mux_window()
 	local active_tab = mux_window:active_tab()
-	local window_index = get_window_index(mux_window:window_id())
-	local tab_index = get_tab_index(mux_window, active_tab:tab_id())
-	local pane_index = get_pane_index(active_tab, pane:pane_id())
+	local window_index = get_window_index(mux_window:window_id()) or "?"
+	local tab_index = get_tab_index(mux_window, active_tab:tab_id()) or "?"
+	local pane_index = get_pane_index(active_tab, pane:pane_id()) or "?"
 
 	-- Time
 	local datetime = wezterm.strftime("%a %b %-d %H:%M")
