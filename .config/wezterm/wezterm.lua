@@ -406,12 +406,21 @@ wezterm.on("update-status", function(window, pane)
 		mode = wezterm.nerdfonts.md_cog_outline .. " " .. "LEADER"
 	end
 
-	-- Window-:Tab:Pane
+	-- Window:Tab:Pane
 	local mux_window = window:mux_window()
 	local active_tab = mux_window:active_tab()
-	local window_index = get_window_index(mux_window:window_id()) or "?"
-	local tab_index = get_tab_index(mux_window, active_tab:tab_id()) or "?"
-	local pane_index = get_pane_index(active_tab, pane:pane_id()) or "?"
+	local all_windows = wezterm.mux.all_windows()
+	local all_tabs = mux_window:tabs()
+	local all_panes = active_tab:panes()
+
+	local function fmt_index(idx, total)
+		if not idx then return "?" end
+		return total > 1 and (idx .. "/" .. total) or tostring(idx)
+	end
+
+	local window_index = fmt_index(get_window_index(mux_window:window_id()), #all_windows)
+	local tab_index = fmt_index(get_tab_index(mux_window, active_tab:tab_id()), #all_tabs)
+	local pane_index = fmt_index(get_pane_index(active_tab, pane:pane_id()), #all_panes)
 
 	-- Time
 	local datetime = wezterm.strftime("%a %b %-d %H:%M")
@@ -419,7 +428,7 @@ wezterm.on("update-status", function(window, pane)
 	window:set_left_status(wezterm.format({}))
 	window:set_right_status(wezterm.format({
 		{ Foreground = { Color = GRUVBOX_GREEN } },
-		{ Text = wezterm.nerdfonts.md_alpha_m_box_outline .. " " .. window_index },
+		{ Text = wezterm.nerdfonts.md_alpha_w_box_outline .. " " .. window_index },
 		{ Text = " " },
 		{ Foreground = { Color = GRUVBOX_BLUE } },
 		{ Text = wezterm.nerdfonts.md_alpha_t_box_outline .. " " .. tab_index },
