@@ -436,6 +436,7 @@ config.colors = {
 -- leader (ctrl+space): management (s/v/t/d/m/o/[/]/r)
 
 -- Session persistence (resurrect)
+-- State files saved to ~/.local/share/wezterm/resurrect/
 resurrect.state_manager.periodic_save({
 	interval_seconds = 300,
 	save_workspaces = true,
