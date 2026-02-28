@@ -70,7 +70,8 @@
 | `v` | Split vertical (equalize) |
 | `t` | New tab |
 | `q` | Close pane |
-| `x` | Close tab |
+| `d` | Close tab |
+| `x` | Swap pane (rotate clockwise) |
 | `m` | Zoom / unzoom pane |
 | `[` | Prev tab |
 | `]` | Next tab |

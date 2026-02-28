@@ -204,7 +204,7 @@ config.keys = {
 	{ key = "t", mods = "LEADER", action = action.SpawnTab("CurrentPaneDomain") },
 	{ key = "q", mods = "LEADER", action = action.CloseCurrentPane({ confirm = false }) },
 	{
-		key = "x",
+		key = "d",
 		mods = "LEADER",
 		action = action.Multiple({
 			action.CloseCurrentTab({ confirm = false }),
@@ -212,6 +212,7 @@ config.keys = {
 			action.ActivateTabRelative(-1),
 		}),
 	},
+	{ key = "x", mods = "LEADER", action = action.RotatePaneDirection("Clockwise") },
 	{ key = "m", mods = "LEADER", action = action.TogglePaneZoomState },
 	{ key = "[", mods = "LEADER", action = action.ActivateTabRelative(-1) },
 	{ key = "]", mods = "LEADER", action = action.ActivateTabRelative(1) },
