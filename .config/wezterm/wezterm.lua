@@ -465,25 +465,25 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, conf, hover, max_width
 	if tab.is_active then
 		return {
 			{ Background = { Color = ACTIVE_BG } },
-			{ Foreground = { Color = ACTIVE_FG } },
+			{ Foreground = { Color = STATUS_BAR_BG } },
 			{ Text = EDGE_LEFT },
 			{ Background = { Color = ACTIVE_BG } },
 			{ Foreground = { Color = ACTIVE_FG } },
 			{ Text = text },
 			{ Background = { Color = ACTIVE_BG } },
-			{ Foreground = { Color = ACTIVE_FG } },
+			{ Foreground = { Color = STATUS_BAR_BG } },
 			{ Text = EDGE_RIGHT },
 		}
 	else
 		return {
 			{ Background = { Color = INACTIVE_BG } },
-			{ Foreground = { Color = INACTIVE_FG } },
+			{ Foreground = { Color = STATUS_BAR_BG } },
 			{ Text = EDGE_LEFT },
 			{ Background = { Color = INACTIVE_BG } },
 			{ Foreground = { Color = INACTIVE_FG } },
 			{ Text = text },
 			{ Background = { Color = INACTIVE_BG } },
-			{ Foreground = { Color = INACTIVE_FG } },
+			{ Foreground = { Color = STATUS_BAR_BG } },
 			{ Text = EDGE_RIGHT },
 		}
 	end
