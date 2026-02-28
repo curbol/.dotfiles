@@ -33,10 +33,6 @@ local GRUVBOX_PURPLE = "#d3869b"
 local STATUS_BAR_BG = GRUVBOX_GREY2
 
 -- Symbols
--- local SEPARATOR_LEFT_BOLD = ""
--- local SEPARATOR_LEFT_THIN = ""
--- local SEPARATOR_RIGHT_BOLD = ""
--- local SEPARATOR_RIGHT_THIN = ""
 local SEPARATOR_THIN = "│"
 
 local EDGE_LEFT = "▌"
@@ -53,37 +49,6 @@ end
 -- Given "c:\\foo\\bar" returns "bar"
 local function basename(s)
 	return string.gsub(s, "(.*[/\\])(.*)", "%2")
-end
-
--- Get the 1-based index of the window
-local function get_window_index(window_id)
-	-- https://wezfurlong.org/wezterm/config/lua/wezterm.mux/index.html
-	for i, item in ipairs(wezterm.mux.all_windows()) do
-		if item:window_id() == window_id then
-			return i
-		end
-	end
-	return nil
-end
-
--- Get the 1-based index of the tab
-local function get_tab_index(window, tab_id)
-	-- https://wezfurlong.org/wezterm/config/lua/mux-window/tabs_with_info.html
-	for _, item in ipairs(window:tabs_with_info()) do
-		if item.tab:tab_id() == tab_id then
-			return item.index + 1
-		end
-	end
-end
-
--- Get the 1-based index of the pane
-local function get_pane_index(tab, pane_id)
-	-- https://wezfurlong.org/wezterm/config/lua/MuxTab/panes_with_info.html
-	for _, item in ipairs(tab:panes_with_info()) do
-		if item.pane:pane_id() == pane_id then
-			return item.index + 1
-		end
-	end
 end
 
 -- Keybindings
@@ -360,25 +325,25 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, conf, hover, max_width
 	if tab.is_active then
 		return {
 			{ Background = { Color = ACTIVE_BG } },
-			{ Foreground = { Color = STATUS_BAR_BG } },
+			{ Foreground = { Color = ACTIVE_FG } },
 			{ Text = EDGE_LEFT },
 			{ Background = { Color = ACTIVE_BG } },
 			{ Foreground = { Color = ACTIVE_FG } },
 			{ Text = text },
 			{ Background = { Color = ACTIVE_BG } },
-			{ Foreground = { Color = STATUS_BAR_BG } },
+			{ Foreground = { Color = ACTIVE_FG } },
 			{ Text = EDGE_RIGHT },
 		}
 	else
 		return {
 			{ Background = { Color = INACTIVE_BG } },
-			{ Foreground = { Color = STATUS_BAR_BG } },
+			{ Foreground = { Color = INACTIVE_FG } },
 			{ Text = EDGE_LEFT },
 			{ Background = { Color = INACTIVE_BG } },
 			{ Foreground = { Color = INACTIVE_FG } },
 			{ Text = text },
 			{ Background = { Color = INACTIVE_BG } },
-			{ Foreground = { Color = STATUS_BAR_BG } },
+			{ Foreground = { Color = INACTIVE_FG } },
 			{ Text = EDGE_RIGHT },
 		}
 	end
@@ -418,14 +383,26 @@ wezterm.on("update-status", function(window, pane)
 		return total > 1 and (idx .. "/" .. total) or tostring(idx)
 	end
 
-	local window_index = fmt_index(get_window_index(mux_window:window_id()), #all_windows)
-	local tab_index = fmt_index(get_tab_index(mux_window, active_tab:tab_id()), #all_tabs)
-	local pane_index = fmt_index(get_pane_index(active_tab, pane:pane_id()), #all_panes)
+	local win_idx, tab_idx, pane_idx
+	local pane_id = pane:pane_id()
+	local win_id = mux_window:window_id()
+	local tab_id = active_tab:tab_id()
+	for i, w in ipairs(all_windows) do
+		if w:window_id() == win_id then win_idx = i; break end
+	end
+	for i, t in ipairs(all_tabs) do
+		if t:tab_id() == tab_id then tab_idx = i; break end
+	end
+	for i, p in ipairs(all_panes) do
+		if p:pane_id() == pane_id then pane_idx = i; break end
+	end
+
+	local window_index = fmt_index(win_idx, #all_windows)
+	local tab_index = fmt_index(tab_idx, #all_tabs)
+	local pane_index = fmt_index(pane_idx, #all_panes)
 
 	-- Time
 	local datetime = wezterm.strftime("%a %b %-d %H:%M")
-
-	window:set_left_status(wezterm.format({}))
 	window:set_right_status(wezterm.format({
 		{ Foreground = { Color = GRUVBOX_GREEN } },
 		{ Text = wezterm.nerdfonts.md_alpha_w_box_outline .. " " .. window_index },
@@ -454,11 +431,6 @@ end)
 
 -- Theme https://wezfurlong.org/wezterm/colorschemes/g/index.html#gruvbox-material-gogh
 config.color_scheme = "Gruvbox Material (Gogh)"
-config.colors = {
-	tab_bar = {
-		-- background = GRUVBOX_GREY1,
-	},
-}
 
 -- Session persistence (resurrect)
 -- State files saved to ~/Library/Application Support/wezterm/plugins/.../state/
