@@ -150,18 +150,18 @@ end
 
 config.keys = {
 	-- Wezterm pane navigation (cmd+arrows)
-	{ key = "LeftArrow",  mods = "SUPER", action = action.ActivatePaneDirection("Left") },
+	{ key = "LeftArrow", mods = "SUPER", action = action.ActivatePaneDirection("Left") },
 	{ key = "RightArrow", mods = "SUPER", action = action.ActivatePaneDirection("Right") },
-	{ key = "UpArrow",    mods = "SUPER", action = action.ActivatePaneDirection("Up") },
-	{ key = "DownArrow",  mods = "SUPER", action = action.ActivatePaneDirection("Down") },
+	{ key = "UpArrow", mods = "SUPER", action = action.ActivatePaneDirection("Up") },
+	{ key = "DownArrow", mods = "SUPER", action = action.ActivatePaneDirection("Down") },
 
 	-- Pass ctrl+shift+arrows through to the terminal (nvim window move/mini.move).
 	-- WezTerm defaults bind these to ActivatePaneDirection; SendString bypasses the pipeline.
 	-- Sequences: \x1b[1;6A/B/C/D = ctrl+shift+up/down/right/left (VT modifier 6 = ctrl+shift)
-	{ key = "LeftArrow",  mods = "CTRL|SHIFT", action = action.SendString("\x1b[1;6D") },
+	{ key = "LeftArrow", mods = "CTRL|SHIFT", action = action.SendString("\x1b[1;6D") },
 	{ key = "RightArrow", mods = "CTRL|SHIFT", action = action.SendString("\x1b[1;6C") },
-	{ key = "UpArrow",    mods = "CTRL|SHIFT", action = action.SendString("\x1b[1;6A") },
-	{ key = "DownArrow",  mods = "CTRL|SHIFT", action = action.SendString("\x1b[1;6B") },
+	{ key = "UpArrow", mods = "CTRL|SHIFT", action = action.SendString("\x1b[1;6A") },
+	{ key = "DownArrow", mods = "CTRL|SHIFT", action = action.SendString("\x1b[1;6B") },
 
 	-- Wezterm tab jump (cmd+[1-9])
 	{ key = "1", mods = "SUPER", action = action.ActivateTab(0) },
@@ -279,6 +279,15 @@ config.window_padding = {
 config.inactive_pane_hsb = {
 	saturation = 0.9,
 	brightness = 0.7,
+}
+
+-- Mouse
+config.mouse_bindings = {
+	{
+		event = { Down = { streak = 1, button = "Middle" } },
+		mods = "NONE",
+		action = action.CloseCurrentTab({ confirm = false }),
+	},
 }
 
 -- Tab Bar
@@ -429,11 +438,6 @@ config.colors = {
 		-- background = GRUVBOX_GREY1,
 	},
 }
-
--- ctrl+arrows: stays in nvim (window nav) / passes through wezterm
--- cmd+arrows: wezterm pane navigation
--- cmd+shift+arrows: wezterm pane swap (picker)
--- leader (ctrl+space): management (s/v/t/d/m/o/[/]/r)
 
 -- Session persistence (resurrect)
 -- State files saved to ~/.local/share/wezterm/resurrect/
