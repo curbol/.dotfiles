@@ -54,7 +54,11 @@ end
 -- Keybindings
 config.leader = { key = "Space", mods = "CTRL", timeout_milliseconds = 1000 }
 
--- Equalize all panes in the current tab (adapted from https://gist.github.com/fcpg/eb3c05be5b480f4cad767199dac5cecd)
+-- Equalize all panes so that each column gets equal width and each row within a
+-- column gets equal height. At each vsplit, the weight is the number of distinct
+-- column groups in each subtree (so horizontal splits inside a column don't inflate
+-- that column's share). At each hsplit, weight is the number of distinct row groups.
+-- This matches what you'd get from an N-ary equal-split layout.
 local function equalize_panes()
 	return wezterm.action_callback(function(window, pane)
 		local tab = window:active_tab()
@@ -70,25 +74,161 @@ local function equalize_panes()
 			end
 		end
 
-		local size = tab:get_size()
-		for _, axis in ipairs({ "x", "y" }) do
-			local total = axis == "x" and size.cols or size.rows
-			local size_key = axis == "x" and "width" or "height"
-			local target = math.floor(total / #panes)
-			local shrink_dir = axis == "x" and "Left" or "Up"
-			local grow_dir = axis == "x" and "Right" or "Down"
-			for _, pi in ipairs(panes) do
-				window:perform_action(action.ActivatePaneByIndex(pi.index), tab:active_pane())
-				local diff = pi[size_key] - target
-				if diff ~= 0 then
-					window:perform_action(
-						action.AdjustPaneSize({ diff > 0 and shrink_dir or grow_dir, math.abs(diff) }),
-						tab:active_pane()
-					)
+		-- Reconstruct the binary split tree from pane positions.
+		-- At each level, find a horizontal or vertical line that cleanly partitions
+		-- the pane set into two non-overlapping groups, then recurse.
+		local function build_tree(ps)
+			if #ps == 1 then
+				return { type = "pane", pane = ps[1], width = ps[1].width, height = ps[1].height }
+			end
+
+			-- Try vertical split candidates (sorted left→right for consistent results)
+			local xs = {}
+			for _, p in ipairs(ps) do
+				xs[p.left + p.width] = true
+			end
+			local xs_sorted = {}
+			for x in pairs(xs) do
+				table.insert(xs_sorted, x)
+			end
+			table.sort(xs_sorted)
+			for _, x in ipairs(xs_sorted) do
+				local left_ps, right_ps = {}, {}
+				for _, p in ipairs(ps) do
+					if p.left + p.width <= x then
+						table.insert(left_ps, p)
+					elseif p.left >= x then
+						table.insert(right_ps, p)
+					end
 				end
+				if #left_ps + #right_ps == #ps and #left_ps > 0 and #right_ps > 0 then
+					local lc = build_tree(left_ps)
+					local rc = build_tree(right_ps)
+					return { type = "vsplit", left_child = lc, right_child = rc,
+					         width = lc.width + rc.width, height = lc.height }
+				end
+			end
+
+			-- Try horizontal split candidates (sorted top→bottom)
+			local ys = {}
+			for _, p in ipairs(ps) do
+				ys[p.top + p.height] = true
+			end
+			local ys_sorted = {}
+			for y in pairs(ys) do
+				table.insert(ys_sorted, y)
+			end
+			table.sort(ys_sorted)
+			for _, y in ipairs(ys_sorted) do
+				local top_ps, bot_ps = {}, {}
+				for _, p in ipairs(ps) do
+					if p.top + p.height <= y then
+						table.insert(top_ps, p)
+					elseif p.top >= y then
+						table.insert(bot_ps, p)
+					end
+				end
+				if #top_ps + #bot_ps == #ps and #top_ps > 0 and #bot_ps > 0 then
+					local tc = build_tree(top_ps)
+					local bc = build_tree(bot_ps)
+					return { type = "hsplit", top_child = tc, bot_child = bc,
+					         width = tc.width, height = tc.height + bc.height }
+				end
+			end
+
+			return { type = "pane", pane = ps[1], width = ps[1].width, height = ps[1].height }
+		end
+
+		-- For a vsplit resize, activate the pane in the LEFT subtree whose right edge
+		-- sits at the split boundary. AdjustPaneSize("Right"/"Left") on it moves that boundary.
+		local function rightmost_pane(node)
+			if node.type == "pane" then return node.pane end
+			if node.type == "vsplit" then return rightmost_pane(node.right_child) end
+			return rightmost_pane(node.top_child) -- hsplit: either child shares the right edge
+		end
+
+		-- For an hsplit resize, activate the pane in the TOP subtree whose bottom edge
+		-- sits at the split boundary.
+		local function bottommost_pane(node)
+			if node.type == "pane" then return node.pane end
+			if node.type == "hsplit" then return bottommost_pane(node.bot_child) end
+			return bottommost_pane(node.left_child) -- vsplit: either child shares the bottom edge
+		end
+
+		-- Count distinct column groups (vsplit branches) in a subtree.
+		-- Hsplit nodes and leaves each count as 1 — they occupy a single column group
+		-- and horizontal splits within a column shouldn't widen that column.
+		local function count_columns(node)
+			if node.type == "vsplit" then
+				return count_columns(node.left_child) + count_columns(node.right_child)
+			else
+				return 1
 			end
 		end
 
+		-- Count distinct row groups (hsplit branches) in a subtree.
+		-- Vsplit nodes and leaves each count as 1.
+		local function count_rows(node)
+			if node.type == "hsplit" then
+				return count_rows(node.top_child) + count_rows(node.bot_child)
+			else
+				return 1
+			end
+		end
+
+		-- Walk the tree top-down, weighting each vsplit by column count and each hsplit
+		-- by row count. This gives equal width to each logical column and equal height to
+		-- each logical row within a column, regardless of how many panes are stacked inside.
+		--
+		-- scale_x / scale_y: multiply stale pane dimensions by these factors to get the
+		-- expected current size, accounting for all ancestor resizes already queued.
+		-- Since perform_action is async, pane sizes from panes_with_info() are stale;
+		-- we track how they scale as parents are resized and propagate that to children.
+		local function equalize_node(node, scale_x, scale_y)
+			if node.type == "pane" then
+				return
+			end
+
+			if node.type == "vsplit" then
+				local lc, rc = node.left_child, node.right_child
+				local l_cols = count_columns(lc)
+				local r_cols = count_columns(rc)
+				local cur_l = lc.width * scale_x
+				local cur_r = rc.width * scale_x
+				local target_l = (cur_l + cur_r) * l_cols / (l_cols + r_cols)
+				local adj = math.floor(cur_l) - math.floor(target_l)
+				local rep = rightmost_pane(lc)
+				window:perform_action(action.ActivatePaneByIndex(rep.index), tab:active_pane())
+				if adj > 0 then
+					window:perform_action(action.AdjustPaneSize({ "Left", adj }), tab:active_pane())
+				elseif adj < 0 then
+					window:perform_action(action.AdjustPaneSize({ "Right", -adj }), tab:active_pane())
+				end
+				equalize_node(lc, target_l / lc.width, scale_y)
+				equalize_node(rc, (cur_l + cur_r - target_l) / rc.width, scale_y)
+
+			elseif node.type == "hsplit" then
+				local tc, bc = node.top_child, node.bot_child
+				local t_rows = count_rows(tc)
+				local b_rows = count_rows(bc)
+				local cur_t = tc.height * scale_y
+				local cur_b = bc.height * scale_y
+				local target_t = (cur_t + cur_b) * t_rows / (t_rows + b_rows)
+				local adj = math.floor(cur_t) - math.floor(target_t)
+				local rep = bottommost_pane(tc)
+				window:perform_action(action.ActivatePaneByIndex(rep.index), tab:active_pane())
+				if adj > 0 then
+					window:perform_action(action.AdjustPaneSize({ "Up", adj }), tab:active_pane())
+				elseif adj < 0 then
+					window:perform_action(action.AdjustPaneSize({ "Down", -adj }), tab:active_pane())
+				end
+				equalize_node(tc, scale_x, target_t / tc.height)
+				equalize_node(bc, scale_x, (cur_t + cur_b - target_t) / bc.height)
+			end
+		end
+
+		local tree = build_tree(panes)
+		equalize_node(tree, 1, 1)
 		window:perform_action(action.ActivatePaneByIndex(active_idx), tab:active_pane())
 	end)
 end
