@@ -69,7 +69,8 @@
 | `s` | Split horizontal (equalize) |
 | `v` | Split vertical (equalize) |
 | `t` | New tab |
-| `d` | Close pane |
+| `q` | Close pane |
+| `x` | Close tab |
 | `m` | Zoom / unzoom pane |
 | `[` | Prev tab |
 | `]` | Next tab |

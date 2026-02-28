@@ -202,7 +202,16 @@ config.keys = {
 	{ key = "s", mods = "LEADER", action = split_and_equalize("vertical") },
 	{ key = "v", mods = "LEADER", action = split_and_equalize("horizontal") },
 	{ key = "t", mods = "LEADER", action = action.SpawnTab("CurrentPaneDomain") },
-	{ key = "d", mods = "LEADER", action = action.CloseCurrentPane({ confirm = false }) },
+	{ key = "q", mods = "LEADER", action = action.CloseCurrentPane({ confirm = false }) },
+	{
+		key = "x",
+		mods = "LEADER",
+		action = action.Multiple({
+			action.CloseCurrentTab({ confirm = false }),
+			action.ActivateTabRelative(1), -- keep last-active tab tracking working
+			action.ActivateTabRelative(-1),
+		}),
+	},
 	{ key = "m", mods = "LEADER", action = action.TogglePaneZoomState },
 	{ key = "[", mods = "LEADER", action = action.ActivateTabRelative(-1) },
 	{ key = "]", mods = "LEADER", action = action.ActivateTabRelative(1) },
