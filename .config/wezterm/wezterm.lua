@@ -212,10 +212,12 @@ config.keys = {
 			action.ActivateTabRelative(-1),
 		}),
 	},
-	{ key = "x", mods = "LEADER", action = action.RotatePanes("Clockwise") },
+	{ key = "x", mods = "LEADER", action = action.PaneSelect({ mode = "SwapWithActive" }) },
 	{ key = "m", mods = "LEADER", action = action.TogglePaneZoomState },
 	{ key = "[", mods = "LEADER", action = action.ActivateTabRelative(-1) },
 	{ key = "]", mods = "LEADER", action = action.ActivateTabRelative(1) },
+	{ key = "{", mods = "LEADER|SHIFT", action = action.MoveTabRelative(-1) },
+	{ key = "}", mods = "LEADER|SHIFT", action = action.MoveTabRelative(1) },
 	{ key = "=", mods = "LEADER", action = equalize_panes() },
 	{
 		key = "o",
@@ -450,13 +452,23 @@ config.colors = {
 }
 
 -- Session persistence (resurrect)
--- State files saved to ~/.local/share/wezterm/resurrect/
+-- State files saved to ~/Library/Application Support/wezterm/plugins/.../state/
 resurrect.state_manager.periodic_save({
 	interval_seconds = 300,
 	save_workspaces = true,
 	save_windows = true,
 	save_tabs = true,
 })
+-- Write the current_state pointer file after each periodic save so
+-- resurrect_on_gui_startup knows which workspace to restore on next launch.
+wezterm.on("resurrect.state_manager.periodic_save.finished", function()
+	resurrect.state_manager.write_current_state(wezterm.mux.get_active_workspace(), "workspace")
+end)
+wezterm.on("gui-shutdown", function()
+	local workspace = wezterm.mux.get_active_workspace()
+	resurrect.state_manager.save_state(require("resurrect.workspace_state").get_workspace_state())
+	resurrect.state_manager.write_current_state(workspace, "workspace")
+end)
 wezterm.on("gui-startup", resurrect.state_manager.resurrect_on_gui_startup)
 
 return config

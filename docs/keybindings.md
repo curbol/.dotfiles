@@ -71,10 +71,12 @@
 | `t` | New tab |
 | `q` | Close pane |
 | `d` | Close tab |
-| `x` | Swap pane (rotate clockwise) |
+| `x` | Swap pane (picker) |
 | `m` | Zoom / unzoom pane |
 | `[` | Prev tab |
 | `]` | Next tab |
+| `{` | Move tab left |
+| `}` | Move tab right |
 | `=` | Equalize pane sizes |
 | `o` | Close other panes |
 | `r` | **Enter resize mode** |
