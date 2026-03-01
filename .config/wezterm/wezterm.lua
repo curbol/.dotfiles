@@ -54,18 +54,15 @@ end
 -- Keybindings
 config.leader = { key = "Space", mods = "CTRL", timeout_milliseconds = 1000 }
 
--- Equalize all panes so that each column gets equal width and each row within a
--- column gets equal height. At each vsplit, the weight is the number of distinct
--- column groups in each subtree (so horizontal splits inside a column don't inflate
--- that column's share). At each hsplit, weight is the number of distinct row groups.
--- This matches what you'd get from an N-ary equal-split layout.
--- Equalize all panes in the given tab. Callable from any action_callback.
+-- Equalize all panes: each column gets equal width, each row within a column gets
+-- equal height. Weights are column/row group counts so mixed split orientations
+-- produce the expected N-ary equal-split layout.
 --
--- WezTerm's AdjustPaneSize finds the nearest ancestor split matching the direction
--- and moves the bar ("Left"/"Up" = shrink first child, "Right"/"Down" = grow first).
--- After adjusting, the first child keeps its absolute size while the second absorbs
--- the remainder. We adjust one boundary at a time in BFS order (shallowest first),
--- re-reading panes_with_info() after each so every adjustment uses accurate sizes.
+-- WezTerm's AdjustPaneSize targets the nearest ancestor split in the internal tree,
+-- which may differ from our reconstructed tree (multiple binary trees produce the same
+-- pixel layout). We probe with +1 adjustments to discover which boundary each pane
+-- actually targets, verifying by checking that panes on BOTH sides of the intended
+-- boundary are affected. This ensures adjustments hit the correct split bar.
 local function equalize_tab(window)
 	local tab = window:active_tab()
 	local initial_panes = tab:panes_with_info()
@@ -127,10 +124,33 @@ local function equalize_tab(window)
 		return { type = "pane", pane = ps[1], width = ps[1].width, height = ps[1].height }
 	end
 
-	local function any_pane(node)
+	-- Leftmost/topmost pane in subtree (first-child path — cascade preserver).
+	local function near_pane(node)
 		if node.type == "pane" then return node.pane end
-		if node.type == "vsplit" then return any_pane(node.left_child) end
-		return any_pane(node.top_child)
+		if node.type == "vsplit" then return near_pane(node.left_child) end
+		return near_pane(node.top_child)
+	end
+
+	-- Rightmost/bottommost pane in subtree (second-child path — cascade absorber).
+	local function far_pane(node)
+		if node.type == "pane" then return node.pane end
+		if node.type == "vsplit" then return far_pane(node.right_child) end
+		return far_pane(node.bot_child)
+	end
+
+	-- Collect all leaf panes in a subtree.
+	local function collect_panes(node, out)
+		out = out or {}
+		if node.type == "pane" then
+			table.insert(out, node.pane)
+		elseif node.type == "vsplit" then
+			collect_panes(node.left_child, out)
+			collect_panes(node.right_child, out)
+		elseif node.type == "hsplit" then
+			collect_panes(node.top_child, out)
+			collect_panes(node.bot_child, out)
+		end
+		return out
 	end
 
 	local function count_columns(node)
@@ -147,60 +167,158 @@ local function equalize_tab(window)
 		return 1
 	end
 
-	-- Find and adjust the shallowest unbalanced split (BFS order).
-	-- Returns true if an adjustment was made, false if all splits are balanced.
-	local function adjust_shallowest(tree)
-		local queue = { tree }
-		while #queue > 0 do
-			local node = table.remove(queue, 1)
-			if node.type == "vsplit" then
-				local lc, rc = node.left_child, node.right_child
-				local l_cols = count_columns(lc)
-				local r_cols = count_columns(rc)
-				local target_l = math.floor((lc.width + rc.width) * l_cols / (l_cols + r_cols))
-				local adj = lc.width - target_l
-				if adj ~= 0 then
-					local rep = any_pane(lc)
-					window:perform_action(action.ActivatePaneByIndex(rep.index), tab:active_pane())
-					if adj > 0 then
-						window:perform_action(action.AdjustPaneSize({ "Left", adj }), tab:active_pane())
+	-- Snapshot pane sizes keyed by index.
+	local function snapshot()
+		local s = {}
+		for _, pi in ipairs(tab:panes_with_info()) do
+			s[pi.index] = { width = pi.width, height = pi.height }
+		end
+		return s
+	end
+
+	-- Probe from a candidate pane to see if it targets the intended boundary.
+	-- Returns "grow"/"shrink"/nil indicating the effect of `pos_dir` on the
+	-- first-child side of the intended boundary.
+	-- pos_dir/neg_dir: e.g. "Right"/"Left" for vsplits, "Down"/"Up" for hsplits.
+	-- prop: "width" or "height".
+	-- verify_pane: a pane on the OTHER side whose size must also change.
+	local function probe(candidate_idx, pos_dir, neg_dir, prop, verify_idx)
+		local before = snapshot()
+		window:perform_action(action.ActivatePaneByIndex(candidate_idx), tab:active_pane())
+		window:perform_action(action.AdjustPaneSize({ pos_dir, 1 }), tab:active_pane())
+		local after = snapshot()
+
+		local cand_delta = after[candidate_idx][prop] - before[candidate_idx][prop]
+		local verify_delta = after[verify_idx][prop] - before[verify_idx][prop]
+
+		-- Undo the probe
+		window:perform_action(action.AdjustPaneSize({ neg_dir, 1 }), tab:active_pane())
+
+		if cand_delta ~= 0 and verify_delta ~= 0 and cand_delta ~= verify_delta then
+			return cand_delta > 0 and "grow" or "shrink"
+		end
+		return nil
+	end
+
+	-- Try to adjust a boundary using probe-and-discover.
+	-- candidate_panes: list of {index, side} to try ("left" or "right" of boundary).
+	-- delta: desired change to first-child size (positive = grow first child).
+	-- pos_dir/neg_dir: direction pair (e.g. "Right"/"Left").
+	-- prop: "width" or "height".
+	-- verify_idx: pane on opposite side to verify correct boundary.
+	local function try_adjust(candidates, delta, pos_dir, neg_dir, prop)
+		for _, c in ipairs(candidates) do
+			local result = probe(c.index, pos_dir, neg_dir, prop, c.verify)
+			if result then
+				window:perform_action(action.ActivatePaneByIndex(c.index), tab:active_pane())
+				-- result tells us what pos_dir does to this pane relative to the boundary.
+				-- We need to figure out what direction achieves our desired delta.
+				if c.side == "left" then
+					-- Candidate is on left/top side. We want delta applied to left side.
+					if result == "grow" then
+						-- pos_dir grows left side
+						if delta > 0 then
+							window:perform_action(action.AdjustPaneSize({ pos_dir, delta }), tab:active_pane())
+						else
+							window:perform_action(action.AdjustPaneSize({ neg_dir, -delta }), tab:active_pane())
+						end
 					else
-						window:perform_action(action.AdjustPaneSize({ "Right", -adj }), tab:active_pane())
+						-- pos_dir shrinks left side
+						if delta > 0 then
+							window:perform_action(action.AdjustPaneSize({ neg_dir, delta }), tab:active_pane())
+						else
+							window:perform_action(action.AdjustPaneSize({ pos_dir, -delta }), tab:active_pane())
+						end
 					end
-					return true
-				end
-				table.insert(queue, lc)
-				table.insert(queue, rc)
-			elseif node.type == "hsplit" then
-				local tc, bc = node.top_child, node.bot_child
-				local t_rows = count_rows(tc)
-				local b_rows = count_rows(bc)
-				local target_t = math.floor((tc.height + bc.height) * t_rows / (t_rows + b_rows))
-				local adj = tc.height - target_t
-				if adj ~= 0 then
-					local rep = any_pane(tc)
-					window:perform_action(action.ActivatePaneByIndex(rep.index), tab:active_pane())
-					if adj > 0 then
-						window:perform_action(action.AdjustPaneSize({ "Up", adj }), tab:active_pane())
+				else
+					-- Candidate is on right/bot side. pos_dir effect on candidate is
+					-- opposite to its effect on the first-child side.
+					if result == "grow" then
+						-- pos_dir grows right side = shrinks left side
+						if delta > 0 then
+							window:perform_action(action.AdjustPaneSize({ neg_dir, delta }), tab:active_pane())
+						else
+							window:perform_action(action.AdjustPaneSize({ pos_dir, -delta }), tab:active_pane())
+						end
 					else
-						window:perform_action(action.AdjustPaneSize({ "Down", -adj }), tab:active_pane())
+						-- pos_dir shrinks right side = grows left side
+						if delta > 0 then
+							window:perform_action(action.AdjustPaneSize({ pos_dir, delta }), tab:active_pane())
+						else
+							window:perform_action(action.AdjustPaneSize({ neg_dir, -delta }), tab:active_pane())
+						end
 					end
-					return true
 				end
-				table.insert(queue, tc)
-				table.insert(queue, bc)
+				return true
 			end
 		end
 		return false
 	end
 
-	-- Adjust one boundary at a time, re-reading fresh pane data between each.
-	-- BFS order (shallowest first) ensures parent splits are correct before
-	-- children are measured, so each adjustment is final — no overshoot.
+	-- BFS: process one boundary at a time, re-reading between each.
 	for _ = 1, #initial_panes - 1 do
-		local panes = tab:panes_with_info()
-		local tree = build_tree(panes)
-		if not adjust_shallowest(tree) then break end
+		local ps = tab:panes_with_info()
+		local tree = build_tree(ps)
+
+		-- Find shallowest unbalanced split (BFS).
+		local queue = { tree }
+		local adjusted = false
+		while #queue > 0 and not adjusted do
+			local node = table.remove(queue, 1)
+			if node.type == "vsplit" then
+				local lc, rc = node.left_child, node.right_child
+				local l_cols = count_columns(lc)
+				local r_cols = count_columns(rc)
+				local total = lc.width + rc.width
+				local target_l = math.floor(total * l_cols / (l_cols + r_cols))
+				local delta = target_l - lc.width
+				if delta ~= 0 then
+					-- Build candidate list: panes from both sides, verified against far pane on other side.
+					local left_panes = collect_panes(lc)
+					local right_panes = collect_panes(rc)
+					local right_far = far_pane(rc)
+					local left_far = far_pane(lc)
+					local candidates = {}
+					for _, p in ipairs(left_panes) do
+						table.insert(candidates, { index = p.index, side = "left", verify = right_far.index })
+					end
+					for _, p in ipairs(right_panes) do
+						table.insert(candidates, { index = p.index, side = "right", verify = left_far.index })
+					end
+					adjusted = try_adjust(candidates, delta, "Right", "Left", "width")
+				end
+				if not adjusted then
+					table.insert(queue, lc)
+					table.insert(queue, rc)
+				end
+			elseif node.type == "hsplit" then
+				local tc, bc = node.top_child, node.bot_child
+				local t_rows = count_rows(tc)
+				local b_rows = count_rows(bc)
+				local total = tc.height + bc.height
+				local target_t = math.floor(total * t_rows / (t_rows + b_rows))
+				local delta = target_t - tc.height
+				if delta ~= 0 then
+					local top_panes = collect_panes(tc)
+					local bot_panes = collect_panes(bc)
+					local bot_far = far_pane(bc)
+					local top_far = far_pane(tc)
+					local candidates = {}
+					for _, p in ipairs(top_panes) do
+						table.insert(candidates, { index = p.index, side = "left", verify = bot_far.index })
+					end
+					for _, p in ipairs(bot_panes) do
+						table.insert(candidates, { index = p.index, side = "right", verify = top_far.index })
+					end
+					adjusted = try_adjust(candidates, delta, "Down", "Up", "height")
+				end
+				if not adjusted then
+					table.insert(queue, tc)
+					table.insert(queue, bc)
+				end
+			end
+		end
+		if not adjusted then break end
 	end
 
 	window:perform_action(action.ActivatePaneByIndex(active_idx), tab:active_pane())
@@ -376,7 +494,10 @@ config.mouse_bindings = {
 	{
 		event = { Down = { streak = 1, button = "Middle" } },
 		mods = "NONE",
-		action = action.CloseCurrentTab({ confirm = false }),
+		action = wezterm.action_callback(function(window, pane)
+			window:perform_action(action.CloseCurrentPane({ confirm = false }), pane)
+			equalize_tab(window)
+		end),
 	},
 }
 
