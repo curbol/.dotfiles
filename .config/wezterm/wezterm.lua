@@ -401,11 +401,7 @@ config.keys = {
 	{
 		key = "d",
 		mods = "LEADER",
-		action = action.Multiple({
-			action.CloseCurrentTab({ confirm = false }),
-			action.ActivateTabRelative(1), -- keep last-active tab tracking working
-			action.ActivateTabRelative(-1),
-		}),
+		action = action.CloseCurrentTab({ confirm = true }),
 	},
 	{ key = "x", mods = "LEADER", action = action.PaneSelect({ mode = "SwapWithActive" }) },
 	{ key = "m", mods = "LEADER", action = action.TogglePaneZoomState },
