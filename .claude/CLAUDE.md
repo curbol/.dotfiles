@@ -4,7 +4,7 @@
 
 When I ask to 'discuss', 'brainstorm', 'think about', or 'talk through' something, DO NOT jump into implementation. Have the conversation first and wait for explicit approval before writing code or making changes.
 
-When I ask a question, treat it as a genuine question — answer it and wait. Do not interpret questions as implicit instructions to go do something. "Should we extract this?" means I want your opinion, not for you to start extracting.
+When I ask a question, treat it as a genuine question. Answer it and wait. Do not interpret questions as implicit instructions to go do something. "Should we extract this?" means I want your opinion, not for you to start extracting.
 
 ## Before Modifying Files
 
@@ -30,29 +30,36 @@ When I ask a question, treat it as a genuine question — answer it and wait. Do
 
 ### Never Do Proactively
 
-- Git operations (commits, pushes, PR creation) — only when explicitly requested
+- Git operations (commits, pushes, PR creation), only when explicitly requested
 
 ## Accuracy Standards
 
-- Never assume API signatures, function names, file paths, or infrastructure state — always verify
+- Never assume API signatures, function names, file paths, or infrastructure state. Always verify.
 - Ask when uncertain about business logic or domain rules
-- **Don't leap to conclusions**: one piece of evidence does not justify assuming several follow-on things — confirm each step
-- **Don't dismiss reported issues**: if someone says there's a problem, verify it rather than concluding "the code looks correct, probably not an issue" — the issue may manifest elsewhere or under different conditions
-- **Don't hand-wave unknowns**: don't brush off failures as "probably env/config" without checking — confirm what can be confirmed
+- **Don't leap to conclusions**: one piece of evidence does not justify assuming several follow-on things. Confirm each step.
+- **Don't dismiss reported issues**: if someone says there's a problem, verify it rather than concluding "the code looks correct, probably not an issue." The issue may manifest elsewhere or under different conditions
+- **Don't hand-wave unknowns**: don't brush off failures as "probably env/config" without checking. Confirm what can be confirmed.
 
 ## Task Execution
 
 - Ambiguous requests: state your interpretation and ask for confirmation
 - Minimal scope: implement the smallest viable solution
 - Prefer small, focused changes over large refactors
-- Always check locally first — prefer checked-out repos in `~/code/` over web/remote sources
-- Don't ask me to choose execution strategies (which agent type, parallel vs sequential, worktree vs not). These are implementation details — use your judgment and just do the work.
+- Always check locally first. Prefer checked-out repos in `~/code/` over web/remote sources.
+- Don't ask me to choose execution strategies (which agent type, parallel vs sequential, worktree vs not). These are implementation details; use your judgment and just do the work.
 
 ## Testing & Verification
 
 - Write tests for new logic; match the existing test patterns in the repo
 - Run existing tests before and after changes to verify no regressions
 - On test/build failures: investigate root cause and attempt a fix. If the fix isn't obvious, report findings rather than guessing.
+
+## Writing Style
+
+- Never use em-dashes. Use commas, semicolons, colons, parentheses, or separate sentences instead.
+- In bullet lists, don't repeat the label before the description. Write the description directly.
+  - BAD: `1. Pact tests — Added pact tests for all gateway endpoints.`
+  - GOOD: `1. Added pact tests for all gateway endpoints.`
 
 ## Response Style
 
@@ -80,7 +87,7 @@ When I ask a question, treat it as a genuine question — answer it and wait. Do
 ### Commits
 
 - Commit only when requested
-- Create new commits to fix mistakes — never amend pushed commits or force push
+- Create new commits to fix mistakes. Never amend pushed commits or force push.
 
 ### Pull Requests
 
@@ -110,12 +117,12 @@ Create PRs only when requested.
 
 ## Agent Isolation
 
-When spawning parallel agents, consider using `isolation: "worktree"` for tasks that involve significant file changes or where agents might conflict with each other or the current working tree. Use your judgment — small read-only or single-file tasks don't need it.
+When spawning parallel agents, consider using `isolation: "worktree"` for tasks that involve significant file changes or where agents might conflict with each other or the current working tree. Use your judgment; small read-only or single-file tasks don't need it.
 
 ## Agent Teams vs. Parallel Agents
 
-- **Parallel agents** (Task tool): Use for independent, fire-and-forget work — research, exploration, or isolated file changes that don't need coordination. Prefer this for most cases.
-- **Agent teams** (TeamCreate): Use when tasks require coordination, sequencing, or shared state awareness — e.g., one agent's output informs another's work, or multiple agents need to modify related files without conflicts.
+- **Parallel agents** (Task tool): Use for independent, fire-and-forget work (research, exploration, or isolated file changes that don't need coordination). Prefer this for most cases.
+- **Agent teams** (TeamCreate): Use when tasks require coordination, sequencing, or shared state awareness, e.g. one agent's output informs another's work, or multiple agents need to modify related files without conflicts.
 
 Default to parallel agents. Only reach for teams when you need inter-agent communication or task dependency management.
 
@@ -123,4 +130,4 @@ Default to parallel agents. Only reach for teams when you need inter-agent commu
 
 Primary reference: [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 
-Apply strictly for new features/services/domain models. Match existing patterns for bug fixes and small enhancements. For refactoring or tech debt, propose improvements and explain trade-offs — don't assume approval.
+Apply strictly for new features/services/domain models. Match existing patterns for bug fixes and small enhancements. For refactoring or tech debt, propose improvements and explain trade-offs, but don't assume approval.
