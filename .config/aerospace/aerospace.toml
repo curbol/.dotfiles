@@ -159,15 +159,15 @@ q = ['close', 'mode main']
 r = 'mode resize'
 
 # Next / prev workspace
-leftSquareBracket  = ['workspace --wrap-around prev', 'mode main']
+leftSquareBracket = ['workspace --wrap-around prev', 'mode main']
 rightSquareBracket = ['workspace --wrap-around next', 'mode main']
 
 [mode.resize.binding]
-left  = 'resize width -50'
+left = 'resize width -50'
 right = 'resize width +50'
-up    = 'resize height +50'
-down  = 'resize height -50'
-esc   = 'mode main'
+up = 'resize height +50'
+down = 'resize height -50'
+esc = 'mode main'
 
 # Workspace 1: Notion, Slack, Arc
 [[on-window-detected]]
@@ -178,13 +178,13 @@ run = ['move-node-to-workspace 1']
 if.app-id = 'com.tinyspeck.slackmacgap'
 run = ['move-node-to-workspace 1']
 
-[[on-window-detected]]
-if.app-id = 'company.thebrowser.Browser'
-run = ['move-node-to-workspace 1']
+# [[on-window-detected]]
+# if.app-id = 'company.thebrowser.Browser'
+# run = ['move-node-to-workspace 1']
 
-# Workspace 2: Warp
+# Workspace 2: WezTerm
 [[on-window-detected]]
-if.app-id = 'dev.warp.Warp-Stable'
+if.app-id = 'com.github.wez.wezterm'
 run = ['move-node-to-workspace 2']
 
 # Workspace 3: Discord, Messages
@@ -195,15 +195,6 @@ run = ['move-node-to-workspace 3']
 [[on-window-detected]]
 if.app-id = 'com.apple.MobileSMS'
 run = ['move-node-to-workspace 3']
-
-# Workspace 9: Safari, Google Meet
-[[on-window-detected]]
-if.app-id = 'com.apple.Safari'
-run = ['move-node-to-workspace 9']
-
-[[on-window-detected]]
-if.app-id = 'com.google.Meet'
-run = ['move-node-to-workspace 9']
 
 # force certain workspaces to certain monitors
 [workspace-to-monitor-force-assignment]
