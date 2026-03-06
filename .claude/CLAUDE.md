@@ -66,6 +66,7 @@ When I ask a question, treat it as a genuine question. Answer it and wait. Do no
 - **Code-first**: Show code immediately when applicable, explain only when needed
 - **Technical depth**: Assume software engineering expertise
 - Include line numbers when discussing specific code
+- **Default to correct, not easy**: When presenting options, recommend the best-practice, most maintainable solution, not the simplest or quickest one. "Simplest" is only the right default when the alternatives offer no meaningful benefit. Lead with what is correct; mention simpler alternatives as trade-offs if relevant.
 
 ### When to Explain
 
