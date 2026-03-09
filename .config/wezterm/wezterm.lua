@@ -471,7 +471,7 @@ config.font = wezterm.font("Maple Mono NF", { weight = "Regular" })
 config.font_size = 15
 
 -- Window
-config.scrollback_lines = 3000
+config.scrollback_lines = 10000
 config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
 config.window_close_confirmation = "AlwaysPrompt"
 config.window_padding = {
