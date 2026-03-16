@@ -3,9 +3,9 @@ config-file = ?"~/.config/ghostty/theme.conf"
 config-file = ?"~/.config/omarchy/current/theme/ghostty.conf"
 
 # Font
-font-family = "JetBrainsMono Nerd Font"
+font-family = "Maple Mono NF"
 font-style = Regular
-font-size = 13
+font-size = 9
 
 # Window
 window-padding-x = 14
@@ -24,9 +24,21 @@ cursor-style-blink = false
 # Shell integration (preserves SSH terminfo; disables cursor override)
 shell-integration-features = no-cursor,ssh-env
 
+# Mouse
+mouse-scroll-multiplier = 0.95
+
+# Fix general slowness on hyprland (https://github.com/ghostty-org/ghostty/discussions/3224)
+async-backend = epoll
+
 # Clipboard
 keybind = shift+insert=paste_from_clipboard
 keybind = control+insert=copy_to_clipboard
+
+# Pane resize
+keybind = super+ctrl+shift+alt+arrow_down=resize_split:down,100
+keybind = super+ctrl+shift+alt+arrow_up=resize_split:up,100
+keybind = super+ctrl+shift+alt+arrow_left=resize_split:left,100
+keybind = super+ctrl+shift+alt+arrow_right=resize_split:right,100
 
 # Shift+Enter fix for Claude Code inside tmux
 keybind = shift+enter=text:\x1b\r

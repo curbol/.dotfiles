@@ -29,7 +29,6 @@ linkfiles=(
   ".claude/settings.json"
   ".claude/statusline-command.sh"
   ".config/ghostty/config"
-  ".config/ghostty/theme.conf"
   ".config/starship.toml"
   ".config/tmux/tmux.conf"
   ".config/zsh/.zsh_plugins.txt"
@@ -48,6 +47,7 @@ linkfiles=(
 if [[ $is_mac_os -eq 1 ]]; then
   linkfiles+=(
     ".config/aerospace/aerospace.toml"
+    ".config/ghostty/theme.conf"
   )
 fi
 
