@@ -9,7 +9,7 @@ COLOR_BLUE='\033[38;2;120;155;141m'  # Seafoam Teal: #789b8d
 COLOR_CYAN='\033[38;2;205;123;144m'  # Dusty Rose: #cd7b90
 
 # Source the OS detection script
-source "$HOME/.dotfiles/scripts/ostype.sh"
+source "$(cd "$(dirname "$0")" && pwd)/.config/zsh/scripts/ostype.sh"
 
 # Initialize force_overwrite_copy flag
 force_overwrite_copy=0
@@ -28,22 +28,35 @@ linkfiles=(
   ".claude/keybindings.json"
   ".claude/settings.json"
   ".claude/statusline-command.sh"
-  ".config/aerospace/aerospace.toml"
-  ".config/aerospace/tmux.conf"
-  ".config/aerospace/tmux-powerline"
   ".config/starship.toml"
-  ".config/wezterm/wezterm.lua"
+  ".config/ghostty/config"
+  ".config/ghostty/theme.conf"
+  ".config/tmux/tmux.conf"
   ".config/zsh/.zsh_plugins.txt"
   ".config/zsh/.zshrc"
   ".config/zsh/scripts/jump.sh"
   ".config/zsh/scripts/ostype.sh"
-  ".markdownlint.jsonc"
   ".gitconfig"
   ".gitignore"
   ".ideavimrc"
+  ".markdownlint.jsonc"
   ".npmrc"
   ".zshenv"
 )
+
+# macOS-only symlinks
+if [[ $is_mac_os -eq 1 ]]; then
+  linkfiles+=(
+    ".config/aerospace/aerospace.toml"
+  )
+fi
+
+# Linux-only symlinks
+if [[ $is_linux -eq 1 ]]; then
+  linkfiles+=(
+    # Add Linux-specific symlinks here as needed
+  )
+fi
 
 # Paths of dotfiles to copy relative to the dotfiles directory
 copyfiles=(

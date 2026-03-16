@@ -1,0 +1,32 @@
+# Theme — Mac uses dotfiles theme.conf; Linux uses omarchy (overrides below)
+config-file = ?"~/.config/ghostty/theme.conf"
+config-file = ?"~/.config/omarchy/current/theme/ghostty.conf"
+
+# Font
+font-family = "JetBrainsMono Nerd Font"
+font-style = Regular
+font-size = 13
+
+# Window
+window-padding-x = 14
+window-padding-y = 14
+confirm-close-surface = false
+resize-overlay = never
+
+# Linux/GTK (ignored on Mac)
+window-theme = ghostty
+gtk-toolbar-style = flat
+
+# Cursor
+cursor-style = block
+cursor-style-blink = false
+
+# Shell integration (preserves SSH terminfo; disables cursor override)
+shell-integration-features = no-cursor,ssh-env
+
+# Clipboard
+keybind = shift+insert=paste_from_clipboard
+keybind = control+insert=copy_to_clipboard
+
+# Shift+Enter fix for Claude Code inside tmux
+keybind = shift+enter=text:\x1b\r

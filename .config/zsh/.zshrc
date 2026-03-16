@@ -1,5 +1,8 @@
 # zmodload zsh/zprof
 
+# Ensure cache directory exists
+mkdir -p "$XDG_CACHE_HOME/zsh"
+
 # ------------------------------------------------------------------------------
 # Cache eval output to avoid subprocess forks on every shell start.
 # Regenerates when the binary is newer than the cache, or cache is missing.
@@ -41,7 +44,15 @@ fi
 
 # ------------------------------------------------------------------------------
 # Load Scripts
-source "$HOME/.dotfiles/scripts/jump.sh"
+source "${ZDOTDIR}/scripts/jump.sh"
+# ------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
+# Clipboard aliases for Linux (pbcopy/pbpaste are native on Mac)
+if [[ $is_linux -eq 1 ]]; then
+  alias pbcopy='wl-copy'
+  alias pbpaste='wl-paste'
+fi
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
@@ -157,7 +168,7 @@ gladmin-src() {
 # ------------------------------------------------------------------------------
 # Below code configures zsh-vi-mode to use system clipboard for yank, paste, change, delete
 # https://github.com/jeffreytse/zsh-vi-mode/issues/19
-# pbcopy and pbpaste work on all OS because of the "belak/zsh-utils" plugin
+# pbcopy and pbpaste: native on Mac; aliased to wl-copy/wl-paste on Linux (see above)
 cbyank() { pbcopy }
 cbpaste() { pbpaste }
 
@@ -244,9 +255,6 @@ zvm_after_lazy_keybindings() {
 
 # ------------------------------------------------------------------------------
 # Antidote
-# ez-compinit: use cached zcompdump (skips compaudit when <20h old).
-zstyle ':plugin:ez-compinit' 'use-cache' 'yes'
-
 # Source a static plugin bundle; only load antidote itself when regeneration is needed.
 zsh_plugins_bundle="${XDG_CACHE_HOME}/zsh/plugins.zsh"
 if [[ ! -f "$zsh_plugins_bundle" || "${ZDOTDIR:-$HOME}/.zsh_plugins.txt" -nt "$zsh_plugins_bundle" ]]; then
@@ -261,10 +269,16 @@ source "$zsh_plugins_bundle"
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
-# ZSH Completions (post-compinit)
-compdef gladmin-src=gladmin
-compdef appcfg-src=appcfg
-compdef appcfg-beta-src=appcfg
+# Lazy completions — initialized on first prompt, not at startup
+autoload -Uz compinit
+_init_completions() {
+  compinit -C
+  compdef gladmin-src=gladmin
+  compdef appcfg-src=appcfg
+  compdef appcfg-beta-src=appcfg
+  precmd_functions=("${(@)precmd_functions:#_init_completions}")
+}
+precmd_functions+=(_init_completions)
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
@@ -279,6 +293,22 @@ ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(
 # ------------------------------------------------------------------------------
 # ZSH options
 setopt NO_BEEP
+# ------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
+# History
+HISTFILE="${ZDOTDIR:-$HOME}/.zsh_history"
+HISTSIZE=20000
+SAVEHIST=20000
+setopt EXTENDED_HISTORY       # Save timestamps
+setopt HIST_EXPIRE_DUPS_FIRST # Expire duplicates first when trimming
+setopt HIST_IGNORE_DUPS       # Don't record consecutive duplicates
+setopt HIST_IGNORE_ALL_DUPS   # Remove older duplicates from history
+setopt HIST_IGNORE_SPACE      # Don't record commands starting with space
+setopt HIST_FIND_NO_DUPS      # Don't show duplicates in search
+setopt HIST_SAVE_NO_DUPS      # Don't save duplicates to file
+setopt HIST_VERIFY            # Confirm before executing history expansion
+setopt SHARE_HISTORY          # Share history between all sessions
 # ------------------------------------------------------------------------------
 
 # zprof

@@ -3,25 +3,11 @@
 # .zsh_plugins.txt - antidote plugins file
 #
 
-# Completions
-mattmc3/ez-compinit
-zsh-users/zsh-completions kind:fpath path:src
-aloxaf/fzf-tab  # Remove if you don't use fzf
-
-# Completion styles
-belak/zsh-utils path:completion/functions kind:autoload post:compstyle_zshzoo_setup
-
-# Keybindings
-belak/zsh-utils path:editor
-
-# History
-belak/zsh-utils path:history
-
-# Utilities
-belak/zsh-utils path:utility
-# Other
+# Syntax highlighting
 zdharma-continuum/fast-syntax-highlighting
+
+# Autosuggestions
 zsh-users/zsh-autosuggestions
 
-# Vi mode
+# Vi mode (full implementation with text objects, surround, system clipboard hooks)
 jeffreytse/zsh-vi-mode

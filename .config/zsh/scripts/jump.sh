@@ -12,7 +12,7 @@ YELLOW='\033[33m'
 RED='\033[31m'
 RESET='\033[0m'
 
-source "$HOME/.dotfiles/scripts/ostype.sh"
+source "${0:a:h}/ostype.sh"
 
 if [[ $is_windows -eq 1 ]]; then
 	export MARKPATH="$HOMEPATH/.marks"

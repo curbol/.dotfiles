@@ -1,98 +1,90 @@
 # Keybindings Reference
 
-**Model:** `alt` = aerospace · `ctrl` = nvim/wezterm nav · `cmd` = wezterm-specific
+---
+
+## AeroSpace (Mac only)
+
+`cmd` = window manager modifier (matches Hyprland `super`)
+
+| Key | Action |
+|-----|--------|
+| `cmd+arrows` | Focus window |
+| `cmd+shift+arrows` | Move window |
+| `cmd+[1–9]` | Switch workspace |
+| `cmd+shift+[1–9]` | Move window to workspace |
+| `cmd+tab` | Next workspace (wrap) |
+| `cmd+shift+tab` | Prev workspace (wrap) |
+| `cmd+f` | Fullscreen |
+| `cmd+t` / `cmd+o` | Float / tile toggle |
+| `cmd+j` | Split horizontal |
+| `cmd+minus` / `cmd+equal` | Resize smart -/+ |
+| `cmd+w` | Close window |
+| `cmd+shift+b` | Open Zen Browser |
+| `cmd+shift+s` | Open Slack |
+| `cmd+shift+n` | Open Notion |
+| `cmd+shift+t` | Open Ghostty |
+| `cmd+shift+m` | Open Messages |
 
 ---
 
-## AeroSpace
+## Tmux
 
-### Main mode
+**Prefix:** `ctrl+space` (or `ctrl+b`)
 
-| Key | Action |
-|-----|--------|
-| `alt+arrows` | Focus window |
-| `alt+shift+arrows` | Move window |
-| `alt+[1–9]` | Switch workspace |
-| `alt+shift+[1–9]` | Move window to workspace |
-| `alt+tab` | Last workspace |
-| `alt+shift+tab` | Move workspace to next monitor |
-| `alt+space` | **Enter service mode** |
-| `alt+shift+-` / `alt+shift+=` | Resize smart -/+ |
-| `alt+b` | Open Arc |
-| `alt+s` | Open Slack |
-| `alt+n` | Open Notion |
-| `alt+t` | Open WezTerm |
-| `alt+m` | Open Messages |
-
-### Service mode (`alt+space`)
+### Panes
 
 | Key | Action |
 |-----|--------|
-| `esc` | Reload config + exit |
-| `m` | Fullscreen toggle |
-| `f` | Float / tile toggle |
-| `q` | Close window |
-| `r` | **Enter resize mode** |
-| `[` | Prev workspace |
-| `]` | Next workspace |
+| `prefix+h` | Split horizontal (new pane below) |
+| `prefix+v` | Split vertical (new pane right) |
+| `prefix+x` | Kill pane |
+| `prefix+m` | Zoom / unzoom pane |
+| `ctrl+alt+arrows` | Navigate panes (no prefix) |
+| `ctrl+alt+shift+arrows` | Resize pane (no prefix) |
 
-### Resize mode (`alt+space r`)
+### Windows
 
 | Key | Action |
 |-----|--------|
-| `arrows` | Resize window |
-| `esc` | Exit to main |
+| `prefix+c` | New window |
+| `prefix+k` | Kill window |
+| `prefix+r` | Rename window |
+| `alt+[1–9]` | Jump to window (no prefix) |
+| `alt+left` / `alt+right` | Prev / next window (no prefix) |
+| `alt+shift+left` / `alt+shift+right` | Swap window left / right (no prefix) |
+
+### Sessions
+
+| Key | Action |
+|-----|--------|
+| `prefix+C` | New session |
+| `prefix+K` | Kill session |
+| `prefix+R` | Rename session |
+| `prefix+P` / `prefix+N` | Prev / next session |
+| `alt+up` / `alt+down` | Prev / next session (no prefix) |
+
+### Copy mode (`prefix+[`)
+
+| Key | Action |
+|-----|--------|
+| `v` | Begin selection |
+| `ctrl+v` | Rectangle toggle |
+| `y` | Copy selection + exit |
+
+### Other
+
+| Key | Action |
+|-----|--------|
+| `prefix+q` | Reload config |
 
 ---
 
-## WezTerm
-
-**Leader:** `ctrl+space`
-
-### Direct bindings
+## Ghostty
 
 | Key | Action |
 |-----|--------|
-| `cmd+arrows` | Navigate panes |
-| `cmd+[1–9]` | Jump to tab |
-| `cmd+v` | Paste (text or image) |
-
-### Leader (`ctrl+space …`)
-
-| Key | Action |
-|-----|--------|
-| `space` | Quick select |
-| `:` | Command palette |
-| `/` | Search |
-| `a` | Last tab |
-| `y` | Copy mode |
-| `s` | Split horizontal (equalize) |
-| `v` | Split vertical (equalize) |
-| `t` | New tab |
-| `q` | Close pane |
-| `d` | Close tab |
-| `x` | Swap pane (picker) |
-| `m` | Zoom / unzoom pane |
-| `[` | Prev tab |
-| `]` | Next tab |
-| `{` | Move tab left |
-| `}` | Move tab right |
-| `=` | Equalize pane sizes |
-| `o` | Close other panes |
-| `r` | **Enter resize mode** |
-
-### Resize mode (`ctrl+space r`)
-
-| Key | Action |
-|-----|--------|
-| `arrows` | Resize pane (hold to keep resizing) |
-| `esc` | Exit (also auto-exits after 1s idle) |
-
-### Copy mode (`ctrl+space y`)
-
-| Key | Action |
-|-----|--------|
-| `y` | Yank selection + exit |
+| `ctrl+insert` | Copy to clipboard |
+| `shift+insert` | Paste from clipboard |
 
 ---
 
