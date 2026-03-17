@@ -54,7 +54,8 @@ fi
 # Linux-only symlinks
 if [[ $is_linux -eq 1 ]]; then
   linkfiles+=(
-    # Add Linux-specific symlinks here as needed
+    ".config/hypr/autostart.conf"
+    ".config/hypr/hyprsunset.conf"
   )
 fi
 

@@ -273,9 +273,8 @@ source "$zsh_plugins_bundle"
 autoload -Uz compinit
 _init_completions() {
   compinit -C
-  compdef gladmin-src=gladmin
-  compdef appcfg-src=appcfg
-  compdef appcfg-beta-src=appcfg
+  command -v gladmin &>/dev/null && compdef gladmin-src=gladmin
+  command -v appcfg  &>/dev/null && compdef appcfg-src=appcfg && compdef appcfg-beta-src=appcfg
   precmd_functions=("${(@)precmd_functions:#_init_completions}")
 }
 precmd_functions+=(_init_completions)

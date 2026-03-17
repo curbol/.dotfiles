@@ -45,10 +45,10 @@ else
   model_part=""
 fi
 
-# Context usage scaled to autocompact threshold (~16.5% buffer)
+# Context usage
 if [ -n "$used_pct" ]; then
-  compact_pct=$(echo "$used_pct / 83.5 * 100" | bc -l | xargs printf '%.0f')
-  ctx_part=" | ctx ${compact_pct}%"
+  ctx_pct=$(awk "BEGIN {printf \"%.0f\", $used_pct}")
+  ctx_part=" | ctx ${ctx_pct}%"
 else
   ctx_part=""
 fi
