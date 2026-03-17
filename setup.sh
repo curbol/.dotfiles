@@ -63,6 +63,7 @@ fi
 copyfiles=(
   ".config/zsh/.zshrc.local"
   ".config/gladmin/config.yaml"
+  ".marks"
 )
 
 create_symlink() {

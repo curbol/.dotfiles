@@ -222,6 +222,10 @@ my_zvm_vi_substitute_whole_line() {
 }
 
 zvm_after_lazy_keybindings() {
+  # Home/End
+  bindkey "^[[1~" beginning-of-line
+  bindkey "^[[4~" end-of-line
+
   # Yank
   zvm_define_widget my_zvm_vi_yank
   zvm_bindkey visual 'y' my_zvm_vi_yank
