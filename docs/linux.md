@@ -68,7 +68,8 @@ EOL
 ```
 
 ```sh
-chmod 600 ~/.gnupg/*
+find ~/.gnupg -type d -exec chmod 700 {} \;
+find ~/.gnupg -type f -exec chmod 600 {} \;
 ```
 
 Reload the gpg-agent:

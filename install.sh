@@ -27,7 +27,7 @@ install_packages() {
     local pacman_pkgs=(
       git zsh tmux neovim lazygit github-cli
       starship fzf ripgrep fd jq cmake wget
-      wl-clipboard luarocks gnupg pinentry
+      wl-clipboard luarocks gnupg pinentry mise
     )
     local to_install=()
     for pkg in "${pacman_pkgs[@]}"; do
@@ -65,15 +65,8 @@ install_packages() {
 # Mise (language runtimes)
 # ------------------------------------------------------------------------------
 install_mise() {
-  if ! command -v mise >/dev/null 2>&1; then
-    if [[ $is_linux -eq 1 ]]; then
-      log "Installing mise..."
-      curl https://mise.run | sh
-      export PATH="$HOME/.local/bin:$PATH"
-    fi
-    # Mac: installed via Brewfile above
-  fi
-
+  # Mac: installed via Brewfile above
+  # Linux: installed via pacman above
   if command -v mise >/dev/null 2>&1; then
     log "Installing mise tools..."
     mise use -g node@lts

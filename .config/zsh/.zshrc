@@ -56,6 +56,13 @@ fi
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
+# SSH agent (Linux only — Mac uses launchd)
+if [[ $is_linux -eq 1 && -z "$SSH_AUTH_SOCK" ]]; then
+  eval "$(ssh-agent -s)" > /dev/null
+fi
+# ------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
 # Homebrew
 export HOMEBREW_AUTO_UPDATE_SECS=86400 # Set Homebrew auto-update interval to 24 hours
 if [[ $is_mac_intel -eq 1 ]]; then
@@ -225,6 +232,8 @@ zvm_after_lazy_keybindings() {
   # Home/End
   bindkey "^[[1~" beginning-of-line
   bindkey "^[[4~" end-of-line
+  zvm_bindkey vicmd "^[[1~" beginning-of-line
+  zvm_bindkey vicmd "^[[4~" end-of-line
 
   # Yank
   zvm_define_widget my_zvm_vi_yank
