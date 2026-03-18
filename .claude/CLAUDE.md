@@ -40,6 +40,12 @@ When I ask a question, treat it as a genuine question. Answer it and wait. Do no
 - **Don't dismiss reported issues**: if someone says there's a problem, verify it rather than concluding "the code looks correct, probably not an issue." The issue may manifest elsewhere or under different conditions
 - **Don't hand-wave unknowns**: don't brush off failures as "probably env/config" without checking. Confirm what can be confirmed.
 
+## Implementation Quality
+
+- **Always implement in the correct layer.** If you know the right place for logic (e.g., runtime vs conversion, application vs handler), put it there. Never put code in the wrong layer because it's "simpler" or "fewer lines." If you catch yourself thinking "it should be in X but it's easier in Y," stop and put it in X.
+- **Do not rationalize shortcuts.** Saying "the simplest approach" or "for now" to justify putting code in the wrong place is not acceptable. Correctness is not optional; it is the baseline.
+- **If unsure about the right layer, ask.** Do not guess and do not default to the convenient option.
+
 ## Task Execution
 
 - Ambiguous requests: state your interpretation and ask for confirmation
