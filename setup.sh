@@ -55,7 +55,6 @@ fi
 if [[ $is_linux -eq 1 ]]; then
   linkfiles+=(
     ".config/hypr/autostart.conf"
-    ".config/hypr/envs.conf"
     ".config/hypr/hyprsunset.conf"
   )
 fi
