@@ -122,6 +122,26 @@ clone_repos() {
   else
     skip "~/.config/nvim already exists"
   fi
+
+  if command -v omarchy-theme-install >/dev/null 2>&1; then
+    if [[ ! -d "$HOME/.config/omarchy/themes/gruvbox-material" ]]; then
+      log "Installing gruvbox-material theme..."
+      omarchy-theme-install https://github.com/curbol/omarchy-gruvbox-material
+    else
+      skip "~/.config/omarchy/themes/gruvbox-material already exists"
+    fi
+  fi
+
+  if [[ ! -d "$HOME/code/notes" ]]; then
+    if ssh -T git@github.com 2>&1 | grep -q "successfully authenticated"; then
+      log "Cloning notes..."
+      git clone git@github.com:curbol/notes.git "$HOME/code/notes"
+    else
+      skip "notes: SSH not configured yet — re-run install.sh after SSH setup"
+    fi
+  else
+    skip "~/code/notes already exists"
+  fi
 }
 
 # ------------------------------------------------------------------------------
