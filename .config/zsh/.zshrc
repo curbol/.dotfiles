@@ -228,6 +228,12 @@ my_zvm_vi_substitute_whole_line() {
   echo -en "${CUTBUFFER}" | cbyank
 }
 
+zvm_after_init() {
+  # Bind Home/End before lazy init so first keypress works correctly
+  bindkey "^[[1~" beginning-of-line
+  bindkey "^[[4~" end-of-line
+}
+
 zvm_after_lazy_keybindings() {
   # Home/End
   bindkey "^[[1~" beginning-of-line
