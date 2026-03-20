@@ -35,7 +35,6 @@ cmd-w = 'close'
 cmd-f = 'fullscreen'
 cmd-t = 'layout floating tiling'
 cmd-o = 'layout floating tiling'
-cmd-j = 'split horizontal'
 cmd-minus = 'resize smart -50'
 cmd-equal = 'resize smart +50'
 
@@ -78,7 +77,7 @@ cmd-tab       = 'workspace --wrap-around next'
 cmd-shift-tab = 'workspace --wrap-around prev'
 
 # App shortcuts (matches Hyprland SUPER+SHIFT+letter pattern)
-cmd-shift-b = 'exec-and-forget open -a "Zen Browser"'
+cmd-shift-b = 'exec-and-forget open -a "Zen"'
 cmd-shift-s = 'exec-and-forget open -a /Applications/Slack.app'
 cmd-shift-n = 'exec-and-forget open -a /Applications/Notion.app'
 cmd-shift-t = 'exec-and-forget open -a /Applications/Ghostty.app'
