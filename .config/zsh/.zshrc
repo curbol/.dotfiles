@@ -1,7 +1,7 @@
 # zmodload zsh/zprof
 
 # Ensure cache directory exists
-mkdir -p "$XDG_CACHE_HOME/zsh"
+[[ -d "$XDG_CACHE_HOME/zsh" ]] || mkdir -p "$XDG_CACHE_HOME/zsh"
 
 # ------------------------------------------------------------------------------
 # Cache eval output to avoid subprocess forks on every shell start.
@@ -64,11 +64,12 @@ fi
 
 # ------------------------------------------------------------------------------
 # Homebrew
-export HOMEBREW_AUTO_UPDATE_SECS=86400 # Set Homebrew auto-update interval to 24 hours
 if [[ $is_mac_intel -eq 1 ]]; then
+  export HOMEBREW_AUTO_UPDATE_SECS=86400
   _eval_cached brew-shellenv brew /usr/local/bin/brew shellenv
 fi
 if [[ $is_mac_arm -eq 1 ]]; then
+  export HOMEBREW_AUTO_UPDATE_SECS=86400
   _eval_cached brew-shellenv brew /opt/homebrew/bin/brew shellenv
 fi
 # ------------------------------------------------------------------------------
@@ -83,7 +84,7 @@ alias gotidy='go mod tidy && go mod vendor'
 # Usage: install-completion <tool>  (tool must support 'completion zsh')
 install-completion() {
   local cmd="$1"
-  "$cmd" completion zsh > "${fpath[1]}/_${cmd}" \
+  "$cmd" completion zsh > "${_user_completions_dir}/_${cmd}" \
     && echo "Installed completions for ${cmd} — restart shell to apply"
 }
 # ------------------------------------------------------------------------------
