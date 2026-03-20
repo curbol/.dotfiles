@@ -103,6 +103,20 @@ set_font() {
 }
 
 # ------------------------------------------------------------------------------
+# Timezone
+# ------------------------------------------------------------------------------
+setup_timezone() {
+  if [[ $is_linux -eq 1 ]]; then
+    if [[ ! -f /etc/timezone ]]; then
+      log "Creating /etc/timezone..."
+      echo "America/Los_Angeles" | sudo tee /etc/timezone > /dev/null
+    else
+      skip "/etc/timezone already exists"
+    fi
+  fi
+}
+
+# ------------------------------------------------------------------------------
 # macOS settings
 # ------------------------------------------------------------------------------
 setup_mac_settings() {
@@ -157,6 +171,7 @@ install_packages
 install_mise
 set_default_shell
 set_font
+setup_timezone
 setup_mac_settings
 clone_repos
 run_setup
