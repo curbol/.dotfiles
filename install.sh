@@ -20,6 +20,12 @@ install_packages() {
       log "Installing Homebrew..."
       /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
+    # Ensure brew is in PATH for the rest of this script (needed on fresh installs)
+    if [[ $is_mac_arm -eq 1 ]]; then
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [[ $is_mac_intel -eq 1 ]]; then
+      eval "$(/usr/local/bin/brew shellenv)"
+    fi
     log "Installing packages from Brewfile..."
     brew bundle --file="$DOTFILES_DIR/Brewfile"
 
@@ -42,6 +48,7 @@ install_packages() {
 
     if ! command -v yay >/dev/null 2>&1; then
       log "Installing yay (AUR helper)..."
+      rm -rf /tmp/yay-install
       git clone https://aur.archlinux.org/yay.git /tmp/yay-install
       (cd /tmp/yay-install && makepkg -si --noconfirm)
       rm -rf /tmp/yay-install
@@ -82,7 +89,7 @@ install_mise() {
 set_default_shell() {
   if [[ $is_linux -eq 1 ]]; then
     local zsh_path
-    zsh_path="$(which zsh)"
+    zsh_path="$(command -v zsh)"
     if [[ "$SHELL" != "$zsh_path" ]]; then
       log "Setting zsh as default shell..."
       chsh -s "$zsh_path"
@@ -161,7 +168,7 @@ clone_repos() {
   fi
 
   if [[ ! -d "$HOME/code/notes" ]]; then
-    if ssh -T git@github.com 2>&1 | grep -q "successfully authenticated"; then
+    if ssh -T -o ConnectTimeout=5 git@github.com 2>&1 | grep -q "successfully authenticated"; then
       log "Cloning notes..."
       git clone git@github.com:curbol/notes.git "$HOME/code/notes"
     else
