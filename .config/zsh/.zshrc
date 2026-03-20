@@ -154,9 +154,15 @@ if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
 fi
 
 export THANKFUL_PATH="$CODE_DIR/thankful"
-# direnv hook — only needed for ~/code/thankful (uses use_flake in .envrc).
-# Remove once no longer actively working in that repo.
-_eval_cached direnv-hook direnv direnv hook zsh
+# direnv hook — lazy loaded on first entry into $THANKFUL_PATH.
+_maybe_load_direnv() {
+  [[ "$PWD" != "$THANKFUL_PATH"* ]] && return
+  _eval_cached direnv-hook direnv direnv hook zsh
+  add-zsh-hook -d chpwd _maybe_load_direnv
+}
+add-zsh-hook chpwd _maybe_load_direnv
+# Also activate immediately if the shell opens inside thankful.
+_maybe_load_direnv
 # End Thankful
 
 appcfg-src() {
@@ -290,10 +296,47 @@ source "$zsh_plugins_bundle"
 # ------------------------------------------------------------------------------
 # Lazy completions — initialized on first prompt, not at startup
 autoload -Uz compinit
+
+# User completions dir — fixed path so it's stable after antidote may modify fpath.
+_user_completions_dir="$HOME/.local/share/zsh/site-functions"
+
+# Generate completion file for cmd if missing or binary is newer than the file.
+# Returns 0 if a file was (re)generated, 1 if already up to date.
+_ensure_completion() {
+  local cmd="$1"
+  local completion_file="${_user_completions_dir}/_${cmd}"
+  local binary="${commands[$cmd]}"
+  [[ -z "$binary" ]] && return 1
+  if [[ ! -f "$completion_file" || "$binary" -nt "$completion_file" ]]; then
+    mkdir -p "${_user_completions_dir}"
+    "$cmd" completion zsh >| "$completion_file" 2>/dev/null
+    return 0
+  fi
+  return 1
+}
+
 _init_completions() {
-  compinit -C
-  command -v gladmin &>/dev/null && compdef gladmin-src=gladmin
-  command -v appcfg  &>/dev/null && compdef appcfg-src=appcfg && compdef appcfg-beta-src=appcfg
+  local _fresh=0
+  _ensure_completion gladmin && _fresh=1
+  _ensure_completion appcfg && _fresh=1
+  # If new completion files were generated, rebuild the dump; otherwise use cache.
+  if (( _fresh )); then
+    compinit
+  else
+    compinit -C
+  fi
+  # Bind completions for -src variants directly to their functions rather than
+  # using compdef X=Y (service copy), which requires the service to already be
+  # registered in the current session.
+  if [[ -f "${_user_completions_dir}/_gladmin" ]] && command -v gladmin &>/dev/null; then
+    autoload -Uz _gladmin
+    compdef _gladmin gladmin-src
+  fi
+  if [[ -f "${_user_completions_dir}/_appcfg" ]] && command -v appcfg &>/dev/null; then
+    autoload -Uz _appcfg
+    compdef _appcfg appcfg-src
+    compdef _appcfg appcfg-beta-src
+  fi
   precmd_functions=("${(@)precmd_functions:#_init_completions}")
 }
 precmd_functions+=(_init_completions)

@@ -54,6 +54,7 @@ fi
 # Linux-only symlinks
 if [[ $is_linux -eq 1 ]]; then
   linkfiles+=(
+    ".config/ghostty/linux.conf"
     ".config/hypr/autostart.conf"
     ".config/hypr/hypridle.conf"
     ".config/hypr/hyprsunset.conf"

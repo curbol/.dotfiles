@@ -27,8 +27,8 @@ shell-integration-features = no-cursor,ssh-env
 # Mouse
 mouse-scroll-multiplier = 0.95
 
-# Fix general slowness on hyprland (https://github.com/ghostty-org/ghostty/discussions/3224)
-async-backend = epoll
+# Linux-only overrides (e.g. async-backend for Hyprland slowness fix)
+config-file = ?"~/.config/ghostty/linux.conf"
 
 # Clipboard
 keybind = shift+insert=paste_from_clipboard
