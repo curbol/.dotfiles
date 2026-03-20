@@ -126,8 +126,8 @@ unmark() {
 		mark="${PWD##*/}"
 	fi
 
-	# Check if mark exists
-	if [[ ! -e "$MARKPATH/$mark" ]]; then
+	# Check if mark exists (use -L to handle broken symlinks too)
+	if [[ ! -e "$MARKPATH/$mark" && ! -L "$MARKPATH/$mark" ]]; then
 		echo "No such mark: $mark"
 		return 1
 	fi
