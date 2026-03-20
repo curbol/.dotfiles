@@ -57,6 +57,7 @@ if [[ $is_linux -eq 1 ]]; then
     ".config/hypr/autostart.conf"
     ".config/hypr/hypridle.conf"
     ".config/hypr/hyprsunset.conf"
+    ".config/hypr/input.conf"
   )
 fi
 
