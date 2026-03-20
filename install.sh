@@ -117,6 +117,20 @@ setup_timezone() {
 }
 
 # ------------------------------------------------------------------------------
+# Bluetooth
+# ------------------------------------------------------------------------------
+setup_bluetooth() {
+  if [[ $is_linux -eq 1 ]]; then
+    if grep -q "^#AutoEnable=true" /etc/bluetooth/main.conf 2>/dev/null; then
+      log "Enabling Bluetooth AutoEnable..."
+      sudo sed -i 's/#AutoEnable=true/AutoEnable=true/' /etc/bluetooth/main.conf
+    else
+      skip "Bluetooth AutoEnable already set"
+    fi
+  fi
+}
+
+# ------------------------------------------------------------------------------
 # macOS settings
 # ------------------------------------------------------------------------------
 setup_mac_settings() {
@@ -172,6 +186,7 @@ install_mise
 set_default_shell
 set_font
 setup_timezone
+setup_bluetooth
 setup_mac_settings
 clone_repos
 run_setup
