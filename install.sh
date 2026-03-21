@@ -134,6 +134,7 @@ setup_bluetooth() {
     else
       skip "Bluetooth AutoEnable already set"
     fi
+
   fi
 }
 
