@@ -27,6 +27,9 @@ shell-integration-features = no-cursor,ssh-env
 # Mouse
 mouse-scroll-multiplier = 0.95
 
+# Send Option as Alt/Meta so tmux M- bindings work (e.g. M-Left/Right for windows)
+macos-option-as-alt = left
+
 # Linux-only overrides (e.g. async-backend for Hyprland slowness fix)
 config-file = ?"~/.config/ghostty/linux.conf"
 
