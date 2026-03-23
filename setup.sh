@@ -59,6 +59,7 @@ if [[ $is_linux -eq 1 ]]; then
     ".config/hypr/hypridle.conf"
     ".config/hypr/hyprsunset.conf"
     ".config/hypr/input.conf"
+    ".config/hypr/monitors.conf"
   )
 fi
 
