@@ -1,0 +1,12 @@
+[Unit]
+Description=Auto-connect trusted Bluetooth devices on startup
+After=bluetooth.service
+Requires=bluetooth.service
+
+[Service]
+Type=oneshot
+ExecStartPre=/bin/sleep 5
+ExecStart=/usr/bin/bash -c 'for dev in $(busctl tree org.bluez | grep -oE "/org/bluez/hci[0-9]+/dev_[A-F0-9_]+"); do busctl get-property org.bluez "$dev" org.bluez.Device1 Trusted 2>/dev/null | grep -q true && busctl call org.bluez "$dev" org.bluez.Device1 Connect 2>/dev/null; done'
+
+[Install]
+WantedBy=multi-user.target

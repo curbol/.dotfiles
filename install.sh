@@ -128,13 +128,16 @@ setup_timezone() {
 # ------------------------------------------------------------------------------
 setup_bluetooth() {
   if [[ $is_linux -eq 1 ]]; then
-    if grep -q "^#AutoEnable=true" /etc/bluetooth/main.conf 2>/dev/null; then
-      log "Enabling Bluetooth AutoEnable..."
-      sudo sed -i 's/#AutoEnable=true/AutoEnable=true/' /etc/bluetooth/main.conf
+    local connect_src="$DOTFILES_DIR/install/bluetooth-connect.service"
+    local connect_dst="/etc/systemd/system/bluetooth-connect.service"
+    if [[ ! -f "$connect_dst" ]]; then
+      log "Installing bluetooth-connect systemd service..."
+      sudo cp "$connect_src" "$connect_dst"
+      sudo systemctl daemon-reload
+      sudo systemctl enable --now bluetooth-connect.service
     else
-      skip "Bluetooth AutoEnable already set"
+      skip "bluetooth-connect.service already installed"
     fi
-
   fi
 }
 
