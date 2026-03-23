@@ -1,4 +1,5 @@
 tap "nikitabobko/tap"
+tap "FelixKratz/formulae"
 
 # Fonts
 cask "font-maple-mono-nf"
@@ -11,6 +12,7 @@ brew "mise"
 
 # Window manager
 cask "nikitabobko/tap/aerospace"
+brew "FelixKratz/formulae/borders"
 
 # Apps
 cask "mac-mouse-fix"
