@@ -3,7 +3,7 @@
 # https://nikitabobko.github.io/AeroSpace/commands
 # https://nikitabobko.github.io/AeroSpace/goodies
 
-after-startup-command = []
+after-startup-command = ['exec-and-forget /opt/homebrew/bin/borders']
 
 start-at-login = true
 
@@ -21,12 +21,12 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 automatically-unhide-macos-hidden-apps = true
 
 [gaps]
-inner.horizontal = 6
-inner.vertical = 6
-outer.bottom = 6
-outer.top = 6
-outer.right = 6
-outer.left = 6
+inner.horizontal = 10
+inner.vertical = 10
+outer.bottom = 10
+outer.top = 10
+outer.right = 10
+outer.left = 10
 
 [mode.main.binding]
 
