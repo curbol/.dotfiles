@@ -129,12 +129,13 @@ setup_timezone() {
 setup_bluetooth() {
   if [[ $is_linux -eq 1 ]]; then
     local connect_src="$DOTFILES_DIR/install/bluetooth-connect.service"
-    local connect_dst="/etc/systemd/system/bluetooth-connect.service"
+    local connect_dst="$HOME/.config/systemd/user/bluetooth-connect.service"
     if [[ ! -f "$connect_dst" ]]; then
-      log "Installing bluetooth-connect systemd service..."
-      sudo cp "$connect_src" "$connect_dst"
-      sudo systemctl daemon-reload
-      sudo systemctl enable --now bluetooth-connect.service
+      log "Installing bluetooth-connect systemd user service..."
+      mkdir -p "$HOME/.config/systemd/user"
+      cp "$connect_src" "$connect_dst"
+      systemctl --user daemon-reload
+      systemctl --user enable --now bluetooth-connect.service
     else
       skip "bluetooth-connect.service already installed"
     fi
