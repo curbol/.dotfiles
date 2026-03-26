@@ -100,18 +100,36 @@ When I ask a question, treat it as a genuine question. Answer it and wait. Do no
 
 Create PRs only when requested.
 
+#### Branch Naming
+
+- Format: `<username>/sc-<story-id>/<description>` (e.g., `curbol/sc-233298/fix-ci-docs`)
+- Include the Shortcut story ID when one exists
+
 #### Title Format
 
 - Imperative mood ("Add", "Fix", "Update", not "Added", "Fixes")
 - Capital first letter, no period at end
-- Include ticket number at end if provided: `[sc-XXXXXX]`
+- Include ticket number at end: `[sc-XXXXXX]`
 
 #### Structure
 
-- **What**: Describe the changes
-- **Why**: Explain the motivation
-- **Testing**: How to verify the change worked *after* it's deployed
-- **Release Notes**: User-facing changes (when applicable)
+Every PR must include these sections as `##` headers:
+
+- **## What**: Describe the changes
+- **## Why**: Explain the motivation. When the branch contains a Shortcut story ID, include `This change supports [sc-XXXXXX]` in this section.
+- **## Testing**: Steps to verify the change worked after it's deployed
+- **## Release Notes**: Customer-facing impact. If internal-only, write "Internal change, no customer impact."
+
+#### Labels
+
+Apply one of these labels to every PR:
+- `bug` for bug fixes
+- `enhancement` for new features and enhancements
+- `demo` for demo changes
+
+#### Commits
+
+- When the branch contains a Shortcut story ID, include `This commit supports [sc-XXXXXX]` in the commit message
 
 ## Security
 
