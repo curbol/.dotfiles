@@ -41,6 +41,7 @@ linkfiles=(
   ".markdownlint.jsonc"
   ".npmrc"
   ".zshenv"
+  ".config/mise/config.toml"
 )
 
 # macOS-only symlinks

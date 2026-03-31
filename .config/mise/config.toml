@@ -1,0 +1,9 @@
+[tools]
+go = "latest"
+node = "lts"
+python = "latest"
+zig = "latest"
+
+[settings]
+idiomatic_version_file_enable_tools = ["node"]
+trusted_config_paths = ["~/code"]
