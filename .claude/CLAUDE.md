@@ -140,6 +140,10 @@ Apply one of these labels to every PR:
 
 - Never commit secrets, credentials, or `.env` files. Warn if asked to.
 
+## Shortcut
+
+- Always create stories under the **AI Knowledge** team (ID `69949769-1bb1-4ded-b7ff-3fa8df4fa57f`). Do not infer the team from the story topic.
+
 ## Repository Access
 
 - Always check for repos locally in `~/code/` first
