@@ -77,6 +77,10 @@ WM modifier is `SUPER` on Linux (Hyprland) and `CMD` on Mac (Aerospace). Both ke
 
 tmux uses `C-Space` as prefix on both platforms. `Alt+number` switches tmux windows on both platforms.
 
+## Version Control First
+
+When making system configuration changes, always put them in this repo and deploy via `setup.sh` or `install.sh`.
+
 ## When Adding New Dotfiles
 
 1. Add the file to this repo at the correct relative path
