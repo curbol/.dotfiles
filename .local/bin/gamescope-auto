@@ -1,0 +1,16 @@
+#!/bin/bash
+# Wrapper for gamescope that auto-detects the active monitor's resolution.
+# Usage (Steam launch options): gamescope-auto -- %command%
+
+# Get the focused monitor's resolution from Hyprland
+resolution=$(hyprctl monitors -j | jq -r '.[] | select(.focused) | "\(.width)x\(.height)"')
+width=$(echo "$resolution" | cut -dx -f1)
+height=$(echo "$resolution" | cut -dx -f2)
+
+if [[ -z "$width" || -z "$height" ]]; then
+  echo "gamescope-auto: failed to detect resolution, falling back to 1920x1080" >&2
+  width=1920
+  height=1080
+fi
+
+exec gamescope -W "$width" -H "$height" -w "$width" -h "$height" "$@"

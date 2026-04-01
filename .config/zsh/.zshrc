@@ -56,21 +56,14 @@ fi
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
-# SSH agent (Linux only — Mac uses launchd)
-if [[ $is_linux -eq 1 && -z "$SSH_AUTH_SOCK" ]]; then
-  eval "$(ssh-agent -s)" > /dev/null
-fi
-# ------------------------------------------------------------------------------
-
-# ------------------------------------------------------------------------------
 # Homebrew
-if [[ $is_mac_intel -eq 1 ]]; then
+if [[ $is_mac_os -eq 1 ]]; then
   export HOMEBREW_AUTO_UPDATE_SECS=86400
-  _eval_cached brew-shellenv brew /usr/local/bin/brew shellenv
-fi
-if [[ $is_mac_arm -eq 1 ]]; then
-  export HOMEBREW_AUTO_UPDATE_SECS=86400
-  _eval_cached brew-shellenv brew /opt/homebrew/bin/brew shellenv
+  if [[ $is_mac_intel -eq 1 ]]; then
+    _eval_cached brew-shellenv brew /usr/local/bin/brew shellenv
+  else
+    _eval_cached brew-shellenv brew /opt/homebrew/bin/brew shellenv
+  fi
 fi
 # ------------------------------------------------------------------------------
 
@@ -111,18 +104,15 @@ fi
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
-# Mise - https://github.com/jdx/mise
-# Examples:
-# > mise use -g node@20.12
-# > mise use -g python@3.11
-# Using shims instead of `mise activate` to avoid the chpwd hook overhead (~160ms).
-# Run `mise reshim` after installing new tools if a shim is missing.
-export PATH="$HOME/.local/share/mise/shims:$PATH"
+# Claude Code
+alias claude-w="CLAUDE_CONFIG_DIR=~/.claude-work claude"
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
-# Claude Code
-alias claude-w="CLAUDE_CONFIG_DIR=~/.claude-work claude"
+# Nix
+if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+  . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+fi
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
@@ -139,21 +129,16 @@ export APP_PLATFORM_INFRA=true # https://github.com/sagansystems/docker-compose
 alias auth-local='saganadmin localhost:8001'
 alias auth-master='saganadmin https://us-master.gladly.qa'
 alias auth-staging='saganadmin https://us-staging.gladly.qa'
-alias gladmin-local='docker run -it --rm --name gladmin-local-$(openssl rand -hex 4) -v /Users/curtis/Gladly:/host -e GLADLY_DN=host.docker.internal -e ORG=example.org -e GLADLY_JWT_TOKEN=$(saganadmin localhost:8001) sagan/gladmin'
-alias gladmin-master='docker run -it --rm --name gladmin-master-$(openssl rand -hex 4) -v /Users/curtis/Gladly:/host -e GLADLY_DN=us-master.gladly.qa -e ORG=gladly.com -e GLADLY_JWT_TOKEN=$(saganadmin https://us-master.gladly.qa) sagan/gladmin'
-alias gladmin-staging='docker run -it --rm --name gladmin-staging-$(openssl rand -hex 4) -v /Users/curtis/Gladly:/host -e GLADLY_DN=us-staging.gladly.qa -e ORG=gladly.com -e GLADLY_JWT_TOKEN=$(saganadmin https://us-staging.gladly.qa) sagan/gladmin'
-alias gladmin-production='docker run -it --rm --name gladmin-production-$(openssl rand -hex 4) -v /Users/curtis/Gladly:/host -e GLADLY_DN=us-1.gladly.com -e ORG=gladly.com -e GLADLY_JWT_TOKEN=$(saganadmin https://us-1.gladly.com) sagan/gladmin'
+alias gladmin-local='docker run -it --rm --name gladmin-local-$(openssl rand -hex 4) -v $HOME/Gladly:/host -e GLADLY_DN=host.docker.internal -e ORG=example.org -e GLADLY_JWT_TOKEN=$(saganadmin localhost:8001) sagan/gladmin'
+alias gladmin-master='docker run -it --rm --name gladmin-master-$(openssl rand -hex 4) -v $HOME/Gladly:/host -e GLADLY_DN=us-master.gladly.qa -e ORG=gladly.com -e GLADLY_JWT_TOKEN=$(saganadmin https://us-master.gladly.qa) sagan/gladmin'
+alias gladmin-staging='docker run -it --rm --name gladmin-staging-$(openssl rand -hex 4) -v $HOME/Gladly:/host -e GLADLY_DN=us-staging.gladly.qa -e ORG=gladly.com -e GLADLY_JWT_TOKEN=$(saganadmin https://us-staging.gladly.qa) sagan/gladmin'
+alias gladmin-production='docker run -it --rm --name gladmin-production-$(openssl rand -hex 4) -v $HOME/Gladly:/host -e GLADLY_DN=us-1.gladly.com -e ORG=gladly.com -e GLADLY_JWT_TOKEN=$(saganadmin https://us-1.gladly.com) sagan/gladmin'
 export GLADLY_APP_CFG_HOST="localhost"
 export GLADLY_APP_CFG_USER="michelle.smith@example.org"
 export GLADLY_APP_CFG_TOKEN="testtoken"
-export GLADLY_APP_CFG_ROOT="/Users/curtis/Gladly"
+export GLADLY_APP_CFG_ROOT="$HOME/Gladly"
 
 # Thankful
-# Nix
-if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
-  . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
-fi
-
 export THANKFUL_PATH="$CODE_DIR/thankful"
 # direnv hook — lazy loaded on first entry into $THANKFUL_PATH.
 _maybe_load_direnv() {

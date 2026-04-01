@@ -1,38 +1,6 @@
 {
-  "effortLevel": "high",
-  "enabledPlugins": {
-    "feature-dev@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": true,
-    "gatekeeper@claude-watchtower": true,
-    "github@claude-plugins-official": false,
-    "gopls-lsp@claude-plugins-official": true,
-    "hookify@claude-plugins-official": true,
-    "notify@claude-watchtower": true,
-    "superpowers@claude-plugins-official": true
-  },
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
-  },
-  "extraKnownMarketplaces": {
-    "claude-watchtower": {
-      "source": {
-        "repo": "curbol/claude-watchtower",
-        "source": "github"
-      }
-    }
-  },
-  "hooks": {
-    "PostToolUse": [
-      {
-        "hooks": [
-          {
-            "command": "file=$(jq -r '.tool_input.file_path') && case \"$file\" in *.go) cd \"$CLAUDE_PROJECT_DIR\" && go build .\/... 2>&1 | head -20 ;; *.ts|*.tsx) cd \"$CLAUDE_PROJECT_DIR\" && tsc --noEmit 2>&1 | head -20 ;; esac",
-            "type": "command"
-          }
-        ],
-        "matcher": "Edit|Write"
-      }
-    ]
   },
   "permissions": {
     "allow": [
@@ -62,16 +30,47 @@
       "Bash(ls *)",
       "Bash(which *)",
       "Bash(brew *)",
-      "Read(\/tmp\/**)",
-      "Write(\/tmp\/**)",
-      "Edit(\/tmp\/**)"
+      "Read(/tmp/**)",
+      "Write(/tmp/**)",
+      "Edit(/tmp/**)"
     ],
     "deny": [
       "Bash(rm -rf *)"
     ]
   },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "file=$(jq -r '.tool_input.file_path') && case \"$file\" in *.go) cd \"$CLAUDE_PROJECT_DIR\" && go build ./... 2>&1 | head -20 ;; *.ts|*.tsx) cd \"$CLAUDE_PROJECT_DIR\" && tsc --noEmit 2>&1 | head -20 ;; esac"
+          }
+        ]
+      }
+    ]
+  },
   "statusLine": {
-    "command": "bash ~\/.claude\/statusline-command.sh",
-    "type": "command"
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
+  },
+  "enabledPlugins": {
+    "feature-dev@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "gatekeeper@claude-watchtower": true,
+    "github@claude-plugins-official": false,
+    "gopls-lsp@claude-plugins-official": true,
+    "hookify@claude-plugins-official": true,
+    "notify@claude-watchtower": true,
+    "superpowers@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-watchtower": {
+      "source": {
+        "source": "github",
+        "repo": "curbol/claude-watchtower"
+      }
+    }
   }
 }

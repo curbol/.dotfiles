@@ -124,6 +124,20 @@ setup_timezone() {
 }
 
 # ------------------------------------------------------------------------------
+# SSH agent (Linux only — Mac uses launchd)
+# ------------------------------------------------------------------------------
+setup_ssh_agent() {
+  if [[ $is_linux -eq 1 ]]; then
+    if systemctl --user is-enabled ssh-agent.socket &>/dev/null; then
+      skip "ssh-agent.socket already enabled"
+    else
+      log "Enabling ssh-agent systemd user socket..."
+      systemctl --user enable --now ssh-agent.socket
+    fi
+  fi
+}
+
+# ------------------------------------------------------------------------------
 # Bluetooth
 # ------------------------------------------------------------------------------
 setup_bluetooth() {
@@ -198,6 +212,7 @@ install_mise
 set_default_shell
 set_font
 setup_timezone
+setup_ssh_agent
 setup_bluetooth
 setup_mac_settings
 clone_repos
