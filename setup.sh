@@ -62,6 +62,7 @@ if [[ $is_linux -eq 1 ]]; then
     ".config/hypr/hyprsunset.conf"
     ".config/hypr/input.conf"
     ".config/hypr/monitors.conf"
+    ".config/environment.d/path.conf"
     ".local/bin/gamescope-auto"
   )
 fi

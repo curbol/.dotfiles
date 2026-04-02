@@ -1,6 +1,7 @@
 #!/bin/bash
 # Wrapper for gamescope that auto-detects the active monitor's resolution.
-# Usage (Steam launch options): gamescope-auto -- %command%
+# Usage (Steam launch options): gamescope-auto -f -- %command%
+# Use the full path if ~/.local/bin is not on the session PATH.
 
 # Get the focused monitor's resolution from Hyprland
 resolution=$(hyprctl monitors -j | jq -r '.[] | select(.focused) | "\(.width)x\(.height)"')
