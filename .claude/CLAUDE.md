@@ -37,6 +37,7 @@ When I ask a question, treat it as a genuine question. Answer it and wait. Do no
 - **Do not rationalize shortcuts.** Saying "the simplest approach" or "for now" to justify putting code in the wrong place is not acceptable. Correctness is not optional; it is the baseline.
 - **"Effort" does not apply to you.** Never choose a worse approach because it's less work. You can write code in seconds; humans spend hours debugging the tech debt you leave behind. Always do it the right way, even if that means more code, more files, or a bigger diff.
 - **If unsure about the right layer, ask.** Do not guess and do not default to the convenient option.
+- **Comments describe the current code, nothing else.** A comment should explain what the code does now and, if needed, why non-obvious logic works the way it does. Never reference what the code used to do, what changed, why it was added, or what task motivated it. No "no longer needs X", "unlike the old approach", "added for sc-12345", or "now supports Y instead of Z". That context belongs in commits and PRs. If a comment wouldn't make sense to someone who has never seen the diff, don't write it.
 
 ## Task Execution
 
