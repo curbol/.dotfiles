@@ -6,13 +6,6 @@ When I ask to 'discuss', 'brainstorm', 'think about', or 'talk through' somethin
 
 When I ask a question, treat it as a genuine question. Answer it and wait. Do not interpret questions as implicit instructions to go do something. "Should we extract this?" means I want your opinion, not for you to start extracting.
 
-## Before Modifying Files
-
-**IMPORTANT**: Before making any file changes, ensure you're on the correct branch:
-
-1. Check current branch: `git branch --show-current`
-2. If on `master`/`main`, create a new branch first. If already on a branch for what seems like unrelated/completed work, ask before creating a new one.
-
 ## Decision Authority
 
 ### Proceed Autonomously
@@ -27,10 +20,6 @@ When I ask a question, treat it as a genuine question. Answer it and wait. Do no
 - Architectural changes or new patterns
 - Changes to public APIs or interfaces
 - Creating new files when editing existing ones would work
-
-### Never Do Proactively
-
-- Git operations (commits, pushes, PR creation), only when explicitly requested
 
 ## Accuracy Standards
 
@@ -90,16 +79,17 @@ When I ask a question, treat it as a genuine question. Answer it and wait. Do no
 
 ### Branch Management
 
-- Never push directly to the `master`/`main` branch
-- Always work in a feature branch. Create one only if needed.
-- Prefix branch names with `<username>/` where <username> is the GitHub username (use `gh api user --jq '.login'` to look it up)
+- Before making file changes, check the current branch with `git branch --show-current`
+- If on `master`/`main`, create a feature branch first. If on a branch for unrelated/completed work, ask before creating a new one.
+- Pushing to `main` is fine for personal repos (https://github.com/curbol/*). For team/work repos, always use feature branches.
+- Prefix branch names with `curbol/`
 - Base new branches off of `master`/`main` unless specified otherwise
 - Always `git pull` after checking out master before creating a new branch
 
 ### Commits
 
-- Commit only when requested
 - Create new commits to fix mistakes. Never amend pushed commits or force push.
+- When the branch contains a Shortcut story ID, include `This commit supports [sc-XXXXXX]` in the commit message
 
 ### Pull Requests
 
@@ -131,10 +121,6 @@ Apply one of these labels to every PR:
 - `bug` for bug fixes
 - `enhancement` for new features and enhancements
 - `demo` for demo changes
-
-#### Commits
-
-- When the branch contains a Shortcut story ID, include `This commit supports [sc-XXXXXX]` in the commit message
 
 ## Security
 

@@ -1,26 +1,11 @@
 {
-  "env": {
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
-  },
   "permissions": {
     "allow": [
       "Bash(go *)",
       "Bash(make *)",
       "Bash(golangci-lint *)",
       "Bash(mise *)",
-      "Bash(git status*)",
-      "Bash(git log *)",
-      "Bash(git diff *)",
-      "Bash(git branch *)",
-      "Bash(git checkout *)",
-      "Bash(git pull *)",
-      "Bash(git add *)",
-      "Bash(git stash *)",
-      "Bash(git fetch *)",
-      "Bash(git rev-parse *)",
-      "Bash(git show *)",
-      "Bash(git remote *)",
-      "Bash(git switch *)",
+      "Bash(git:*)",
       "Bash(gh *)",
       "Bash(npm *)",
       "Bash(npx *)",
@@ -59,7 +44,6 @@
     "feature-dev@claude-plugins-official": true,
     "frontend-design@claude-plugins-official": true,
     "gatekeeper@claude-watchtower": true,
-    "github@claude-plugins-official": false,
     "gopls-lsp@claude-plugins-official": true,
     "hookify@claude-plugins-official": true,
     "notify@claude-watchtower": true,
