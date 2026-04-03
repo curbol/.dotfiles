@@ -29,6 +29,7 @@ When I ask a question, treat it as a genuine question. Answer it and wait. Do no
 - **Don't dismiss reported issues**: if someone says there's a problem, verify it rather than concluding "the code looks correct, probably not an issue." The issue may manifest elsewhere or under different conditions. Never deflect with "this is pre-existing" or "not our code" without being asked; just investigate and fix it.
 - **Investigate before forming opinions**: when something looks wrong, read the code, search for related issues, check logs, or do a web search *before* saying whether it's a problem. Do not wait to be told to investigate. Your first response to a reported issue should include evidence from investigation, not a guess or dismissal.
 - **Don't hand-wave unknowns**: don't brush off failures as "probably env/config" without checking. Confirm what can be confirmed.
+- **Don't state things you haven't verified.** If you haven't read the file, run the command, or checked the docs, don't assert it as fact. Say "I think" or "I'm not sure" when working from memory. Confidence is not a substitute for evidence.
 
 ## Implementation Quality
 
@@ -44,6 +45,7 @@ When I ask a question, treat it as a genuine question. Answer it and wait. Do no
 - Prefer small, focused changes over large refactors
 - Always check locally first. Prefer checked-out repos in `~/code/` over web/remote sources.
 - Don't ask me to choose execution strategies (which agent type, parallel vs sequential, worktree vs not). These are implementation details; use your judgment and just do the work.
+- **Use your tools.** When asked a question you can answer by running a command, reading a file, or searching, do it. Don't suggest I look it up or run it myself.
 
 ## Testing & Verification
 
@@ -66,7 +68,6 @@ When I ask a question, treat it as a genuine question. Answer it and wait. Do no
 - **Code-first**: Show code immediately when applicable, explain only when needed
 - **Technical depth**: Assume software engineering expertise
 - Include line numbers when discussing specific code
-- **Default to correct, not easy**: When presenting options, recommend the best-practice, most maintainable solution, not the simplest or quickest one. "Simplest" is only the right default when the alternatives offer no meaningful benefit. Lead with what is correct; mention simpler alternatives as trade-offs if relevant.
 
 ### When to Explain
 
@@ -89,21 +90,43 @@ When I ask a question, treat it as a genuine question. Answer it and wait. Do no
 ### Commits
 
 - Create new commits to fix mistakes. Never amend pushed commits or force push.
-- When the branch contains a Shortcut story ID, include `This commit supports [sc-XXXXXX]` in the commit message
 
 ### Pull Requests
-
-Create PRs only when requested.
-
-#### Branch Naming
-
-- Format: `<username>/sc-<story-id>/<description>` (e.g., `curbol/sc-233298/fix-ci-docs`)
-- Include the Shortcut story ID when one exists
 
 #### Title Format
 
 - Imperative mood ("Add", "Fix", "Update", not "Added", "Fixes")
 - Capital first letter, no period at end
+
+## Security
+
+- Never commit secrets, credentials, or `.env` files. Warn if asked to.
+
+---
+
+# Gladly (Work Only)
+
+The following applies only to Gladly repositories (https://github.com/sagansystems/ internal, https://github.com/gladly/ public).
+
+## Shortcut
+
+- Always create stories under the **AI Knowledge** team (ID `69949769-1bb1-4ded-b7ff-3fa8df4fa57f`). Do not infer the team from the story topic.
+
+## Git Practices
+
+### Branch Naming
+
+- Format: `curbol/sc-<story-id>/<description>` (e.g., `curbol/sc-233298/fix-ci-docs`)
+- Include the Shortcut story ID when one exists
+
+### Commits
+
+- When the branch contains a Shortcut story ID, include `This commit supports [sc-XXXXXX]` in the commit message
+
+### Pull Requests
+
+#### Title Format
+
 - Include ticket number at end: `[sc-XXXXXX]`
 
 #### Structure
@@ -121,33 +144,3 @@ Apply one of these labels to every PR:
 - `bug` for bug fixes
 - `enhancement` for new features and enhancements
 - `demo` for demo changes
-
-## Security
-
-- Never commit secrets, credentials, or `.env` files. Warn if asked to.
-
-## Shortcut
-
-- Always create stories under the **AI Knowledge** team (ID `69949769-1bb1-4ded-b7ff-3fa8df4fa57f`). Do not infer the team from the story topic.
-
-## Repository Access
-
-- Always check for repos locally in `~/code/` first
-- Prefer CLI (`gh` via Bash tool) over MCP tools for GitHub operations
-
-## Agent Isolation
-
-When spawning parallel agents, consider using `isolation: "worktree"` for tasks that involve significant file changes or where agents might conflict with each other or the current working tree. Use your judgment; small read-only or single-file tasks don't need it.
-
-## Agent Teams vs. Parallel Agents
-
-- **Parallel agents** (Task tool): Use for independent, fire-and-forget work (research, exploration, or isolated file changes that don't need coordination). Prefer this for most cases.
-- **Agent teams** (TeamCreate): Use when tasks require coordination, sequencing, or shared state awareness, e.g. one agent's output informs another's work, or multiple agents need to modify related files without conflicts.
-
-Default to parallel agents. Only reach for teams when you need inter-agent communication or task dependency management.
-
-## Architectural Guidance
-
-Primary reference: [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
-
-Apply strictly for new features/services/domain models. Match existing patterns for bug fixes and small enhancements. For refactoring or tech debt, propose improvements and explain trade-offs, but don't assume approval.

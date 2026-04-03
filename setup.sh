@@ -135,6 +135,15 @@ for file in "${linkfiles[@]}"; do
   create_symlink "$src" "$dest"
 done
 
+# Mirror .claude/* symlinks to .claude-work/ (work account shares config, separate auth)
+for file in "${linkfiles[@]}"; do
+  if [[ "$file" == .claude/* ]]; then
+    src="$dotfiles_dir/$file"
+    dest="$HOME/.claude-work/${file#.claude/}"
+    create_symlink "$src" "$dest"
+  fi
+done
+
 # Iterate over the copyfiles array and copy files
 for file in "${copyfiles[@]}"; do
   src="$dotfiles_dir/$file"
