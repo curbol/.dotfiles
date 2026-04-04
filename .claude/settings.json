@@ -41,11 +41,16 @@
   },
   "enabledPlugins": {
     "feature-dev@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": true,
     "gopls-lsp@claude-plugins-official": true,
-    "hookify@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true
+    "superpowers@claude-plugins-official": true,
+    "gatekeeper@claude-watchtower": true,
+    "notify@claude-watchtower": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "slack@claude-plugins-official": true,
+    "coderabbit@claude-plugins-official": true,
+    "context7@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {},
+  "autoDreamEnabled": true,
   "skipAutoPermissionPrompt": true
 }
