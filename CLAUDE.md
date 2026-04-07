@@ -48,6 +48,7 @@ The setup script does two things:
 | ZSH plugins | `.config/zsh/.zsh_plugins.txt` | Antidote plugin list |
 | ZSH secrets | `.config/zsh/.zshrc.local` | API keys, tokens (copied, gitignored content) |
 | Git | `.gitconfig` | URL rewrites for orgs, nvim as editor/difftool |
+| Git local | `.gitconfig_local` | Machine-specific git config (copied, not symlinked) |
 | Ghostty | `.config/ghostty/config` | Terminal emulator (Omarchy theme integration, Shift+Enter fix) |
 | Tmux | `.config/tmux/tmux.conf` | C-Space prefix, vim keys, minimal top statusline |
 | AeroSpace | `.config/aerospace/aerospace.toml` | Tiling window manager (Mac only) |

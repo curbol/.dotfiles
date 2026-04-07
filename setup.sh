@@ -71,6 +71,7 @@ fi
 copyfiles=(
   ".config/zsh/.zshrc.local"
   ".config/gladmin/config.yaml"
+  ".gitconfig_local"
   ".marks"
 )
 
