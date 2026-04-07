@@ -28,6 +28,7 @@ linkfiles=(
   ".claude/keybindings.json"
   ".claude/settings.json"
   ".claude/statusline-command.sh"
+  ".claude/stop-hook.sh"
   ".config/ghostty/config"
   ".config/starship.toml"
   ".config/tmux/tmux.conf"

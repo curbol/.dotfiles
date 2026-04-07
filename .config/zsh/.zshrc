@@ -106,6 +106,8 @@ fi
 # ------------------------------------------------------------------------------
 # Claude Code
 alias claude-w="CLAUDE_CONFIG_DIR=~/.claude-work claude"
+# Temp workaround: performance regression since Feb 2025
+export CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING=1
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------

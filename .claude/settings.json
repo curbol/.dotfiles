@@ -52,5 +52,18 @@
   "extraKnownMarketplaces": {},
   "autoDreamEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "effortLevel": "high"
+  "autoCompactWindow": 400000,
+  "effortLevel": "high",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/stop-hook.sh"
+          }
+        ]
+      }
+    ]
+  }
 }
