@@ -13,6 +13,7 @@ export CODE_DIR="$HOME/code"
 export GOPATH="$HOME/go"
 export GOBIN="$HOME/go/bin"
 export ZK_NOTEBOOK_DIR="$CODE_DIR/notes"
+export GODOT_PATH="/usr/bin/godot-mono"
 
 # Ensure path arrays do not contain duplicates.
 typeset -gU path fpath
