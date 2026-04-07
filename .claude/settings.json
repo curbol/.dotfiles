@@ -53,7 +53,7 @@
   "autoDreamEnabled": true,
   "skipAutoPermissionPrompt": true,
   "autoCompactWindow": 400000,
-  "effortLevel": "high",
+  "effortLevel": "max",
   "hooks": {
     "Stop": [
       {
