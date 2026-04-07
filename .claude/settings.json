@@ -47,5 +47,19 @@
     "superpowers@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {},
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "autoCompactWindow": 400000,
+  "effortLevel": "high",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/stop-hook.sh"
+          }
+        ]
+      }
+    ]
+  }
 }
