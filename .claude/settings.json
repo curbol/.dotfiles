@@ -44,7 +44,6 @@
     "gopls-lsp@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true,
     "gatekeeper@claude-watchtower": true,
-    "notify@claude-watchtower": true,
     "typescript-lsp@claude-plugins-official": true,
     "slack@claude-plugins-official": true,
     "coderabbit@claude-plugins-official": true,
@@ -52,5 +51,6 @@
   },
   "extraKnownMarketplaces": {},
   "autoDreamEnabled": true,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "effortLevel": "high"
 }
