@@ -56,18 +56,6 @@ fi
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
-# Homebrew
-if [[ $is_mac_os -eq 1 ]]; then
-  export HOMEBREW_AUTO_UPDATE_SECS=86400
-  if [[ $is_mac_intel -eq 1 ]]; then
-    _eval_cached brew-shellenv brew /usr/local/bin/brew shellenv
-  else
-    _eval_cached brew-shellenv brew /opt/homebrew/bin/brew shellenv
-  fi
-fi
-# ------------------------------------------------------------------------------
-
-# ------------------------------------------------------------------------------
 # Go
 alias gotidy='go mod tidy && go mod vendor'
 # ------------------------------------------------------------------------------
