@@ -17,24 +17,3 @@ export GODOT_PATH="/usr/bin/godot-mono"
 
 # Ensure path arrays do not contain duplicates.
 typeset -gU path fpath
-
-# Set the list of directories that zsh searches for commands.
-path=(
-  $HOME/.local/share/mise/shims(N)
-  $HOME/.local/{,s}bin(N)
-  $GOBIN(N)
-  $HOME/{,s}bin(N)
-  /opt/{homebrew,local}/{,s}bin(N)
-  /usr/local/{,s}bin(N)
-  /nix/var/nix/profiles/default/bin(N) # Gladly (Nix)
-  $HOME/.nix-profile/bin(N)            # Gladly (Nix)
-  /opt/pact/bin(N)                     # Gladly (Pact)
-  $path
-)
-
-# fpath[1] is a reliable user completions dir, always first so tools that
-# recommend `${fpath[1]}/_tool` install to the right place.
-fpath=(
-  $HOME/.local/share/zsh/site-functions
-  $fpath
-)

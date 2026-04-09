@@ -32,6 +32,7 @@ linkfiles=(
   ".config/ghostty/config"
   ".config/starship.toml"
   ".config/tmux/tmux.conf"
+  ".config/zsh/.zprofile"
   ".config/zsh/.zsh_plugins.txt"
   ".config/zsh/.zshrc"
   ".config/zsh/scripts/jump.sh"
