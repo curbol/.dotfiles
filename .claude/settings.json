@@ -52,7 +52,6 @@
   "extraKnownMarketplaces": {},
   "autoDreamEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "autoCompactWindow": 400000,
   "effortLevel": "max",
   "hooks": {
     "Stop": [
