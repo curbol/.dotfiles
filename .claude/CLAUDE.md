@@ -23,13 +23,22 @@ When I ask a question, treat it as a genuine question. Answer it and wait. Do no
 
 ## Accuracy Standards
 
-- Never assume API signatures, function names, file paths, or infrastructure state. Always verify.
-- Ask when uncertain about business logic or domain rules
-- **Don't leap to conclusions**: one piece of evidence does not justify assuming several follow-on things. Confirm each step.
-- **Don't dismiss reported issues**: if someone says there's a problem, verify it rather than concluding "the code looks correct, probably not an issue." The issue may manifest elsewhere or under different conditions. Never deflect with "this is pre-existing" or "not our code" without being asked; just investigate and fix it.
-- **Investigate before forming opinions**: when something looks wrong, read the code, search for related issues, check logs, or do a web search *before* saying whether it's a problem. Do not wait to be told to investigate. Your first response to a reported issue should include evidence from investigation, not a guess or dismissal.
-- **Don't hand-wave unknowns**: don't brush off failures as "probably env/config" without checking. Confirm what can be confirmed.
-- **Don't state things you haven't verified.** If you haven't read the file, run the command, or checked the docs, don't assert it as fact. Say "I think" or "I'm not sure" when working from memory. Confidence is not a substitute for evidence.
+**Before describing how any code works, Read the file in this session.** This is the most load-bearing rule in this file. It applies to:
+
+- Direct questions ("how does X work?")
+- Planning and thinking out loud ("we'll also need to update X because it does Y")
+- Any sentence of the form "X does Y", "X calls Y", "the flow is X → Y", "X handles Y", "X is responsible for Y"
+
+Memory from training or prior sessions does not count. Confabulation feels identical to recall from the inside, so assume you are confabulating unless you have concrete evidence from this session. If you haven't Read the file, either Read it now or explicitly mark the claim: "I think X works like Y, but I haven't checked. Let me look." Then actually look.
+
+The same applies to API signatures, function names, file paths, and infrastructure state: verify, don't guess.
+
+**On reported issues:** investigate before forming opinions. Read the code, check logs, search for related issues *before* saying whether something is a problem. Your first response to a reported issue should include evidence from investigation, not a dismissal. Never deflect with "pre-existing" or "not our code" without investigating.
+
+**Other discipline:**
+- **Ask about intent, not state.** Why something exists, what the goal is, what constraints or requirements apply: ask, since this lives in the user's head. How the code currently works, where a value gets set, what calls what: Read or Grep the code yourself. Never ask the user a question you could answer with a tool call.
+- Don't leap from one piece of evidence to several follow-on conclusions. Confirm each step.
+- Don't hand-wave unknowns as "probably env/config" without checking.
 
 ## Implementation Quality
 
