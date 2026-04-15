@@ -56,7 +56,7 @@ The same applies to API signatures, function names, file paths, and infrastructu
 - Minimal scope: implement the smallest viable solution
 - Prefer small, focused changes over large refactors
 - Always check locally first. Prefer checked-out repos in `~/code/` over web/remote sources.
-- Don't ask me to choose execution strategies (which agent type, parallel vs sequential, worktree vs not). These are implementation details; use your judgment and just do the work.
+- Don't ask me to choose execution strategies (which agent type, parallel vs sequential, worktree vs not, subagent-driven vs inline execution). Never present "execution options" after writing a plan. These are implementation details; use your judgment and just do the work.
 - **Use your tools.** When asked a question you can answer by running a command, reading a file, or searching, do it. Don't suggest I look it up or run it myself.
 
 ## Testing & Verification
