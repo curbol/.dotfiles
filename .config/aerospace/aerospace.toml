@@ -32,10 +32,9 @@ outer.left = 10
 
 # Window management (matches Hyprland SUPER+key)
 cmd-w = 'close'
-cmd-f = 'fullscreen'
+cmd-shift-f = 'fullscreen'
 cmd-t = 'layout floating tiling'
 cmd-o = 'layout floating tiling'
-cmd-minus = 'resize smart -50'
 cmd-equal = 'resize smart +50'
 
 # Focus (matches Hyprland SUPER+arrows)

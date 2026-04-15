@@ -47,7 +47,8 @@
     "typescript-lsp@claude-plugins-official": true,
     "slack@claude-plugins-official": true,
     "coderabbit@claude-plugins-official": true,
-    "context7@claude-plugins-official": true
+    "context7@claude-plugins-official": true,
+    "work@gladly-claude-tools": true
   },
   "extraKnownMarketplaces": {},
   "autoDreamEnabled": true,
