@@ -43,7 +43,6 @@
     "feature-dev@claude-plugins-official": true,
     "gopls-lsp@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true,
-    "gatekeeper@claude-watchtower": true,
     "typescript-lsp@claude-plugins-official": true,
     "slack@claude-plugins-official": true,
     "coderabbit@claude-plugins-official": true,
