@@ -66,6 +66,7 @@ if [[ $is_linux -eq 1 ]]; then
     ".config/environment.d/path.conf"
     ".config/wireplumber/wireplumber.conf.d/50-disable-bt-source.conf"
     ".local/bin/gamescope-auto"
+    ".local/bin/omarchy-drift"
   )
 fi
 

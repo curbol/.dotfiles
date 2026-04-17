@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# Show upstream omarchy seed changes since the last acknowledged commit.
+# First run sets the baseline. Subsequent runs list commits + diffs in
+# config/ since that baseline. Pass --ack after reviewing to advance it.
+
+set -euo pipefail
+
+repo="$HOME/.local/share/omarchy"
+state="$HOME/.cache/omarchy-drift/last-checked"
+mkdir -p "$(dirname "$state")"
+cd "$repo"
+
+ack=0
+[[ "${1:-}" == "--ack" ]] && ack=1
+
+head=$(git rev-parse HEAD)
+
+if [[ ! -f "$state" ]] || ! git cat-file -e "$(cat "$state")" 2>/dev/null; then
+  echo "$head" > "$state"
+  echo "Baseline set to upstream HEAD ($head). Re-run after future updates."
+  exit 0
+fi
+
+since=$(cat "$state")
+
+if [[ "$since" == "$head" ]]; then
+  echo "No upstream changes since last check."
+  exit 0
+fi
+
+echo "Upstream config/ changes ($since → $head):"
+echo
+git log --oneline "$since..$head" -- config/ || echo "(no config/ changes)"
+echo
+git diff "$since..$head" -- config/
+
+if [[ $ack -eq 1 ]]; then
+  echo "$head" > "$state"
+  echo
+  echo "Baseline advanced to $head."
+fi

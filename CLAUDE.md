@@ -82,6 +82,21 @@ tmux uses `C-Space` as prefix on both platforms. `Alt+number` switches tmux wind
 
 When making system configuration changes, always put them in this repo and deploy via `setup.sh` or `install.sh`.
 
+## Checking for Omarchy Drift (Linux)
+
+Omarchy seeds files into `~/.config/` at install time and never overwrites them on update. `.local/bin/omarchy-drift` shows upstream seed changes since the last acknowledged commit, by diffing commits in `~/.local/share/omarchy/` (itself a git repo). It ignores local customizations; the signal is purely what upstream changed.
+
+State is stored at `~/.cache/omarchy-drift/last-checked`. First run sets the baseline to the current upstream HEAD. Subsequent runs show `git log` + `git diff` in `config/` since that baseline.
+
+Typical workflow after `omarchy-update`:
+
+```sh
+omarchy-drift           # review upstream changes since last ack
+omarchy-drift --ack     # advance baseline after reviewing
+```
+
+Merge upstream changes you want into the tracked dotfile (for symlinked configs) or into `~/.config/` directly (for untracked locals).
+
 ## When Adding New Dotfiles
 
 1. Add the file to this repo at the correct relative path
