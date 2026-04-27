@@ -54,7 +54,7 @@ install_packages() {
       rm -rf /tmp/yay-install
     fi
 
-    local aur_pkgs=(maplemono-nf)
+    local aur_pkgs=(maplemono-nf rtk-ai-bin)
     local aur_to_install=()
     for pkg in "${aur_pkgs[@]}"; do
       pacman -Q "$pkg" &>/dev/null || aur_to_install+=("$pkg")
