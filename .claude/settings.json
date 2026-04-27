@@ -52,5 +52,7 @@
   "extraKnownMarketplaces": {},
   "autoDreamEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "effortLevel": "max"
+  "teammateMode": "auto",
+  "remoteControlAtStartup": true,
+  "agentPushNotifEnabled": true
 }
