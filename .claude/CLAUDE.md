@@ -40,6 +40,7 @@ The same applies to API signatures, function names, file paths, and infrastructu
 **On reported issues:** investigate before forming opinions. Read the code, check logs, search for related issues *before* saying whether something is a problem. Your first response to a reported issue should include evidence from investigation, not a dismissal. Never deflect with "pre-existing" or "not our code" without investigating.
 
 **Other discipline:**
+
 - **Ask about intent, not state.** Why something exists, what the goal is, what constraints or requirements apply: ask, since this lives in the user's head. How the code currently works, where a value gets set, what calls what: Read or Grep the code yourself. Never ask the user a question you could answer with a tool call.
 - Don't leap from one piece of evidence to several follow-on conclusions. Confirm each step.
 - Don't hand-wave unknowns as "probably env/config" without checking.
@@ -95,7 +96,7 @@ The same applies to API signatures, function names, file paths, and infrastructu
 
 - Before making file changes, check the current branch with `git branch --show-current`
 - If on `master`/`main`, create a feature branch first. If on a branch for unrelated/completed work, ask before creating a new one.
-- Pushing to `main` is fine for personal repos (https://github.com/curbol/*). For team/work repos, always use feature branches.
+- Pushing to `main` is fine for personal repos (<https://github.com/curbol/>*). For team/work repos, always use feature branches.
 - Prefix branch names with `curbol/`
 - Base new branches off of `master`/`main` unless specified otherwise
 - Always `git pull` after checking out master before creating a new branch
@@ -119,7 +120,7 @@ The same applies to API signatures, function names, file paths, and infrastructu
 
 # Gladly (Work Only)
 
-The following applies only to Gladly repositories (https://github.com/sagansystems/ internal, https://github.com/gladly/ public).
+The following applies only to Gladly repositories (<https://github.com/sagansystems/> internal, <https://github.com/gladly/> public).
 
 ## Shortcut
 
@@ -154,6 +155,9 @@ Every PR must include these sections as `##` headers:
 #### Labels
 
 Apply one of these labels to every PR:
+
 - `bug` for bug fixes
 - `enhancement` for new features and enhancements
 - `demo` for demo changes
+
+@RTK.md

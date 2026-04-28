@@ -33,6 +33,7 @@ brew "cmake"
 brew "wget"
 brew "luarocks"
 brew "prettier"
+brew "rtk"
 
 # GPG
 brew "gnupg"
