@@ -47,12 +47,22 @@
     "slack@claude-plugins-official": true,
     "coderabbit@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
-    "work@gladly-claude-tools": true
+    "work@gladly-claude-tools": true,
+    "local-dev@gladly-claude-tools": true,
+    "analyze-tests@gladly-claude-tools": true,
+    "address-pr-comments@gladly-claude-tools": true
   },
-  "extraKnownMarketplaces": {},
+  "extraKnownMarketplaces": {
+    "gladly-claude-tools": {
+      "source": {
+        "source": "github",
+        "repo": "sagansystems/gladly-claude-tools"
+      }
+    }
+  },
   "autoDreamEnabled": true,
-  "skipAutoPermissionPrompt": true,
   "teammateMode": "auto",
   "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "skipAutoPermissionPrompt": true
 }
