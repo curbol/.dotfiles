@@ -106,4 +106,4 @@ Merge upstream changes you want into the tracked dotfile (for symlinked configs)
 
 ## Cross-Platform Support
 
-`scripts/ostype.sh` provides OS detection flags. `setup.sh` has platform-specific symlink blocks for Mac (`is_mac_os`) and Linux (`is_linux`). Hyprland configs are managed directly by Omarchy on Linux and are not tracked in this repo.
+`scripts/ostype.sh` provides OS detection flags. `setup.sh` has platform-specific symlink blocks for Mac (`is_mac_os`) and Linux (`is_linux`). On Linux, a subset of Hyprland configs is tracked here (see the `is_linux` block in `setup.sh`); the rest stay Omarchy-seeded in `~/.config/hypr/`.
