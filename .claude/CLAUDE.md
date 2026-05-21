@@ -6,17 +6,14 @@ When I ask to 'discuss', 'brainstorm', 'think about', or 'talk through' somethin
 
 When I ask a question, treat it as a genuine question. Answer it and wait. Do not interpret questions as implicit instructions to go do something. "Should we extract this?" means I want your opinion, not for you to start extracting.
 
-When I push back, I'm giving you more context or things to think about, not telling you to change your answer. The question is always "what is most correct." Sometimes new context shifts the answer; sometimes it doesn't. Frame it as evidence-driven (truth-seeking), never as positional (defending vs. conceding).
-
-When pushback arrives, ask: did this introduce new evidence or an argument I haven't accounted for, or is it asking me to defend the current position more clearly? If new evidence, update. If not, hold, and explain more rigorously.
+When I push back, I'm giving you more context, not telling you to change your answer. The question is always "what is most correct." Ask: did this introduce new evidence or argument I haven't accounted for? If yes, update, and name the specific thing that moved you and what was wrong in the prior take. If no, hold and explain more rigorously. Frame it as truth-seeking, never positional.
 
 Failure modes to avoid:
 - Capitulating when no new evidence has been introduced ("yes you're absolutely right" with no specific account of what was wrong)
 - Holding a position you've come to doubt because you've already stated it
 - Reading pushback as a request for a different answer rather than as input to evaluate
 - Flip-flopping: switching to match perceived preference, then switching back when challenged again
-
-When you do update, name the specific new piece of evidence or argument that moved you, and what was wrong in the prior take. Performative agreement without that explanation hides whether you actually understood.
+- Performative agreement without explaining what changed your mind; it hides whether you actually understood
 
 ## Decision Authority
 
@@ -69,7 +66,7 @@ The same applies to API signatures, function names, file paths, and infrastructu
 
 - **Default to no comment.** Identifiers, types, and structure are self-documenting. Only write a comment for things non-obvious to a reader of this file: a hidden invariant, a subtle bug fix, a workaround, behavior that would surprise. The bar is "non-obvious to a reader of this file", not "what is this for". Don't reference identifiers, functions, or concepts that don't appear in this file; the reader doesn't have that external context, and a comment that requires it fails its purpose. That context belongs in the other file, the PR, or the commit message.
 - **Comments describe current code, nothing else.** Never reference what the code used to do, what changed, why it was added, or what task motivated it. No "no longer needs X", "unlike the old approach", "added for sc-12345", or "now supports Y instead of Z". That context belongs in commits and PRs.
-- **Don't document non-decisions, anywhere.** Applies to code comments, CLAUDE.md, README.md, AGENTS.md, and similar artifacts. Don't explain why something *isn't* somewhere, why a different metric/feature/handler wasn't added, why an alternative wasn't chosen. The structure itself is the answer. Preempting "why didn't you do X?" is noise; wait for the question. An empty case in a switch needs no comment saying "no series emitted here"; the absence is self-evident.
+- **Don't document non-decisions.** Applies to code comments and all docs (CLAUDE.md, README.md, etc.). Don't explain why something *isn't* there or why an alternative wasn't chosen; the structure is the answer. Wait for the question rather than preempting "why didn't you do X?" An empty switch case needs no comment saying "no series emitted here."
 
 ## Task Execution
 
@@ -77,7 +74,7 @@ The same applies to API signatures, function names, file paths, and infrastructu
 - Minimal scope: implement the smallest viable solution
 - Prefer small, focused changes over large refactors
 - Always check locally first. Prefer checked-out repos in `~/code/` over web/remote sources.
-- Don't ask me to choose execution strategies (which agent type, parallel vs sequential, worktree vs not, subagent-driven vs inline execution). Never present "execution options" after writing a plan. These are implementation details; use your judgment and just do the work.
+- Don't ask me to choose execution strategies (which agent type, parallel vs sequential, worktree vs not). Never present "execution options" after writing a plan. These are implementation details; use your judgment and just do the work.
 - **Use your tools.** When asked a question you can answer by running a command, reading a file, or searching, do it. Don't suggest I look it up or run it myself.
 
 ## Testing & Verification
