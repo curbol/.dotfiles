@@ -113,8 +113,8 @@ The same applies to API signatures, function names, file paths, and infrastructu
 ### Branch Management
 
 - Before making file changes, check the current branch with `git branch --show-current`
-- If on `master`/`main`, create a feature branch first. If on a branch for unrelated/completed work, ask before creating a new one.
-- Pushing to `main` is fine for personal repos (`github.com/curbol/*`). For team/work repos, always use feature branches.
+- For personal repos (`github.com/curbol/*`): committing and pushing directly to `main` is fine. Only branch when you want to isolate a multi-commit feature for clean history, or to keep a safety point before risky work.
+- For team/work repos (`github.com/sagansystems/*`, `github.com/gladly/*`): if on `master`/`main`, create a feature branch first. If on a branch for unrelated/completed work, ask before creating a new one.
 - Prefix branch names with `curbol/`
 - Base new branches off of `master`/`main` unless specified otherwise
 - Always `git pull` after checking out master before creating a new branch
