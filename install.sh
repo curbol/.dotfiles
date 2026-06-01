@@ -157,6 +157,40 @@ setup_bluetooth() {
 }
 
 # ------------------------------------------------------------------------------
+# NVIDIA (Linux only — Blackwell + open driver tuning)
+# ------------------------------------------------------------------------------
+setup_nvidia() {
+  if [[ $is_linux -eq 1 ]] && pacman -Q nvidia-open-dkms &>/dev/null; then
+    local src="$DOTFILES_DIR/install/nvidia.conf"
+    local dst="/etc/modprobe.d/nvidia.conf"
+    if [[ ! -f "$dst" ]] || ! cmp -s "$src" "$dst"; then
+      log "Installing $dst..."
+      sudo install -m 644 "$src" "$dst"
+      log "Rebuilding initramfs..."
+      if command -v limine-mkinitcpio >/dev/null 2>&1; then
+        sudo limine-mkinitcpio
+      else
+        sudo mkinitcpio -P
+      fi
+    else
+      skip "$dst already up to date"
+    fi
+
+    local nvidia_services=(nvidia-suspend.service nvidia-resume.service nvidia-hibernate.service)
+    local to_enable=()
+    for svc in "${nvidia_services[@]}"; do
+      systemctl is-enabled "$svc" &>/dev/null || to_enable+=("$svc")
+    done
+    if [[ ${#to_enable[@]} -gt 0 ]]; then
+      log "Enabling NVIDIA suspend services: ${to_enable[*]}"
+      sudo systemctl enable "${to_enable[@]}"
+    else
+      skip "NVIDIA suspend services already enabled"
+    fi
+  fi
+}
+
+# ------------------------------------------------------------------------------
 # macOS settings
 # ------------------------------------------------------------------------------
 setup_mac_settings() {
@@ -214,6 +248,7 @@ set_font
 setup_timezone
 setup_ssh_agent
 setup_bluetooth
+setup_nvidia
 setup_mac_settings
 clone_repos
 run_setup
