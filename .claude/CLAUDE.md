@@ -57,6 +57,21 @@ The same applies to API signatures, function names, file paths, and infrastructu
 - Don't leap from one piece of evidence to several follow-on conclusions. Confirm each step.
 - Don't hand-wave unknowns as "probably env/config" without checking.
 
+## Estimating Effort
+
+Never express the size of work in time — not human ("~30 min", "1-2 days"), not
+"AI time", not any clock unit. Time estimates are always wrong and unverifiable.
+
+When size is decision-relevant (sequencing, batching, splitting a PR), state its
+concrete dimensions instead:
+
+- **Scope**: which files/layers change, roughly how many edit sites.
+- **Certainty**: what's mechanical vs. what needs investigation.
+- **Risk**: what could break, what's reversible, the blast radius.
+- **Deliverable units**: how it splits into commits or PRs.
+
+Lead with the dimension that drives the decision; don't recite all four.
+
 ## Code Structure
 
 - **Put code in the correct layer, even when it's more work.** If you know the right place for logic (runtime vs conversion, application vs handler, core vs presentation), put it there. Never choose a worse approach because it's fewer lines, faster to write, or "simpler for now." You can write code in seconds; the human spends hours debugging the tech debt you leave behind. Correctness is the baseline, not a stretch goal. If you catch yourself thinking "it should be in X but it's easier in Y," stop and put it in X.
