@@ -50,7 +50,8 @@
     "work@gladly-claude-tools": true,
     "local-dev@gladly-claude-tools": true,
     "analyze-tests@gladly-claude-tools": true,
-    "address-pr-comments@gladly-claude-tools": true
+    "address-pr-comments@gladly-claude-tools": true,
+    "test-deployed@gladly-claude-tools": true
   },
   "extraKnownMarketplaces": {
     "gladly-claude-tools": {
