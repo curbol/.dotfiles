@@ -227,9 +227,11 @@ Phases 1-2 are interactive; everything after is autonomous.
 
 ## Run directory
 
-Lives at `.longrun/` in the worktree, committed on the branch. Whether it
-survives to merge is decided at merge time. Every file is honest current
-state, safe for any subagent to read.
+Lives at `.longrun/` in the worktree, local-only and never committed
+(excluded via `.git/info/exclude` at setup): plans and reports are session
+artifacts that are stale by PR time, so the repo gets code and the human
+reads `REPORT.md` from the worktree. Every file is honest current state,
+safe for any subagent to read.
 
 ```
 .longrun/

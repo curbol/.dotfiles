@@ -13,8 +13,10 @@ two files encode opposing biases and are role-scoped on purpose.
 
 ## State
 
-All run state lives in `.longrun/` at the worktree root, committed on the
-branch. Ground every phase in these files, not conversation memory; a
+All run state lives in `.longrun/` at the worktree root. It is local-only
+and never committed: plans and reports are session artifacts that are
+stale by PR time; the repo gets code, the human reads `REPORT.md` from the
+worktree. Ground every phase in these files, not conversation memory; a
 crashed or interrupted run re-enters by reading them.
 
     .longrun/
@@ -36,8 +38,8 @@ the harness supports it.
    `git worktree add ../<repo>-longrun-<slug> -b curbol/longrun-<slug>`
    (when a Shortcut story exists, use `curbol/sc-XXXXXX/longrun-<slug>`).
    Work exclusively in the worktree.
-3. Create `.longrun/` and commit it as the run's first commit as soon as
-   `BRIEF.md` exists.
+3. Create `.longrun/` and add `.longrun/` to `.git/info/exclude` so it
+   can never be committed.
 
 ## Phase 1: Clarify
 
@@ -132,7 +134,7 @@ Loop, capped at 5 rounds:
 
 1. Spawn a fresh AUDITOR subagent. Its prompt contains: the worktree
    path, instructions to read `PLAN.md` and run
-   `git diff <default-branch>...HEAD -- ':(exclude).longrun'`, and the
+   `git diff <default-branch>...HEAD`, and the
    output contract: a table with one row per plan item, status
    done|partial|missing with file:line evidence, plus rows flagged
    not-in-plan for material changes the plan never mentions. No rubric,
@@ -161,8 +163,7 @@ become known-issues entries.
 ## Phase 8: Report
 
 Write `REPORT.md` following `report-template.md` from this skill's base
-directory. Commit the final state of `.longrun/`. End with a short visible
-summary pointing at the report.
+directory. End with a short visible summary pointing at the report.
 
 ## Drift and recovery
 
