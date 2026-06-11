@@ -152,6 +152,10 @@ added falsifies the count.
   deliverables (would fixing later add a migration, backfill, or follow-up).
   Lead with the dimension that drives the call. If even the strongest
   dimension is cheap, the finding is a nit.
+- **Reviewer audit**: every round audits the whole plan across all
+  dimensions: requirements coverage against the brief, feasibility against
+  the actual codebase, simplicity/over-engineering, failure modes and edge
+  cases.
 - **Reviewer evidence**: claims about how existing code behaves (behavior,
   signatures, paths) must come from files read this round, cited file:line.
   Claims that something does not exist must cite the search performed
@@ -255,10 +259,13 @@ Three roles, strictly separated:
 
 - **Author** (the main session) writes and revises the plan. It never
   decides significance and never decides termination.
-- **Reviewer**: a fresh subagent each round with a rotating lens:
-  requirements coverage → codebase feasibility → simplicity/over-engineering
-  → failure modes → repeat. Reviewers receive the brief, context, plan, and
+- **Reviewer**: a fresh subagent each round, running a general audit that
+  covers every dimension each time (requirements coverage, codebase
+  feasibility, simplicity/over-engineering, failure modes; the checklist
+  lives in `rubric.md`). Reviewers receive the brief, context, plan, and
   `rubric.md`, and report per the reviewer evidence rules above.
+  Decorrelation between rounds comes from reviewer freshness plus the plan
+  having changed since the last round, not from varying the prompt.
 - **Adjudicator**: a fresh subagent each round. Receives `rubric.md`, the
   round's findings, the full `PLAN.md`, `BRIEF.md`, and the contested-calls
   section of `FOLLOWUPS.md`; does not receive the round number or any
@@ -324,7 +331,8 @@ Settled empirically over pilot runs, using report loop statistics:
 - Adjudicator subagent vs. main-session triage of findings. (The
   adjudicator is deliberately kept to cheap triage, with the author as
   factual verifier of record, partly so this comparison stays clean.)
-- The lens set and rotation order.
+- Whether single general-audit reviewers drift to nits in late rounds
+  (rotating per-round lenses is the known remedy if they do).
 - Cap values (15/5/10 rounds, 10 findings per round) and the
   one-clean-round exit.
 - The re-raise verdict: whether contested-calls visibility keeps contested

@@ -83,20 +83,19 @@ feasible); prefer machine-verifiable designs. Staged production changes
 
 Then loop, round r = 1, 2, ...:
 
-1. Lens for this round, rotating: requirements coverage → codebase
-   feasibility → simplicity/over-engineering → failure modes.
-2. Spawn a fresh REVIEWER subagent (Agent tool). Its prompt contains: the
+1. Spawn a fresh REVIEWER subagent (Agent tool). Its prompt contains: the
    absolute path of this skill's `rubric.md` (instruct it to read that
-   first), the worktree paths of `BRIEF.md`, `CONTEXT.md`, and `PLAN.md`
-   with instructions to read them, this round's lens, and the output
-   contract: a findings list, each `[significant|nit] <title>: <claim>,
-   <evidence>, <deferral-cost answer>`, at most 10 ordered by severity,
-   stating explicitly if more exist. No round number, no history.
-3. Validate the output: parseable, every finding tagged. Invalid → retry
+   first; its audit dimensions and evidence rules govern the review), the
+   worktree paths of `BRIEF.md`, `CONTEXT.md`, and `PLAN.md` with
+   instructions to read them, and the output contract: a findings list,
+   each `[significant|nit] <title>: <claim>, <evidence>, <deferral-cost
+   answer>`, at most 10 ordered by severity, stating explicitly if more
+   exist. No round number, no history.
+2. Validate the output: parseable, every finding tagged. Invalid → retry
    once, including the validation error. Still invalid → record the round
    as invalid (it counts toward the cap and can never be the clean exit)
    and continue.
-4. Spawn a fresh ADJUDICATOR subagent. Its prompt contains: the absolute
+3. Spawn a fresh ADJUDICATOR subagent. Its prompt contains: the absolute
    paths of this skill's `rubric.md` and the worktree's `PLAN.md` and
    `BRIEF.md` (instruct it to read all three first), the round's findings
    pasted in full, and the "Contested calls" section of `FOLLOWUPS.md`
@@ -104,10 +103,10 @@ Then loop, round r = 1, 2, ...:
    history, no other FOLLOWUPS sections. Output contract, per finding:
    `accept`, `accept (unverified: author must confirm)`, `reject: <why>`,
    or `re-raise: <the contested-calls entry it duplicates>`.
-5. Apply per the feedback discipline in `principles.md`: accepted
+4. Apply per the feedback discipline in `principles.md`: accepted
    findings are applied (confirm unverified tags against the codebase
    first), nits filed under FOLLOWUPS Nits, `PLAN.md` updated.
-6. Exit when a valid round accepts zero findings (re-raise verdicts do
+5. Exit when a valid round accepts zero findings (re-raise verdicts do
    not count as accepted). Hard cap 15 rounds; if findings are still
    material at the cap, record that under contested calls (it is a
    decomposition signal) and proceed.

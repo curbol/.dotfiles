@@ -47,6 +47,9 @@ finding is a nit.
 
 ## Reviewer rules
 
+- Audit the whole plan, covering every dimension each time: requirements
+  coverage against the brief; feasibility against the actual codebase;
+  simplicity and over-engineering; failure modes and edge cases.
 - Claims about how existing code behaves (behavior, signatures, paths)
   must come from files you read this round; cite file:line. Claims that
   something does not exist must cite the search you performed (pattern and
