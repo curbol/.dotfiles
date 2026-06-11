@@ -30,6 +30,7 @@ linkfiles=(
   ".claude/settings.json"
   ".claude/statusline-command.sh"
   ".claude/stop-hook.sh"
+  ".claude/skills/longrun"
   ".config/ghostty/config"
   ".config/starship.toml"
   ".config/tmux/tmux.conf"
