@@ -107,18 +107,22 @@ Then loop, round r = 1, 2, ...:
    pasted in full, and the "Contested calls" section of `FOLLOWUPS.md`
    pasted (never the whole file). No round number, no conversation
    history, no other FOLLOWUPS sections. Output contract, per finding:
-   `accept`, `accept (unverified: author must confirm)`, `reject: <why>`,
-   or `re-raise: <the contested-calls entry it duplicates>`.
+   `accept <build|procedure>` (optionally adding `unverified: author must
+   confirm`), `reject: <why>`, or `re-raise: <the contested-calls entry it
+   duplicates>`.
 4. Apply per the feedback discipline in `principles.md`: accepted
    findings are applied (confirm unverified tags against the codebase
    first), nits filed under FOLLOWUPS Nits, `PLAN.md` updated.
 5. Exit when a valid round accepts zero findings (re-raise verdicts do
-   not count as accepted). Hard cap 15 rounds; if findings are still
-   material at the cap, record that under contested calls (it is a
-   decomposition signal) and proceed.
+   not count as accepted), or after 2 consecutive valid rounds in which
+   every accepted finding is procedure-tagged: apply them, then exit.
+   Procedure churn after the deliverables converge is deferrable; its
+   gaps surface loudly in QA. Hard cap 15 rounds; if build-tagged
+   findings are still landing at the cap, record that under contested
+   calls (it is a decomposition signal) and proceed.
 
-Track per-round counts (accepted, rejected, re-raised, unverified tags,
-invalid rounds) as you go; the report needs them.
+Track per-round counts (accepted by tag, rejected, re-raised, unverified
+tags, invalid rounds) as you go; the report needs them.
 
 ## Phase 5: Implement
 

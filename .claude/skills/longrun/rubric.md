@@ -6,12 +6,17 @@ Never give this file to the implementer.
 ## Significance
 
 A finding is significant when acting on it would change an interface or
-data shape, add or remove a deliverable, change the verification strategy,
-or invalidate an assumption the plan depends on.
+data shape, add or remove a deliverable, change what must be verified or
+what a passing verification proves, or invalidate an assumption the plan
+depends on.
 
 Explicitly not significant: asking the plan to state what the codebase
 already implies, specificity the implementer can decide, style, and
-genericity that is costly and not currently needed.
+genericity that is costly and not currently needed. Refinements to how
+the QA procedure executes are nits when their absence would surface as a
+loud failure during QA (the QA loop hits the failure and fixes the
+procedure then); a procedure gap is significant only when it would let a
+wrong result pass silently.
 
 ## Scope guard (deliverable-adding findings)
 
@@ -76,3 +81,7 @@ finding is a nit.
 - Dispute history is not evidence on the merits. But a finding whose
   substance is already recorded under contested calls with no new argument
   is triaged "re-raise", not accepted.
+- Tag every accepted finding `build` (changes what gets built: an
+  interface or shape, a deliverable, or what a passing verification
+  proves) or `procedure` (refines how verification executes). The tag
+  drives loop termination.

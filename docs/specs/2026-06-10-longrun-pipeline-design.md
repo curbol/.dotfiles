@@ -130,11 +130,14 @@ added falsifies the count.
 ### rubric.md (reviewer/adjudicator)
 
 - **Significance**: acting on the finding would change an interface or data
-  shape, add or remove a deliverable, change the verification strategy, or
-  invalidate an assumption the plan depends on. Explicitly not significant:
-  asking the plan to state what the codebase already implies, specificity
-  the implementer can decide, style, and genericity that is costly and not
-  currently needed.
+  shape, add or remove a deliverable, change what must be verified or what
+  a passing verification proves, or invalidate an assumption the plan
+  depends on. Explicitly not significant: asking the plan to state what the
+  codebase already implies, specificity the implementer can decide, style,
+  and genericity that is costly and not currently needed. QA-procedure
+  execution refinements are nits when their absence fails loudly at QA
+  time; they are significant only when their absence would let a wrong
+  result pass silently.
 - **Scope guard** (deliverable-adding findings): a finding that would add a
   deliverable is significant only if the brief requires it, the plan's
   existing deliverables entail it (a persisted-shape change entails its
@@ -273,8 +276,10 @@ Three roles, strictly separated:
 - **Adjudicator**: a fresh subagent each round. Receives `rubric.md`, the
   round's findings, the full `PLAN.md`, `BRIEF.md`, and the contested-calls
   section of `FOLLOWUPS.md`; does not receive the round number or any
-  conversation history. Verdict per finding: accept (optionally tagged
-  unverified), reject, or re-raise.
+  conversation history. Verdict per finding: accept, tagged `build`
+  (changes what gets built or what a passing verification proves) or
+  `procedure` (refines how verification executes), optionally also tagged
+  unverified; reject; or re-raise.
 
 **Each round:** reviewer reports → adjudicator triages → author applies
 accepted findings (confirming unverified tags first), files nits, and
@@ -286,10 +291,16 @@ toward the cap and can never count as the clean exit. A crashed reviewer
 must not look like a clean plan.
 
 **Termination:** the loop exits the first valid round in which the
-adjudicator accepts zero findings, where re-raise verdicts do not count as
-accepted. Hard cap at 15 rounds; if the cap fires while findings are still
-material, the report says so and flags it as a decomposition signal: a plan
-still churning at the cap is usually two plans.
+adjudicator accepts zero findings (re-raise verdicts do not count as
+accepted), or after 2 consecutive valid rounds in which every accepted
+finding is procedure-tagged: those findings are applied, then the loop
+exits. Rationale, from pilot run 1: deliverables converge rounds before
+procedure churn stops, and "change the verification strategy" as an open
+significance class let QA-procedure polish qualify as significant forever;
+the silent-vs-loud test plus the procedure exit closes that hole without a
+human override. Hard cap at 15 rounds; if build-tagged findings are still
+landing at the cap, the report says so and flags it as a decomposition
+signal: a plan still churning at the cap is usually two plans.
 
 **Disputes and holds:** governed by the feedback-discipline rule in
 `principles.md` (apply by default; dispute factually wrong findings with
@@ -307,9 +318,9 @@ Ordered for fast re-entry, structure in `report-template.md`:
 5. Open questions.
 6. Known issues and QA results.
 7. Suggested review order through the commits.
-8. Loop statistics (rounds per loop, findings accepted/rejected/re-raised,
-   unverified tags issued and refuted, caps hit, per-round subagent cost
-   where available) for trial documentation.
+8. Loop statistics (rounds per loop, findings accepted by build/procedure
+   tag, rejected, re-raised, unverified tags issued and refuted, caps hit,
+   per-round subagent cost where available) for trial documentation.
 
 ## Parallelism, recovery, drift
 
