@@ -72,6 +72,10 @@ the problem, use-cases, constraints, and the Q&A in `BRIEF.md`.
 Run while the human is still present. Confirm each item by exercising it,
 not by assuming:
 
+- Session model: quota burn rate varies several-fold by model (in pilots,
+  Fable 5 exhausted a usage window in about an hour; Opus-class stretches
+  it much further). If this session is on a fast-burning model, flag it
+  to the human now: switching is only possible before the leash starts.
 - Permission mode: confirm the session can edit files and run the build,
   test, and git commands this run needs without prompting (try one of
   each).
@@ -231,13 +235,6 @@ directory. End with a short visible summary pointing at the report.
 
 ## Drift and recovery
 
-A usage-limit stop kills the session outright: there is no seeing the
-quota, waiting it out, or restarting yourself. The human resumes the
-session after the window resets; recovery is the same as any
-interruption: re-ground in the run directory and continue. On resume,
-note the gap in the report's loop statistics so the timeline reads as a
-stall, not silent work.
-
 Mid-run environment failure (MCP auth expired, tilt died, the worktree
 branch touched from outside): attempt the documented remediation once
 (re-auth probe, service restart, re-run the relevant preflight step);
@@ -246,6 +243,8 @@ continue whatever remains possible. Never silently stall, and never sit on
 a permission prompt: if one fires mid-run, park the blocked work and move
 on.
 
-To resume an interrupted run, re-enter at the first phase whose output
-file is missing or visibly incomplete, grounding in the run directory.
-Flip-flop stickiness re-arms only from recorded contested-calls entries.
+To resume an interrupted run (including after a usage-limit stop),
+re-enter at the first phase whose output file is missing or visibly
+incomplete, grounding in the run directory; note the stall gap in the
+report's loop statistics. Flip-flop stickiness re-arms only from
+recorded contested-calls entries.

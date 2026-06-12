@@ -363,10 +363,12 @@ stamina, is the real unit of leash: a run that exhausts it stops with a
 usage error, cannot see the quota or wait it out, and sits dead until
 the human resumes it after reset. Run-directory grounding makes resume
 cheap (pilot 2 was resumed twice in one night and continued correctly;
-roughly 2 hours of active work across 10 wall-clock hours). Two
-consequences: token-efficiency improvements are leash-length
-improvements, and N parallel runs slice one quota N ways, stalling
-together.
+roughly 2 hours of active work across 10 wall-clock hours). Model choice
+is the dominant burn-rate factor: pilot 2 ran on Fable 5 and exhausted a
+window in about an hour; Opus 4.8 stretches the same window much
+further. Two consequences: token-efficiency improvements are
+leash-length improvements, and N parallel runs slice one quota N ways,
+stalling together.
 
 A crashed or interrupted run resumes by re-entering the pipeline against the
 existing run directory: every phase grounds itself in the files, not in
