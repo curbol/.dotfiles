@@ -159,6 +159,11 @@ added falsifies the count.
   dimensions: requirements coverage against the brief, feasibility against
   the actual codebase, simplicity/over-engineering, failure modes and edge
   cases.
+- **Code review** (diff reviews, phases 8 and 10): significant when
+  merging without the fix would ship incorrect behavior, a security
+  problem, a broken invariant or contract, or a violation the repo's
+  conventions block on; style and alternative-approach preferences are
+  nits.
 - **Reviewer evidence**: claims about how existing code behaves (behavior,
   signatures, paths) must come from files read this round, cited file:line.
   Claims that something does not exist must cite the search performed
@@ -182,6 +187,15 @@ added falsifies the count.
 ## Pipeline
 
 Phases 1-2 are interactive; everything after is autonomous.
+
+Phases are artifact-keyed guidelines, not a fixed march. On entry the run
+inventories what already exists: human-provided artifacts seed the run
+files (a spec seeds `BRIEF.md`, a plan seeds `PLAN.md`, an existing branch
+enters at the completeness audit), a plan the human calls approved is not
+re-reviewed, phases whose artifacts already exist get brief validation
+instead of a redo, and irrelevant phases are skipped and noted in the
+report. Judgment governs which phases run and where to enter; it never
+governs how loops exit.
 
 1. **Clarify.** Take the problem statement and use-cases. Ask clarifying
    questions immediately, scaled to how ambiguous the prompt is. Write
@@ -226,7 +240,22 @@ Phases 1-2 are interactive; everything after is autonomous.
    assumptions in the report. Exit when clean, after 2 consecutive rounds
    with no progress, or at 10 rounds. Unresolved issues become known-issues
    entries.
-8. **Report.** Synthesize `REPORT.md` from the run directory.
+8. **Self-review loop.** Fresh reviewer on the actual branch diff against
+   the plan, judged by the rubric's code-review significance test;
+   adjudicated as in phase 4 (no build/procedure tag: every accept is a
+   fix to make now). Max 3 rounds; exit on a clean round; leftovers at
+   the cap become known-issues entries.
+9. **Pull requests.** Open the PRs the plan defines, following repo
+   conventions and tooling. PRs are opened, never merged; merging is the
+   human's call.
+10. **Automated-review window.** Wait for the repo's automated reviewers
+    (default 30 minutes, tuned to known bot latency), then up to 3
+    cycles: fetch feedback, triage with review-loop discipline (fix what
+    is right and push; reply with recorded evidence to what is wrong;
+    never silently ignore, never capitulate), failing checks per QA
+    discipline. A cycle with no new feedback and nothing significant
+    outstanding ends the window; unresolved threads are parked.
+11. **Report.** Synthesize `REPORT.md` from the run directory.
 
 ## Run directory
 
@@ -311,16 +340,20 @@ recorded evidence; hold only on A→B→A reversals that bring nothing new).
 Ordered for fast re-entry, structure in `report-template.md`:
 
 1. TL;DR with honest status: complete, partial, or blocked.
-2. Load-bearing assumptions and staged apply-steps, first because they gate
+2. Pull requests: links, per-PR checks and automated-review thread status,
+   what remains for the human (review, merge order).
+3. Load-bearing assumptions and staged apply-steps, because they gate
    everything else.
-3. Coverage table from the completeness loop, including not-in-plan rows.
-4. Notable design choices and contested calls.
-5. Open questions.
-6. Known issues and QA results.
-7. Suggested review order through the commits.
-8. Loop statistics (rounds per loop, findings accepted by build/procedure
-   tag, rejected, re-raised, unverified tags issued and refuted, caps hit,
-   per-round subagent cost where available) for trial documentation.
+4. Coverage table from the completeness loop, including not-in-plan rows.
+5. Notable design choices and contested calls.
+6. Open questions.
+7. Known issues and QA results.
+8. Suggested review order through the commits.
+9. Loop statistics (rounds per loop including self-review and
+   automated-feedback cycles, findings accepted by build/procedure tag,
+   rejected, re-raised, unverified tags issued and refuted, caps hit,
+   phases skipped or entered mid-stream, per-round subagent cost where
+   available) for trial documentation.
 
 ## Parallelism, recovery, drift
 
@@ -352,6 +385,8 @@ Settled empirically over pilot runs, using report loop statistics:
   one-clean-round exit.
 - The re-raise verdict: whether contested-calls visibility keeps contested
   plans terminable without contaminating adjudication.
+- The automated-review window: the 30-minute default wait, the 3-cycle
+  cap, and whether bot findings deserve their own significance tier.
 - Whether the report alone makes re-entry fast enough, or an interactive
   debrief mode earns its place.
 

@@ -8,6 +8,11 @@ link to FOLLOWUPS.md entries rather than restating them.
 Honest status: complete, partial, or blocked. What was attempted, what
 shipped, in a few sentences.
 
+## Pull requests
+
+Links, one line each: checks status, automated-review threads addressed
+vs. open, and what remains for the human (review, merge order).
+
 ## Load-bearing assumptions
 
 The assumptions that gate everything else, including staged production
@@ -41,6 +46,8 @@ line each on why.
 
 ## Loop statistics
 
-Rounds per loop; findings accepted/rejected/re-raised per round;
-unverified tags issued and how many were refuted; invalid rounds; caps
-hit; per-round subagent cost where available.
+Rounds per loop (plan review, completeness, QA, self-review,
+automated-feedback cycles); findings accepted (by build/procedure tag),
+rejected, re-raised per round; unverified tags issued and how many were
+refuted; invalid rounds; caps hit; phases skipped or entered mid-stream;
+per-round subagent cost where available.

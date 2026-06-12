@@ -63,6 +63,15 @@ finding is a nit.
   its deferral-cost answer. At most 10 findings, ordered by severity;
   state explicitly when more exist beyond the cap.
 
+## Code review (diff reviews, after implementation)
+
+For reviews of the actual diff (self-review and automated-feedback
+triage): a finding is significant when merging without it would ship
+incorrect behavior, a security problem, a broken invariant or contract,
+or a violation the repo's conventions block on. Style and
+alternative-approach preferences are nits. The evidence rules above apply
+unchanged.
+
 ## Adjudicator rules
 
 - Judge significance on plan impact, never on citation hygiene.

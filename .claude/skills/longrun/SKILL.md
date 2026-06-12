@@ -31,6 +31,26 @@ question, also emit it as a visible message in the session, and send a
 push notification for load-bearing entries (expensive to reverse) where
 the harness supports it.
 
+## Entry and relevance
+
+The phases below are keyed to artifacts, not to a fixed march. On entry,
+inventory what already exists and start in the right place:
+
+- Artifacts the human hands you seed the run files: a problem doc or spec
+  seeds `BRIEF.md`; a design or implementation plan seeds `PLAN.md`; an
+  existing branch with commits means entering at the completeness audit
+  to establish where things stand before continuing.
+- A plan the human calls approved is not re-reviewed; an imported draft
+  enters the review loop as-is.
+- A phase whose artifact already exists and is adequate gets a brief
+  validation, not a redo. A phase with nothing to contribute to this
+  brief is skipped and noted in the report.
+- The prompt may direct entry explicitly ("implement this approved plan"
+  seeds `BRIEF.md` and `PLAN.md` and starts at Phase 5).
+
+Judgment governs which phases run and where to enter. It never governs
+how loops exit: loop exits stay mechanical.
+
 ## Setup
 
 1. Identify the target repo. If ambiguous from the prompt, ask now.
@@ -164,7 +184,47 @@ issues with the evidence; do not retry it. Exit when clean, after 2
 consecutive rounds with no progress, or at 10 rounds. Unresolved issues
 become known-issues entries.
 
-## Phase 8: Report
+## Phase 8: Self-review loop
+
+Review the actual diff before opening PRs. Loop, max 3 rounds:
+
+1. Spawn a fresh REVIEWER subagent: the absolute path of this skill's
+   `rubric.md` (its code-review section governs), the worktree path,
+   instructions to read `PLAN.md` and run
+   `git diff <default-branch>...HEAD`, and the Phase 4 output contract.
+2. Validate and adjudicate exactly as in Phase 4, except no
+   build/procedure tag: every accepted finding is a fix to make now.
+3. Fix accepted findings, file nits, commit.
+4. Exit on a clean round or at the cap; findings unresolved at the cap
+   become known-issues entries.
+
+## Phase 9: Pull requests
+
+Open the PRs the plan defines, following the repo's conventions and
+tooling (at Gladly: the /commit-and-pr skill, the What/Why/Testing/
+Release Notes template, labels, story links; update linked stories where
+the repo's practice expects it). PRs are opened, never merged: merging is
+the human's call. Record PR links in `FOLLOWUPS.md`.
+
+## Phase 10: Automated-review window
+
+Repos with automated reviewers produce feedback minutes after a PR opens.
+Wait for it (default 30 minutes, adjusted to the repo's known bot
+latency) using the harness's scheduler, a background timer, or a slow
+polling loop. Then, for up to 3 cycles:
+
+1. Fetch new PR feedback: review comments and failing checks.
+2. Triage with the same discipline as review-loop findings: investigate
+   before acting. Fix what is right and push. For findings that are
+   factually wrong, record the evidence under contested calls and reply
+   on the thread with it; never silently ignore and never capitulate to
+   a wrong finding. Style preferences are nits unless repo convention
+   requires them. Failing checks follow the QA discipline in
+   `principles.md`.
+3. A cycle with no new feedback and nothing significant outstanding ends
+   the window. Unresolved threads are parked in `FOLLOWUPS.md`.
+
+## Phase 11: Report
 
 Write `REPORT.md` following `report-template.md` from this skill's base
 directory. End with a short visible summary pointing at the report.
