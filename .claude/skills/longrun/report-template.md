@@ -50,4 +50,5 @@ Rounds per loop (plan review, completeness, QA, self-review,
 automated-feedback cycles); findings accepted (by build/procedure tag),
 rejected, re-raised per round; unverified tags issued and how many were
 refuted; invalid rounds; caps hit; phases skipped or entered mid-stream;
-per-round subagent cost where available.
+usage-limit stops (when, gap until resumed); per-round subagent cost
+where available.

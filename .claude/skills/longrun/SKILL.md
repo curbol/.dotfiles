@@ -231,6 +231,13 @@ directory. End with a short visible summary pointing at the report.
 
 ## Drift and recovery
 
+A usage-limit stop kills the session outright: there is no seeing the
+quota, waiting it out, or restarting yourself. The human resumes the
+session after the window resets; recovery is the same as any
+interruption: re-ground in the run directory and continue. On resume,
+note the gap in the report's loop statistics so the timeline reads as a
+stall, not silent work.
+
 Mid-run environment failure (MCP auth expired, tilt died, the worktree
 branch touched from outside): attempt the documented remediation once
 (re-auth probe, service restart, re-run the relevant preflight step);

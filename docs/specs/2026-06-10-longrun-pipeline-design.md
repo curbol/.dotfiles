@@ -357,7 +357,16 @@ Ordered for fast re-entry, structure in `report-template.md`:
 
 ## Parallelism, recovery, drift
 
-One run per session per worktree; parallel runs are just parallel sessions.
+One run per session per worktree; parallel runs are just parallel
+sessions. They share one usage quota, and the quota window, not session
+stamina, is the real unit of leash: a run that exhausts it stops with a
+usage error, cannot see the quota or wait it out, and sits dead until
+the human resumes it after reset. Run-directory grounding makes resume
+cheap (pilot 2 was resumed twice in one night and continued correctly;
+roughly 2 hours of active work across 10 wall-clock hours). Two
+consequences: token-efficiency improvements are leash-length
+improvements, and N parallel runs slice one quota N ways, stalling
+together.
 
 A crashed or interrupted run resumes by re-entering the pipeline against the
 existing run directory: every phase grounds itself in the files, not in
@@ -387,6 +396,9 @@ Settled empirically over pilot runs, using report loop statistics:
   plans terminable without contaminating adjudication.
 - The automated-review window: the 30-minute default wait, the 3-cycle
   cap, and whether bot findings deserve their own significance tier.
+- External auto-resume: a scheduler outside the session that restarts a
+  usage-limit-stopped run after the window resets, so overnight stalls
+  don't wait for morning.
 - Whether the report alone makes re-entry fast enough, or an interactive
   debrief mode earns its place.
 
