@@ -90,7 +90,7 @@ unchanged.
 - Dispute history is not evidence on the merits. But a finding whose
   substance is already recorded under contested calls with no new argument
   is triaged "re-raise", not accepted.
-- Tag every accepted finding `build` (changes what gets built: an
-  interface or shape, a deliverable, or what a passing verification
-  proves) or `procedure` (refines how verification executes). The tag
-  drives loop termination.
+- In plan reviews, tag every accepted finding `build` (changes what gets
+  built: an interface or shape, a deliverable, or what a passing
+  verification proves) or `procedure` (refines how verification executes);
+  the tag drives loop termination. Diff reviews use no such tag.

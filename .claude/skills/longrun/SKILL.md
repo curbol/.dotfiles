@@ -1,4 +1,5 @@
 ---
+name: longrun
 description: Run a full problem-to-verified-implementation pipeline autonomously for hours (long-leash run). Use when the user invokes /longrun with a problem statement, or asks for a long-leash or overnight autonomous run.
 ---
 
@@ -15,21 +16,23 @@ two files encode opposing biases and are role-scoped on purpose.
 
 All run state lives in `.longrun/` at the worktree root. It is local-only
 and never committed: plans and reports are session artifacts that are
-stale by PR time; the repo gets code, the human reads `REPORT.md` from the
-worktree. Ground every phase in these files, not conversation memory; a
-crashed or interrupted run re-enters by reading them.
+stale by PR time; the repo gets code, the human reads `REPORT.md` and acts
+on `DECISIONS.md`, both from the worktree. Ground every phase in these
+files, not conversation memory; a crashed or interrupted run re-enters by
+reading them.
 
     .longrun/
     ├── BRIEF.md       problem, use-cases, clarifying Q&A
     ├── CONTEXT.md     exploration findings
     ├── PLAN.md        the living plan
-    ├── FOLLOWUPS.md   open questions • contested calls • assumptions and decisions • nits
+    ├── DECISIONS.md   your inbox: open questions • to apply • push/PR/merge
+    ├── LEDGER.md      agent notes: settled calls • contested calls • nits • known issues • loop log
     └── REPORT.md      final synthesis
 
-FOLLOWUPS routing lives in `principles.md`. When you park an open
-question, also emit it as a visible message in the session, and send a
-push notification for load-bearing entries (expensive to reverse) where
-the harness supports it.
+Parking routing lives in `principles.md`. When you park something that
+needs the human (DECISIONS.md), also emit it as a visible message in the
+session, and send a push notification for load-bearing entries (expensive
+to reverse) where the harness supports it.
 
 ## Entry and relevance
 
@@ -48,8 +51,11 @@ inventory what already exists and start in the right place:
 - The prompt may direct entry explicitly ("implement this approved plan"
   seeds `BRIEF.md` and `PLAN.md` and starts at Phase 5).
 
-Judgment governs which phases run and where to enter. It never governs
-how loops exit: loop exits stay mechanical.
+Judgment governs which phases run and where to enter, with one exception:
+Preflight (Phase 2) always runs before autonomy begins, even on a
+mid-stream entry, since it gates leash-readiness and has no artifact to
+inventory. Judgment never governs how loops exit: loop exits stay
+mechanical.
 
 ## Setup
 
@@ -58,8 +64,12 @@ how loops exit: loop exits stay mechanical.
    `git worktree add ../<repo>-longrun-<slug> -b curbol/longrun-<slug>`
    (when a Shortcut story exists, use `curbol/sc-XXXXXX/longrun-<slug>`).
    Work exclusively in the worktree.
-3. Create `.longrun/` and add `.longrun/` to `.git/info/exclude` so it
-   can never be committed.
+3. Create `.longrun/`, then exclude it so it can never be committed. In a
+   worktree `.git` is a file, not a directory, so resolve the exclude path
+   rather than hardcoding it, and append idempotently:
+
+       f="$(git rev-parse --git-dir)/info/exclude"
+       grep -qxF '.longrun/' "$f" || echo '.longrun/' >> "$f"
 
 ## Phase 1: Clarify
 
@@ -72,10 +82,6 @@ the problem, use-cases, constraints, and the Q&A in `BRIEF.md`.
 Run while the human is still present. Confirm each item by exercising it,
 not by assuming:
 
-- Session model: quota burn rate varies several-fold by model (in pilots,
-  Fable 5 exhausted a usage window in about an hour; Opus-class stretches
-  it much further). If this session is on a fast-burning model, flag it
-  to the human now: switching is only possible before the leash starts.
 - Permission mode: confirm the session can edit files and run the build,
   test, and git commands this run needs without prompting (try one of
   each).
@@ -83,8 +89,8 @@ not by assuming:
   web), make one cheap read call now.
 - QA dependencies: if verification will need tilt, a dev server, or a
   database, confirm it is up now.
-- Announce going autonomous: tell the human the leash is on and questions
-  will be parked in `FOLLOWUPS.md` from here.
+- Announce going autonomous: tell the human the leash is on and anything
+  needing them will be parked in `DECISIONS.md` from here.
 
 If any item fails, fix it with the human now; never start the autonomous
 phases on a known-broken leash.
@@ -128,15 +134,15 @@ Then loop, round r = 1, 2, ...:
 3. Spawn a fresh ADJUDICATOR subagent. Its prompt contains: the absolute
    paths of this skill's `rubric.md` and the worktree's `PLAN.md` and
    `BRIEF.md` (instruct it to read all three first), the round's findings
-   pasted in full, and the "Contested calls" section of `FOLLOWUPS.md`
+   pasted in full, and the "Contested calls" section of `LEDGER.md`
    pasted (never the whole file). No round number, no conversation
-   history, no other FOLLOWUPS sections. Output contract, per finding:
+   history, no other LEDGER sections. Output contract, per finding:
    `accept <build|procedure>` (optionally adding `unverified: author must
    confirm`), `reject: <why>`, or `re-raise: <the contested-calls entry it
    duplicates>`.
 4. Apply per the feedback discipline in `principles.md`: accepted
    findings are applied (confirm unverified tags against the codebase
-   first), nits filed under FOLLOWUPS Nits, `PLAN.md` updated.
+   first), nits filed under LEDGER Nits, `PLAN.md` updated.
 5. Exit when a valid round accepts zero findings (re-raise verdicts do
    not count as accepted), or after 2 consecutive valid rounds in which
    every accepted finding is procedure-tagged: apply them, then exit.
@@ -146,7 +152,8 @@ Then loop, round r = 1, 2, ...:
    calls (it is a decomposition signal) and proceed.
 
 Track per-round counts (accepted by tag, rejected, re-raised, unverified
-tags, invalid rounds) as you go; the report needs them.
+tags, invalid rounds) in LEDGER's loop log as you go; the report needs
+them.
 
 ## Phase 5: Implement
 
@@ -208,7 +215,8 @@ Open the PRs the plan defines, following the repo's conventions and
 tooling (at Gladly: the /commit-and-pr skill, the What/Why/Testing/
 Release Notes template, labels, story links; update linked stories where
 the repo's practice expects it). PRs are opened, never merged: merging is
-the human's call. Record PR links in `FOLLOWUPS.md`.
+the human's call. Record PR links under "Push / PR / merge" in
+`DECISIONS.md`.
 
 ## Phase 10: Automated-review window
 
@@ -218,15 +226,15 @@ latency) using the harness's scheduler, a background timer, or a slow
 polling loop. Then, for up to 3 cycles:
 
 1. Fetch new PR feedback: review comments and failing checks.
-2. Triage with the same discipline as review-loop findings: investigate
-   before acting. Fix what is right and push. For findings that are
-   factually wrong, record the evidence under contested calls and reply
-   on the thread with it; never silently ignore and never capitulate to
-   a wrong finding. Style preferences are nits unless repo convention
+2. Triage with the same investigate-before-acting discipline as the
+   review loops: fix what is right and push. Findings you believe are
+   wrong take the dispute path in `principles.md`, which includes replying
+   on the thread. Style preferences are nits unless repo convention
    requires them. Failing checks follow the QA discipline in
    `principles.md`.
 3. A cycle with no new feedback and nothing significant outstanding ends
-   the window. Unresolved threads are parked in `FOLLOWUPS.md`.
+   the window. Unresolved threads are parked under "Open questions" in
+   `DECISIONS.md`.
 
 ## Phase 11: Report
 

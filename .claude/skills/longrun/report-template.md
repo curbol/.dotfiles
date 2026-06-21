@@ -1,7 +1,7 @@
 # Longrun Report Template
 
 REPORT.md structure, ordered for fast re-entry. Keep each section tight;
-link to FOLLOWUPS.md entries rather than restating them.
+link to DECISIONS.md and LEDGER.md entries rather than restating them.
 
 ## TL;DR
 
@@ -32,7 +32,7 @@ positions considered.
 
 ## Open questions
 
-Parked questions needing the human, from FOLLOWUPS.md.
+Parked questions needing the human, from DECISIONS.md.
 
 ## Known issues and QA results
 
