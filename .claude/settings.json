@@ -61,10 +61,11 @@
       }
     }
   },
+  "effortLevel": "xhigh",
   "autoDreamEnabled": true,
   "teammateMode": "auto",
   "remoteControlAtStartup": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "effortLevel": "xhigh"
+  "tui": "fullscreen"
 }
