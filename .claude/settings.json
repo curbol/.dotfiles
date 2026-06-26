@@ -41,15 +41,15 @@
   },
   "enabledPlugins": {
     "feature-dev@claude-plugins-official": true,
-    "gopls-lsp@claude-plugins-official": true,
+    "gopls-lsp@claude-plugins-official": false,
     "superpowers@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": false,
     "slack@claude-plugins-official": true,
     "coderabbit@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
     "work@gladly-claude-tools": true,
     "local-dev@gladly-claude-tools": true,
-    "analyze-tests@gladly-claude-tools": true,
+    "analyze-tests@gladly-claude-tools": false,
     "address-pr-comments@gladly-claude-tools": true,
     "test-deployed@gladly-claude-tools": true
   },
@@ -62,10 +62,23 @@
     }
   },
   "effortLevel": "xhigh",
+  "tui": "fullscreen",
   "autoDreamEnabled": true,
   "teammateMode": "auto",
   "remoteControlAtStartup": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "tui": "fullscreen"
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rtk hook claude"
+          }
+        ]
+      }
+    ]
+  }
 }
