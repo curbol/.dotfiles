@@ -35,6 +35,19 @@
       "/home/curbol/code"
     ]
   },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rtk hook claude"
+          }
+        ]
+      }
+    ]
+  },
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline-command.sh"
@@ -51,7 +64,8 @@
     "local-dev@gladly-claude-tools": true,
     "analyze-tests@gladly-claude-tools": false,
     "address-pr-comments@gladly-claude-tools": true,
-    "test-deployed@gladly-claude-tools": true
+    "test-deployed@gladly-claude-tools": true,
+    "playwright@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "gladly-claude-tools": {
@@ -67,18 +81,5 @@
   "teammateMode": "auto",
   "remoteControlAtStartup": true,
   "agentPushNotifEnabled": true,
-  "skipAutoPermissionPrompt": true,
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "rtk hook claude"
-          }
-        ]
-      }
-    ]
-  }
+  "skipAutoPermissionPrompt": true
 }
