@@ -65,14 +65,16 @@
     "analyze-tests@gladly-claude-tools": false,
     "address-pr-comments@gladly-claude-tools": true,
     "test-deployed@gladly-claude-tools": true,
-    "playwright@claude-plugins-official": true
+    "playwright@claude-plugins-official": true,
+    "longrun@gladly-claude-tools": true
   },
   "extraKnownMarketplaces": {
     "gladly-claude-tools": {
       "source": {
         "source": "github",
         "repo": "sagansystems/gladly-claude-tools"
-      }
+      },
+      "autoUpdate": true
     }
   },
   "effortLevel": "xhigh",
