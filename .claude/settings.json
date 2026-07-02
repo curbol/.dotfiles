@@ -35,7 +35,6 @@
       "/home/curbol/code"
     ]
   },
-  "model": "claude-fable-5[1m]",
   "hooks": {
     "PreToolUse": [
       {
@@ -67,7 +66,7 @@
     "address-pr-comments@gladly-claude-tools": true,
     "test-deployed@gladly-claude-tools": true,
     "playwright@claude-plugins-official": true,
-    "longrun@gladly-claude-tools": true
+    "longrun@gladly-claude-tools": false
   },
   "extraKnownMarketplaces": {
     "gladly-claude-tools": {
@@ -78,7 +77,7 @@
       "autoUpdate": true
     }
   },
-  "effortLevel": "medium",
+  "effortLevel": "xhigh",
   "tui": "fullscreen",
   "autoDreamEnabled": true,
   "teammateMode": "auto",
