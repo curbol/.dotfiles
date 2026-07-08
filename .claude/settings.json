@@ -66,7 +66,8 @@
     "address-pr-comments@gladly-claude-tools": true,
     "test-deployed@gladly-claude-tools": true,
     "playwright@claude-plugins-official": true,
-    "longrun@gladly-claude-tools": false
+    "longrun@gladly-claude-tools": false,
+    "pr-screenshots@gladly-claude-tools": true
   },
   "extraKnownMarketplaces": {
     "gladly-claude-tools": {
@@ -83,5 +84,6 @@
   "teammateMode": "auto",
   "remoteControlAtStartup": true,
   "agentPushNotifEnabled": true,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "skipWorkflowUsageWarning": true
 }
