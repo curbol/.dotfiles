@@ -71,6 +71,17 @@ or a violation the repo's conventions block on. Style and
 alternative-approach preferences are nits. The evidence rules above apply
 unchanged.
 
+Comments and documentation the diff adds or changes get a cold-reader
+test: each line must earn its place for someone reading only this file,
+who never saw the run, the plan, the review loop, the story, or the code's
+prior state. A comment or doc line is significant when it says what the
+code used to do or why it changed, names a task, ticket, or rejected
+alternative, justifies an absence, or only restates what the code and its
+identifiers already make plain. This is where the run's own context leaks,
+and it reads as noise to the human reading the diff, so these are fixed,
+not filed. The fix is deletion or a trim to what the file's reader needs,
+never a rewrite of working code.
+
 ## Adjudicator rules
 
 - Judge significance on plan impact, never on citation hygiene.
