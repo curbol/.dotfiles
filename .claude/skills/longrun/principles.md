@@ -71,6 +71,20 @@ young codebases have provisional patterns. Never silently deviate and
 never silently force a bad fit: make the most-correct call and record it
 per the routing below.
 
+## Comments and documentation
+
+Default to no comment. Write one only for what a reader of this file
+cannot recover from its code, identifiers, and structure: a hidden
+invariant, a subtle fix, a workaround, a genuine surprise. Comments and
+docs describe the code as it now stands, for someone who never saw this
+run. Never write what the code used to do, why it changed, what task or
+story motivated it, what alternative you rejected, or why something is
+absent; that belongs in the commit and the PR. This is the run's
+characteristic leak: you are holding the plan, the review history, and the
+story, and it bleeds into comments the human then has to strip.
+Self-review treats these leaks as significant, so writing clean the first
+time saves a round.
+
 ## Production boundary
 
 Operations that touch production (infrastructure, deployed config, live
