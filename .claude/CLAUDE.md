@@ -89,6 +89,7 @@ Lead with the dimension that drives the decision; don't recite all four.
 - Minimal scope: implement the smallest viable solution
 - Prefer small, focused changes over large refactors
 - Always check locally first. Prefer checked-out repos in `~/code/` over web/remote sources.
+- **Check what the repo already exposes before hand-rolling a command.** Before building, testing, linting, formatting, or running anything, look for existing entry points: `Makefile` targets, `package.json` scripts, `justfile`/`Taskfile.yml`, `pyproject.toml`/`tox.ini`, cargo aliases, `scripts/` and `bin/` dirs, `.github/workflows/`, and CONTRIBUTING/README docs. Prefer the project's own target over reconstructing the invocation by hand; it encodes flags and setup you'll otherwise miss.
 - Don't ask me to choose execution strategies (which agent type, parallel vs sequential, worktree vs not). Never present "execution options" after writing a plan. These are implementation details; use your judgment and just do the work.
 - **Use your tools.** When asked a question you can answer by running a command, reading a file, or searching, do it. Don't suggest I look it up or run it myself.
 
