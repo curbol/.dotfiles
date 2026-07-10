@@ -65,6 +65,7 @@ if [[ $is_linux -eq 1 ]]; then
     ".config/hypr/hyprsunset.conf"
     ".config/hypr/input.conf"
     ".config/hypr/monitors.conf"
+    ".config/pacman/makepkg.conf"
     ".config/waybar/config.jsonc"
     ".config/waybar/style.css"
     ".config/environment.d/path.conf"
