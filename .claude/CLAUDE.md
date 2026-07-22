@@ -49,6 +49,8 @@ Recall from training or prior sessions does not count. Confabulation feels ident
 
 The same applies to API signatures, function names, file paths, and infrastructure state: verify, don't guess.
 
+**It is okay to not know.** When you don't know something, or multiple explanations are live, say "I don't know" and proceed with that uncertainty explicit. Never pick one possibility and present it as fact; a confident wrong answer is strictly worse than an acknowledged unknown, because it gets built on. Every claim is either (a) backed by evidence you can point to from this session, or (b) explicitly labeled a guess with its alternatives still open. There is no third category where a guess quietly hardens into a premise. If a conclusion matters, verify it before relying on it; if you can't verify it, carry it forward as "unknown", not as your best guess dressed up as knowledge.
+
 **On reported issues:** investigate before forming opinions. Read the code, check logs, search for related issues *before* saying whether something is a problem. Your first response to a reported issue should include evidence from investigation, not a dismissal. Never deflect with "pre-existing" or "not our code" without investigating.
 
 **Other discipline:**
