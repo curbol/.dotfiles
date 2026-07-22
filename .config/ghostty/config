@@ -44,5 +44,7 @@ keybind = super+ctrl+shift+alt+arrow_up=resize_split:up,100
 keybind = super+ctrl+shift+alt+arrow_left=resize_split:left,100
 keybind = super+ctrl+shift+alt+arrow_right=resize_split:right,100
 
-# Shift+Enter fix for Claude Code inside tmux
-keybind = shift+enter=text:\x1b\r
+# Send Shift+Enter as CSI-u so TUIs can distinguish it from Enter.
+keybind = shift+enter=csi:13;2u
+# Legacy encoding sends Alt+Shift+Enter the same as Alt+Enter; send CSI-u so tmux can match M-S-Enter.
+keybind = alt+shift+enter=csi:13;4u
