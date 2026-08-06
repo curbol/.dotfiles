@@ -14,6 +14,61 @@ generic at low cost, do it, with one ratchet guard: the reviewed plan
 supersedes this default. Re-introducing scope or genericity that plan
 review removed is a plan change, not an implementation detail.
 
+## The harness is not yours to manage
+
+Context, compaction, cost, and account limits are the human's concern.
+They are never an input to a decision about what work to do: not a reason
+to end a loop before its exit condition, skip a round, inline a subagent's
+job, drop a phase, or narrow a deliverable. Auto-compaction exists,
+`.longrun/` is precisely what survives it, and the human has mitigations
+you cannot see. Budgeting your remaining context across the phases ahead
+is not thrift, it is the run quietly deciding which of its own guarantees
+to void. Run the pipeline as written and let the harness or the human
+interrupt you.
+
+Interruption is the cheap outcome, because an interrupted run is
+recoverable and a finished-looking one is not. State on disk lets the next
+session re-enter exactly where this one stopped; a pipeline that reached
+Phase 11 with a phase skipped or self-served looks complete, reads as
+verified, and gets trusted. Stopping mid-phase with `STATE.md` current
+always beats reaching the end with a phase unrun.
+
+## Role scoping
+
+Reviewer, adjudicator, and auditor are independent roles, and that
+independence is the only thing their verdicts are made of. You are the
+author, and you can never fill one of them: not when the subagent dies,
+not when the round looks cheap, not when you are confident you know what
+it would have said. A self-served review is worth less than no review,
+because it produces the same artifacts and the same loop-statistics line
+as a real one, so it spends the human's trust instead of earning it.
+
+When a role subagent cannot run (spend limit, API error, dispatch
+unavailable), retry it once. If it still cannot run, that loop is blocked:
+park it under DECISIONS.md "Open questions" with the blocking reason and
+what consequently went unreviewed, notify, and leave the loop where it
+stands. Work independent of the blocked loop continues; work downstream of
+it does not proceed as though the loop ran. The report records the phase
+as blocked, never as clean.
+
+## Banned rationalizations
+
+Each of these is a rationalization wearing the clothes of a judgment call.
+Recognizing one is the signal to stop and do the thing you were about to
+skip:
+
+- "Context is filling, I'll stop this loop early."
+- "The loop was narrowing anyway, one more round is waste." Narrowing is
+  not clean. Only the loop's own exit condition ends the loop, and a round
+  that produced real findings is evidence the loop is still working.
+- "Spawning a subagent for this is overkill, I'll just review it myself."
+- "The subagent died, I'll do its job myself."
+- "I'm resuming, so I'll just finish the remaining work directly."
+- "Simple now, better later." (see Most correct, always)
+
+Deviating from a rule and hiding it are separate failures. If you deviate
+anyway, route it per Parking routing below, at the moment you do it.
+
 ## Feedback discipline (plan-review loop only)
 
 Completeness gap findings and QA failures are never held on
@@ -108,6 +163,13 @@ existing entry rather than appending a near-duplicate.
   visible session message and a push notification.
 - Staged production changes (see Production boundary) → DECISIONS.md "To
   apply", with the apply steps and the post-apply check.
+- Deviating from a mechanical rule (a loop's exit condition, role scoping,
+  the production boundary) → DECISIONS.md "Open questions" at the moment
+  you deviate, naming what you skipped and what is therefore unverified,
+  plus a visible session message and a push notification. Cost to reverse
+  does not apply here: an unreviewed plan and an unrun audit leave no trace
+  in the diff, so the human learns about them only because you said so.
+  LEDGER.md is the wrong file and the final report is the wrong time.
 - Architectural choices, new patterns, and new files inside the worktree
   are normal autonomous work: record material ones under "Settled calls";
   they reach DECISIONS.md only by independently failing the

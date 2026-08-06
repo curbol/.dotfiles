@@ -1,6 +1,6 @@
 ---
 name: longrun
-description: Run a full problem-to-verified-implementation pipeline autonomously for hours (long-leash run). Use when the user invokes /longrun with a problem statement, or asks for a long-leash or overnight autonomous run.
+description: Run a full problem-to-verified-implementation pipeline autonomously for hours (long-leash run). Use when the user invokes /longrun with a problem statement, asks for a long-leash or overnight autonomous run, or asks to continue, resume, or pick up a longrun that stopped.
 ---
 
 # Longrun Pipeline
@@ -22,12 +22,23 @@ files, not conversation memory; a crashed or interrupted run re-enters by
 reading them.
 
     .longrun/
+    ├── STATE.md       re-entry pointer: phase • loop and round • checklist position
     ├── BRIEF.md       problem, use-cases, clarifying Q&A
     ├── CONTEXT.md     exploration findings
     ├── PLAN.md        the living plan
     ├── DECISIONS.md   your inbox: open questions • to apply • push/PR/merge
     ├── LEDGER.md      agent notes: settled calls • contested calls • nits • known issues • loop log
     └── REPORT.md      final synthesis
+
+`STATE.md` is the run's re-entry pointer and the only file whose
+freshness is load-bearing. Rewrite it in place (it is replaced, never
+appended to) at every phase boundary, every loop round, and every
+checklist item finished. Three lines suffice: current phase, the loop and
+round if inside one, and checklist position. Phases 5-10 all run with the
+same artifacts present, so nothing else on disk distinguishes them; a
+resuming session and the session-start hook both read this file first.
+`REPORT.md` existing is what marks a run finished, so it is written only
+in Phase 11.
 
 Parking routing lives in `principles.md`. When you park something that
 needs the human (DECISIONS.md), also emit it as a visible message in the
@@ -60,6 +71,14 @@ reaches its clean or no-progress exit well before the cap, and a loop
 that instead terminates by hitting the cap records that in the report's
 loop statistics.
 
+Nothing about the harness ends a loop early: not context, not compaction,
+not cost, not how converged the last round looked (see `principles.md`,
+"The harness is not yours to manage"). A loop whose role subagent cannot
+run is blocked, never self-served: you are the author and can never fill a
+reviewer, adjudicator, or auditor role (see `principles.md`, "Role
+scoping"). Deviating from either rule goes to `DECISIONS.md` the moment it
+happens, not to the report.
+
 ## Setup
 
 1. Identify the target repo. If ambiguous from the prompt, ask now.
@@ -75,6 +94,9 @@ loop statistics.
 
        f="$(git rev-parse --git-dir)/info/exclude"
        grep -qxF '.longrun/' "$f" || echo '.longrun/' >> "$f"
+
+4. Write `STATE.md` before Phase 1, so an interruption at any point after
+   setup has a pointer to read.
 
 ## Phase 1: Clarify
 
@@ -254,10 +276,20 @@ branch touched from outside): attempt the documented remediation once
 otherwise park the affected work under open questions, notify, and
 continue whatever remains possible. Never silently stall, and never sit on
 a permission prompt: if one fires mid-run, park the blocked work and move
-on.
+on. A dead review, adjudication, or audit subagent is not this case: it
+takes the blocked-role path in `principles.md`.
 
-To resume an interrupted run (including after a usage-limit stop),
-re-enter at the first phase whose output file is missing or visibly
-incomplete, grounding in the run directory; note the stall gap in the
-report's loop statistics. Flip-flop stickiness re-arms only from
-recorded contested-calls entries.
+To resume an interrupted run (including after a usage-limit stop or a
+crash), read `STATE.md` and re-enter at the phase and round it names,
+grounding in the rest of the run directory; if `STATE.md` is missing or
+stale, fall back to the first phase whose output file is missing or
+visibly incomplete. Note the stall gap in the report's loop statistics.
+Flip-flop stickiness re-arms only from recorded contested-calls entries.
+
+Resuming means resuming the pipeline. A run that stopped mid-loop
+re-enters that loop with a fresh subagent and runs it to its mechanical
+exit; a run that stopped mid-implementation picks up the checklist and
+still owes every downstream phase. The human saying "continue" is not
+permission to finish the work directly, and it grants no phase an early
+exit; if they want the pipeline abandoned in favor of finishing by hand,
+they will say so in those terms.

@@ -27,6 +27,7 @@ linkfiles=(
   ".claude/CLAUDE.md"
   ".claude/RTK.md"
   ".claude/keybindings.json"
+  ".claude/longrun-resume-hook.sh"
   ".claude/settings.json"
   ".claude/statusline-command.sh"
   ".claude/stop-hook.sh"

@@ -6,7 +6,9 @@ link to DECISIONS.md and LEDGER.md entries rather than restating them.
 ## TL;DR
 
 Honest status: complete, partial, or blocked. What was attempted, what
-shipped, in a few sentences.
+shipped, in a few sentences. A phase that was blocked, skipped, or never
+reached its own exit belongs here in the status itself, not further down:
+the run is not complete if one of its guarantees did not run.
 
 ## Pull requests
 
@@ -52,3 +54,9 @@ rejected, re-raised per round; unverified tags issued and how many were
 refuted; invalid rounds; caps hit; phases skipped or entered mid-stream;
 usage-limit stops (when, gap until resumed); per-round subagent cost
 where available.
+
+Then, for each loop, how it ended: its own exit condition, its cap, or
+neither. A loop that ended for any other reason names what ended it, what
+went unreviewed as a result, and its DECISIONS.md entry. Loops blocked by
+an unavailable role subagent name the role and the phase. This section
+never reports a self-served round as a round.
