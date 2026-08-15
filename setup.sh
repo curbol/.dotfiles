@@ -74,7 +74,6 @@ if [[ $is_linux -eq 1 ]]; then
   linkfiles+=(
     ".config/ghostty/linux.conf"
     ".config/hypr/autostart.lua"
-    ".config/hypr/hyprsunset.conf"
     ".config/hypr/input.lua"
     ".config/hypr/monitors.lua"
     ".config/pacman/makepkg.conf"
@@ -92,14 +91,6 @@ copyfiles=(
   ".gitconfig_local"
   ".marks"
 )
-
-# The Omarchy shell rewrites shell.json by atomic replace, which would break a
-# symlink into this repo, so it is copied rather than linked.
-if [[ $is_linux -eq 1 ]]; then
-  copyfiles+=(
-    ".config/omarchy/shell.json"
-  )
-fi
 
 create_symlink() {
   local src=$1

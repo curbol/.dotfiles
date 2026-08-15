@@ -59,7 +59,6 @@ Secrets are deliberately not reproducible from this repo. A reformat still needs
 | Tmux | `.config/tmux/tmux.conf` | C-Space prefix, vim keys, minimal top statusline |
 | AeroSpace | `.config/aerospace/aerospace.toml` | Tiling window manager (Mac only) |
 | Hyprland | `.config/hypr/*.lua` | Tiling window manager (Linux only); overrides load after Omarchy's defaults |
-| Omarchy shell | `.config/omarchy/shell.json` | Bar layout, idle and lock timeouts (copied, not symlinked) |
 | Starship | `.config/starship.toml` | Prompt (Gruvbox-ish palette) |
 | IdeaVim | `.ideavimrc` | JetBrains vim keybindings |
 | Claude Code | `.claude/CLAUDE.md` | Global Claude Code instructions (symlinked to ~/.claude/) |
@@ -127,4 +126,6 @@ Merge upstream changes you want into the tracked dotfile (for symlinked configs)
 
 `scripts/ostype.sh` provides OS detection flags. `setup.sh` has platform-specific symlink blocks for Mac (`is_mac_os`) and Linux (`is_linux`). On Linux, a subset of Hyprland configs is tracked here (see the `is_linux` block in `setup.sh`); the rest stay Omarchy-seeded in `~/.config/hypr/`.
 
-Only genuine deviations from Omarchy's defaults belong in the tracked `hypr/*.lua` files. Omarchy loads its own defaults first, so anything that merely restates them is dead weight that silently diverges as upstream moves. `hl.config()` merges per key, so a partial override leaves the surrounding defaults intact.
+Track only genuine deviations from a fresh Omarchy install. Anything that merely restates a default is dead weight that silently diverges as upstream moves, so when a local value and a new default disagree without a reason, take the default. For `hypr/*.lua` this is cheap: Omarchy loads its own defaults first and `hl.config()` merges per key, so a partial override leaves the surrounding defaults intact.
+
+Config Omarchy owns and rewrites itself (`omarchy/shell.json`) stays untracked while it matches the shipped default; the shell falls back to that default verbatim when the file is absent.
