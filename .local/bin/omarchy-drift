@@ -1,56 +1,71 @@
 #!/usr/bin/env bash
-# Show upstream omarchy changes since the last acknowledged commit.
-# First run sets the baseline. Subsequent runs list commits + diffs for each
-# watched path since that baseline. Pass --ack after reviewing to advance it.
+# Show what upstream omarchy changed since the last acknowledged baseline.
+# Quattro ships its defaults as a package instead of a git checkout, so the
+# baseline is a copy of the shipped trees rather than a commit. First run sets
+# the baseline. Pass --ack after reviewing to advance it.
 
 set -euo pipefail
 
-repo="$HOME/.local/share/omarchy"
-state="$HOME/.cache/omarchy-drift/last-checked"
-mkdir -p "$(dirname "$state")"
-cd "$repo"
+root="${OMARCHY_PATH:-/usr/share/omarchy}"
+state="$HOME/.cache/omarchy-drift"
+baseline="$state/baseline"
+stamp="$state/version"
+
+watched=(
+  "config:seeded into ~/.config once; upstream changes never re-apply"
+  "install:runs only at install time; upstream fixes never reach this machine"
+  "default:sourced live, but a new default can duplicate or fight an override"
+)
 
 ack=0
 [[ "${1:-}" == "--ack" ]] && ack=1
 
-head=$(git rev-parse HEAD)
+version=$(pacman -Q omarchy 2>/dev/null | awk '{print $2}' || true)
+[[ -n "$version" ]] || version="unknown"
 
-if [[ ! -f "$state" ]] || ! git cat-file -e "$(cat "$state")" 2>/dev/null; then
-  echo "$head" > "$state"
-  echo "Baseline set to upstream HEAD ($head). Re-run after future updates."
+snapshot() {
+  local entry path
+  rm -rf "$baseline"
+  mkdir -p "$baseline"
+  for entry in "${watched[@]}"; do
+    path="${entry%%:*}"
+    [[ -d "$root/$path" ]] && cp -a "$root/$path" "$baseline/$path"
+  done
+  printf '%s\n' "$version" >"$stamp"
+}
+
+mkdir -p "$state"
+
+if [[ ! -d "$baseline" ]]; then
+  snapshot
+  echo "Baseline set to omarchy $version. Re-run after future updates."
   exit 0
 fi
 
-since=$(cat "$state")
-
-if [[ "$since" == "$head" ]]; then
-  echo "No upstream changes since last check."
-  exit 0
-fi
-
-watched=(
-  "config/:seeded into ~/.config once; upstream changes never re-apply"
-  "install/:runs only at install time; upstream fixes never reach this machine"
-  "default/:sourced live, but a new default can duplicate or fight an override"
-)
+was=$(cat "$stamp" 2>/dev/null || echo unknown)
 
 found=0
 for entry in "${watched[@]}"; do
   path="${entry%%:*}"
   note="${entry#*:}"
-  [[ -n "$(git log --oneline "$since..$head" -- "$path")" ]] || continue
+  [[ -d "$root/$path" ]] || continue
+
+  output=$(diff -ruN "$baseline/$path" "$root/$path" 2>/dev/null || true)
+  [[ -n "$output" ]] || continue
+
   found=1
   echo "=== $path  ($note)"
   echo
-  git log --oneline "$since..$head" -- "$path"
-  echo
-  git diff "$since..$head" -- "$path"
-  echo
+  printf '%s\n\n' "$output"
 done
 
-((found)) || echo "No changes in watched paths ($since -> $head)."
+if [[ $found -eq 0 ]]; then
+  echo "No upstream changes since last check (omarchy $version)."
+else
+  echo "Upstream changes: omarchy $was -> $version"
+fi
 
 if [[ $ack -eq 1 ]]; then
-  echo "$head" > "$state"
-  echo "Baseline advanced to $head."
+  snapshot
+  echo "Baseline advanced to omarchy $version."
 fi

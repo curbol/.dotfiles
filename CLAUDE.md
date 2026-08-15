@@ -58,7 +58,8 @@ Secrets are deliberately not reproducible from this repo. A reformat still needs
 | Ghostty | `.config/ghostty/config` | Terminal emulator (Omarchy theme integration, Shift+Enter fix) |
 | Tmux | `.config/tmux/tmux.conf` | C-Space prefix, vim keys, minimal top statusline |
 | AeroSpace | `.config/aerospace/aerospace.toml` | Tiling window manager (Mac only) |
-| Omarchy/Hyprland | `~/.config/hypr/` | Tiling window manager (Linux only, managed by Omarchy) |
+| Hyprland | `.config/hypr/*.lua` | Tiling window manager (Linux only); overrides load after Omarchy's defaults |
+| Omarchy shell | `.config/omarchy/shell.json` | Bar layout, idle and lock timeouts (copied, not symlinked) |
 | Starship | `.config/starship.toml` | Prompt (Gruvbox-ish palette) |
 | IdeaVim | `.ideavimrc` | JetBrains vim keybindings |
 | Claude Code | `.claude/CLAUDE.md` | Global Claude Code instructions (symlinked to ~/.claude/) |
@@ -90,7 +91,9 @@ When making system configuration changes, always put them in this repo and deplo
 
 ## Checking for Omarchy Drift (Linux)
 
-Omarchy writes files onto the machine once and never revisits them on update. `.local/bin/omarchy-drift` shows what upstream changed since the last acknowledged commit, by diffing commits in `~/.local/share/omarchy/` (itself a git repo). It ignores local customizations; the signal is purely what upstream changed.
+Omarchy writes files onto the machine once and never revisits them on update. `.local/bin/omarchy-drift` shows what upstream changed since the last acknowledged baseline. It ignores local customizations; the signal is purely what upstream changed.
+
+Quattro ships Omarchy as a package at `/usr/share/omarchy` rather than a git checkout, so the baseline is a snapshot of the shipped trees under `~/.cache/omarchy-drift/baseline/` instead of a commit SHA.
 
 It watches three paths, each stale for a different reason:
 
@@ -102,7 +105,7 @@ It watches three paths, each stale for a different reason:
 
 `install/` is the one that bites hardest: a bug fixed upstream stays broken here forever, since the script that would apply it only ever ran once.
 
-State is stored at `~/.cache/omarchy-drift/last-checked`. First run sets the baseline to the current upstream HEAD. Subsequent runs show `git log` + `git diff` per watched path since that baseline, skipping paths with no changes.
+First run snapshots the shipped trees and records the package version. Subsequent runs show a `diff -ruN` per watched path against that snapshot, skipping paths with no changes. `omarchy-refresh-config <path>` pulls an individual shipped default back into `~/.config`.
 
 Typical workflow after `omarchy-update`:
 
@@ -123,3 +126,5 @@ Merge upstream changes you want into the tracked dotfile (for symlinked configs)
 ## Cross-Platform Support
 
 `scripts/ostype.sh` provides OS detection flags. `setup.sh` has platform-specific symlink blocks for Mac (`is_mac_os`) and Linux (`is_linux`). On Linux, a subset of Hyprland configs is tracked here (see the `is_linux` block in `setup.sh`); the rest stay Omarchy-seeded in `~/.config/hypr/`.
+
+Only genuine deviations from Omarchy's defaults belong in the tracked `hypr/*.lua` files. Omarchy loads its own defaults first, so anything that merely restates them is dead weight that silently diverges as upstream moves. `hl.config()` merges per key, so a partial override leaves the surrounding defaults intact.
