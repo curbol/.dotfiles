@@ -1,6 +1,6 @@
 # Theme — Mac uses dotfiles theme.conf; Linux uses omarchy (overrides below)
 config-file = ?"~/.config/ghostty/theme.conf"
-config-file = ?"~/.config/omarchy/current/theme/ghostty.conf"
+config-file = ?"~/.local/state/omarchy/current/theme/ghostty.conf"
 
 # Font
 font-family = "Maple Mono NF"
