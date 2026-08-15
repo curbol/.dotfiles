@@ -74,6 +74,7 @@ if [[ $is_linux -eq 1 ]]; then
   linkfiles+=(
     ".config/ghostty/linux.conf"
     ".config/hypr/autostart.lua"
+    ".config/hypr/hyprsunset.conf"
     ".config/hypr/input.lua"
     ".config/hypr/monitors.lua"
     ".config/pacman/makepkg.conf"
