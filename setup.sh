@@ -11,16 +11,28 @@ COLOR_CYAN='\033[38;2;205;123;144m'  # Dusty Rose: #cd7b90
 # Source the OS detection script
 source "$(cd "$(dirname "$0")" && pwd)/.config/zsh/scripts/ostype.sh"
 
-# Initialize force_overwrite_copy flag
+# Initialize flags
 force_overwrite_copy=0
+install_packages=0
 
 # Parse command-line options
-# If --force is passed as the first argument, enable overwriting for copy operations.
-if [[ "$1" == "--force" ]]; then
-  force_overwrite_copy=1
-  echo -e "${COLOR_YELLOW}Force overwrite enabled for copied files.${COLOR_RESET}"
-  shift # Consume the --force argument, so it's not processed by later parts of the script if any.
-fi
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+  --force)
+    force_overwrite_copy=1
+    echo -e "${COLOR_YELLOW}Force overwrite enabled for copied files.${COLOR_RESET}"
+    ;;
+  --packages)
+    install_packages=1
+    ;;
+  *)
+    echo -e "${COLOR_RED}Unknown option:${COLOR_RESET} $1"
+    echo "Usage: sh setup.sh [--force] [--packages]"
+    exit 1
+    ;;
+  esac
+  shift
+done
 
 # Paths of dotfiles to symlink relative to the dotfiles directory
 linkfiles=(
@@ -111,6 +123,36 @@ create_symlink() {
   fi
 }
 
+install_arch_packages() {
+  local list="$dotfiles_dir/packages.txt"
+  local packages=()
+  local line
+
+  if [[ ! -f "$list" ]]; then
+    echo -e "${COLOR_RED}Missing package list:${COLOR_RESET} $list"
+    return 1
+  fi
+
+  if ! command -v yay >/dev/null 2>&1; then
+    echo -e "${COLOR_RED}yay not found.${COLOR_RESET} Install an AUR helper before using --packages."
+    return 1
+  fi
+
+  while IFS= read -r line; do
+    line="${line%%#*}"
+    line="${line//[[:space:]]/}"
+    [[ -n "$line" ]] && packages+=("$line")
+  done <"$list"
+
+  if [[ ${#packages[@]} -eq 0 ]]; then
+    echo -e "${COLOR_YELLOW}No packages listed in${COLOR_RESET} $list"
+    return 0
+  fi
+
+  echo -e "${COLOR_GREEN}Installing ${#packages[@]} packages from${COLOR_RESET} packages.txt"
+  yay -S --needed "${packages[@]}"
+}
+
 copy_file() {
   local src=$1
   local dest=$2
@@ -161,5 +203,13 @@ for file in "${copyfiles[@]}"; do
 
   copy_file "$src" "$dest" "$force_overwrite_copy"
 done
+
+if [[ $install_packages -eq 1 ]]; then
+  if [[ $is_linux -eq 1 ]]; then
+    install_arch_packages
+  else
+    echo -e "${COLOR_YELLOW}Skipping --packages:${COLOR_RESET} packages.txt is Arch-only."
+  fi
+fi
 
 echo -e "${COLOR_BLUE}Dotfiles have been processed!${COLOR_RESET}"

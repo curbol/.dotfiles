@@ -9,14 +9,20 @@ A dotfiles repository for macOS (Apple Silicon and Intel) and Linux (Omarchy/Arc
 ## Setup
 
 ```sh
-sh ~/.dotfiles/setup.sh          # symlink and copy dotfiles
-sh ~/.dotfiles/setup.sh --force  # overwrite copied files too
+sh ~/.dotfiles/setup.sh                     # symlink and copy dotfiles
+sh ~/.dotfiles/setup.sh --force             # overwrite copied files too
+sh ~/.dotfiles/setup.sh --force --packages  # full rebuild after a reformat
 ```
 
-The setup script does two things:
+The setup script does three things:
 
 1. **Symlinks** config files from this repo to their expected locations in `$HOME` (e.g., `.gitconfig`, `.zshenv`, `.config/zsh/.zshrc`)
 2. **Copies** files that are meant to be locally customized (e.g., `.zshrc.local` for secrets, `.gladmin/config.yaml`)
+3. **Installs** the packages in `packages.txt`, but only with `--packages` (Linux only, via `yay`)
+
+`packages.txt` lists what's installed on top of Omarchy's own defaults, so a fresh Omarchy install plus `setup.sh --force --packages` reproduces the machine. Regenerate it by diffing `pacman -Qqett` against Omarchy's shipped `*.packages` lists.
+
+Secrets are deliberately not reproducible from this repo. A reformat still needs `~/.ssh`, the GPG secret key, and the real `.zshrc.local` restored by hand.
 
 ## Architecture
 

@@ -1,0 +1,47 @@
+# Arch packages installed on top of Omarchy's defaults, for rebuilding a machine
+# after a reformat. Install with: sh setup.sh --packages
+#
+# Everything goes through yay, which handles repo and AUR packages alike.
+# Omarchy's own packages are omitted; a fresh Omarchy install already has them.
+
+# Shell and CLI
+git-delta
+git-lfs
+tree
+wget
+zsh
+
+# Coding agents
+opencode
+rtk
+
+# Gamedev
+aspnet-runtime-9.0
+blender
+cmake
+godot-mono
+
+# Gaming
+gamescope
+limo
+limo-docs
+protonup-qt-bin
+steam
+
+# Desktop apps
+ghostty
+high-tide
+zen-browser-bin
+
+# Dictation, bound to push-to-talk
+voxtype-bin
+wtype
+ydotool
+
+# Theming
+gruvbox-plus-icon-theme
+maplemono-nf
+
+# Hardware and repo access
+amd-ucode
+omarchy-keyring
