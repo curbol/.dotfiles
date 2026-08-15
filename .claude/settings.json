@@ -8,8 +8,6 @@
       "Bash(git:*)",
       "Bash(gh *)",
       "Bash(npm *)",
-      "Bash(npx *)",
-      "Bash(node *)",
       "Bash(tsc *)",
       "Bash(jq *)",
       "Bash(ls *)",
@@ -35,7 +33,6 @@
       "/home/curbol/code"
     ]
   },
-  "model": "opus[1m]",
   "hooks": {
     "PreToolUse": [
       {
@@ -92,12 +89,53 @@
       "autoUpdate": true
     }
   },
-  "effortLevel": "high",
+  "effortLevel": "xhigh",
   "tui": "fullscreen",
   "autoDreamEnabled": true,
+  "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
   "teammateMode": "auto",
   "remoteControlAtStartup": true,
   "agentPushNotifEnabled": true,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "autoMode": {
+    "allow": [
+      "$defaults",
+      "Bash(godot-mono:*) — running/importing the local Godot project in this repo's checkout or worktrees",
+      "Bash(dotnet test:*) and Bash(dotnet build:*) — local NUnit/build runs in /home/curbol/code/hexed-haven",
+      "Bash(synty-sync browse:*) — read-only local asset-cache index under ~/code/raw-assets",
+      "Bash(grim:*) — local windowed screen capture for visual verification of the running game"
+    ],
+    "soft_deny": [
+      "$defaults",
+      "Bash(synty-sync:*) for non-browse subcommands that write into ~/code/raw-assets (sync/select mutate the shared vendor cache outside this repo)",
+      "Bash(ydotool:*) — synthetic keyboard/mouse injection through /dev/uinput drives the whole desktop, not just the game window"
+    ],
+    "environment": [
+      "### Org-wide",
+      "**Organization**: None configured — personal/hobby account `curbol` on GitHub",
+      "**Cloud provider(s)**: None configured",
+      "**Repository visibility**: PRIVATE — `curbol/hexed-haven` (confirmed via gh API)",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: None configured — `export_credentials.cfg` is gitignored in this repo and must never be committed",
+      "**Default / protected branches**: default branch `main`; rulesets not queryable here, no classic protected branches listed",
+      "**CI/CD deploy targets**: None configured — `.github/workflows` present but no deploy target evidence",
+      "**Network posture**: None configured",
+      "**Source control**: `github.com:curbol/hexed-haven.git` (origin, SSH) only — as scoped by the Trusted repo and Repository visibility entries above",
+      "**Trusted internal domains**: None configured",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: LiveControl debug channel on `127.0.0.1:$HH_CONTROL_PORT` (default 7777), local only; Godot MCP server, local",
+      "**Internal package registry**: None configured — NuGet/dotnet restore via `make deps`",
+      "**Sensitive data locations & audiences**: any file or store holding personal data, confidential business data, credentials, regulated data, or similarly sensitive material; preserve exact handles when known and share only with audiences cleared at the [named+specifics] bar; in this repo also `export_credentials.cfg`",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment (hyphen/underscore/dot-delimited — e.g. matches `prod-db`, not `producer`)",
+      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment",
+      "### User-specific",
+      "**Primary use of Claude Code**: game development — Godot 4.7 C# turn-based tactical roguelike (hexed-haven), including 3D asset promotion and live-game visual verification",
+      "**Trusted repo**: `/home/curbol/code/hexed-haven` and its remote `github.com:curbol/hexed-haven.git` (private). Committing and pushing to `main` is routine for this personal repo. Visibility scopes confidential material only: secrets and sensitive data are never cleared into any repo by its visibility.",
+      "**Org-specific CLIs**: `godot-mono` (Godot binary for this project), `synty-sync` (vendor asset mirror), `rtk`, `dotnet`, `blender`, `grim`, `ydotool`, plus `make` targets (`build`, `test`, `test-godot`, `fmt`, `fmt-check`, `run`, `deps`, `theme`, `theme-check`, `synty-select`, `synty-sync`, `synty-convert`, `characters-bake`)",
+      "**Routine under `curbol/` prefix**: branch names are prefixed `curbol/` per user CLAUDE.md; personal repos under `github.com/curbol/*` allow direct commits to `main`"
+    ]
+  }
 }
