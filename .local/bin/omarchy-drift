@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Show upstream omarchy seed changes since the last acknowledged commit.
-# First run sets the baseline. Subsequent runs list commits + diffs in
-# config/ since that baseline. Pass --ack after reviewing to advance it.
+# Show upstream omarchy changes since the last acknowledged commit.
+# First run sets the baseline. Subsequent runs list commits + diffs for each
+# watched path since that baseline. Pass --ack after reviewing to advance it.
 
 set -euo pipefail
 
@@ -28,14 +28,29 @@ if [[ "$since" == "$head" ]]; then
   exit 0
 fi
 
-echo "Upstream config/ changes ($since → $head):"
-echo
-git log --oneline "$since..$head" -- config/ || echo "(no config/ changes)"
-echo
-git diff "$since..$head" -- config/
+watched=(
+  "config/:seeded into ~/.config once; upstream changes never re-apply"
+  "install/:runs only at install time; upstream fixes never reach this machine"
+  "default/:sourced live, but a new default can duplicate or fight an override"
+)
+
+found=0
+for entry in "${watched[@]}"; do
+  path="${entry%%:*}"
+  note="${entry#*:}"
+  [[ -n "$(git log --oneline "$since..$head" -- "$path")" ]] || continue
+  found=1
+  echo "=== $path  ($note)"
+  echo
+  git log --oneline "$since..$head" -- "$path"
+  echo
+  git diff "$since..$head" -- "$path"
+  echo
+done
+
+((found)) || echo "No changes in watched paths ($since -> $head)."
 
 if [[ $ack -eq 1 ]]; then
   echo "$head" > "$state"
-  echo
   echo "Baseline advanced to $head."
 fi

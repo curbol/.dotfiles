@@ -84,9 +84,19 @@ When making system configuration changes, always put them in this repo and deplo
 
 ## Checking for Omarchy Drift (Linux)
 
-Omarchy seeds files into `~/.config/` at install time and never overwrites them on update. `.local/bin/omarchy-drift` shows upstream seed changes since the last acknowledged commit, by diffing commits in `~/.local/share/omarchy/` (itself a git repo). It ignores local customizations; the signal is purely what upstream changed.
+Omarchy writes files onto the machine once and never revisits them on update. `.local/bin/omarchy-drift` shows what upstream changed since the last acknowledged commit, by diffing commits in `~/.local/share/omarchy/` (itself a git repo). It ignores local customizations; the signal is purely what upstream changed.
 
-State is stored at `~/.cache/omarchy-drift/last-checked`. First run sets the baseline to the current upstream HEAD. Subsequent runs show `git log` + `git diff` in `config/` since that baseline.
+It watches three paths, each stale for a different reason:
+
+| Path | Why it drifts |
+|------|---------------|
+| `config/` | Seeded into `~/.config/` at install; upstream changes never re-apply |
+| `install/` | Runs only at install time, so a fix upstream never reaches this machine |
+| `default/` | Sourced live, but a new default can duplicate or fight a local override |
+
+`install/` is the one that bites hardest: a bug fixed upstream stays broken here forever, since the script that would apply it only ever ran once.
+
+State is stored at `~/.cache/omarchy-drift/last-checked`. First run sets the baseline to the current upstream HEAD. Subsequent runs show `git log` + `git diff` per watched path since that baseline, skipping paths with no changes.
 
 Typical workflow after `omarchy-update`:
 
