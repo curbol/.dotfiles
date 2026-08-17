@@ -30,15 +30,14 @@ reading them.
     ├── LEDGER.md      agent notes: settled calls • contested calls • nits • known issues • loop log
     └── REPORT.md      final synthesis
 
-`STATE.md` is the run's re-entry pointer and the only file whose
-freshness is load-bearing. Rewrite it in place (it is replaced, never
-appended to) at every phase boundary, every loop round, and every
-checklist item finished. Three lines suffice: current phase, the loop and
-round if inside one, and checklist position. Phases 5-10 all run with the
-same artifacts present, so nothing else on disk distinguishes them; a
-resuming session and the session-start hook both read this file first.
-`REPORT.md` existing is what marks a run finished, so it is written only
-in Phase 11.
+`STATE.md` is the only file whose freshness is load-bearing: a resuming
+session and the session-start hook both read it first, and the phases
+after planning all run with the same other artifacts present, so nothing
+else on disk distinguishes them. Rewrite it in place at every phase
+boundary, every loop round, and every checklist item finished. Three lines
+suffice: current phase, the loop and round if inside one, and checklist
+position. `REPORT.md` existing is what marks a run finished, so write it
+only in Phase 11.
 
 Parking routing lives in `principles.md`. When you park something that
 needs the human (DECISIONS.md), also emit it as a visible message in the
@@ -72,12 +71,10 @@ that instead terminates by hitting the cap records that in the report's
 loop statistics.
 
 Nothing about the harness ends a loop early: not context, not compaction,
-not cost, not how converged the last round looked (see `principles.md`,
-"The harness is not yours to manage"). A loop whose role subagent cannot
-run is blocked, never self-served: you are the author and can never fill a
-reviewer, adjudicator, or auditor role (see `principles.md`, "Role
-scoping"). Deviating from either rule goes to `DECISIONS.md` the moment it
-happens, not to the report.
+not cost, not how converged the last round looked. A loop whose role
+subagent cannot run is blocked, never self-served. Both rules, and where a
+deviation from either gets parked, are in `principles.md` ("The harness is
+not yours to manage", "Role scoping").
 
 ## Setup
 
@@ -286,10 +283,9 @@ stale, fall back to the first phase whose output file is missing or
 visibly incomplete. Note the stall gap in the report's loop statistics.
 Flip-flop stickiness re-arms only from recorded contested-calls entries.
 
-Resuming means resuming the pipeline. A run that stopped mid-loop
-re-enters that loop with a fresh subagent and runs it to its mechanical
-exit; a run that stopped mid-implementation picks up the checklist and
-still owes every downstream phase. The human saying "continue" is not
-permission to finish the work directly, and it grants no phase an early
-exit; if they want the pipeline abandoned in favor of finishing by hand,
-they will say so in those terms.
+Resuming resumes the pipeline. A run that stopped mid-loop re-enters that
+loop with a fresh subagent and runs it to its mechanical exit; a run that
+stopped mid-implementation picks up the checklist and still owes every
+downstream phase. "Continue" is not permission to finish the work
+directly, and grants no phase an early exit; only an explicit instruction
+to abandon the pipeline does that.
