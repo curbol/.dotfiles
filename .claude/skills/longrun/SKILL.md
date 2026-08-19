@@ -31,12 +31,11 @@ reading them.
     └── REPORT.md      final synthesis
 
 `STATE.md` is the only file whose freshness is load-bearing: a resuming
-session and the session-start hook both read it first, and the phases
-after planning all run with the same other artifacts present, so nothing
-else on disk distinguishes them. Rewrite it in place at every phase
-boundary, every loop round, and every checklist item finished. Three lines
-suffice: current phase, the loop and round if inside one, and checklist
-position. `REPORT.md` existing is what marks a run finished, so write it
+session and the session-start hook both read it first, and every phase
+after planning runs with the same other artifacts present, so nothing else
+on disk distinguishes them. Rewrite it in place at every phase boundary,
+every loop round, and every checklist item finished; the three lines above
+suffice. `REPORT.md` existing is what marks a run finished, so write it
 only in Phase 11.
 
 Parking routing lives in `principles.md`. When you park something that
@@ -73,8 +72,8 @@ loop statistics.
 Nothing about the harness ends a loop early: not context, not compaction,
 not cost, not how converged the last round looked. A loop whose role
 subagent cannot run is blocked, never self-served. Both rules, and where a
-deviation from either gets parked, are in `principles.md` ("The harness is
-not yours to manage", "Role scoping").
+deviation gets parked, are in `principles.md` ("The harness is not yours to
+manage", "Role scoping").
 
 ## Setup
 
@@ -92,8 +91,8 @@ not yours to manage", "Role scoping").
        f="$(git rev-parse --git-dir)/info/exclude"
        grep -qxF '.longrun/' "$f" || echo '.longrun/' >> "$f"
 
-4. Write `STATE.md` before Phase 1, so an interruption at any point after
-   setup has a pointer to read.
+4. Write `STATE.md` before Phase 1, so an interruption after setup has a
+   pointer to read.
 
 ## Phase 1: Clarify
 

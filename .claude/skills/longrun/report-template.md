@@ -50,11 +50,11 @@ line each on why.
 Rounds per loop (plan review, completeness, QA, self-review,
 automated-feedback cycles); findings accepted (by build/procedure tag),
 rejected, re-raised per round; unverified tags issued and how many were
-refuted; invalid rounds; caps hit; phases skipped or entered mid-stream;
+refuted; invalid rounds; phases skipped or entered mid-stream;
 usage-limit stops (when, gap until resumed); per-round subagent cost
 where available.
 
 Then, for each loop, how it ended: its own exit condition, its cap, or
-something else. Something else names what ended it, what went unreviewed,
-and its DECISIONS.md entry; a loop blocked by an unavailable role subagent
-names the role. Never count a self-served round as a round.
+something else, which names what ended it, what went unreviewed, and its
+DECISIONS.md entry. A loop blocked by an unavailable role subagent names
+the role. Never count a self-served round as a round.

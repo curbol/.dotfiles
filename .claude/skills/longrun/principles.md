@@ -31,12 +31,12 @@ trusted.
 
 ## Role scoping
 
-Reviewer, adjudicator, and auditor are independent roles, and that
-independence is the only thing their verdicts are made of. You are the
-author and can never fill one: not when the subagent dies, not when the
-round looks cheap, not when you are confident you know what it would have
-said. A self-served review is worth less than none, because it produces
-the same artifacts and the same statistics as a real one.
+Reviewer, adjudicator, and auditor are independent roles, and independence
+is all their verdicts are made of. You are the author and can never fill
+one: not when the subagent dies, not when the round looks cheap, not when
+you are confident you know what it would have said. A self-served review is
+worth less than none, because it produces the same artifacts and the same
+statistics as a real one.
 
 When a role subagent cannot run (spend limit, API error, dispatch
 unavailable), retry it once. If it still cannot run, that loop is blocked:

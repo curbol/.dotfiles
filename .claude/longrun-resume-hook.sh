@@ -28,7 +28,7 @@ escape_for_json() {
 }
 
 context="<EXTREMELY_IMPORTANT>
-An unfinished longrun lives in ${run_dir}: REPORT.md is absent, so the run stopped before its final phase.
+An unfinished longrun lives in ${run_dir}: no REPORT.md, so it stopped before its final phase.
 
 Recorded state:
 
