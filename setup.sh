@@ -43,6 +43,7 @@ linkfiles=(
   ".claude/settings.json"
   ".claude/statusline-command.sh"
   ".claude/stop-hook.sh"
+  ".claude/skills/audit-command"
   ".claude/skills/longrun"
   ".config/ghostty/config"
   ".config/starship.toml"
