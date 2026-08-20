@@ -24,10 +24,9 @@ job, drop a phase, or narrow a deliverable. Auto-compaction exists,
 see.
 
 Run the pipeline as written and let the harness or the human interrupt
-you. Being interrupted is the cheap outcome: a run stopped mid-phase with
-`STATE.md` current re-enters where it stopped, while a run that reaches
-the end with a phase skipped or self-served looks complete and gets
-trusted.
+you. Being interrupted is the cheap outcome: a run stopped mid-phase
+re-enters at the phase it stopped in, while a run that reaches the end
+with a phase skipped or self-served looks complete and gets trusted.
 
 ## Role scoping
 

@@ -44,17 +44,6 @@
           }
         ]
       }
-    ],
-    "SessionStart": [
-      {
-        "matcher": "startup|resume|clear|compact|fork",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/longrun-resume-hook.sh"
-          }
-        ]
-      }
     ]
   },
   "statusLine": {

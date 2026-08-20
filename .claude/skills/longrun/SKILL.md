@@ -22,21 +22,12 @@ files, not conversation memory; a crashed or interrupted run re-enters by
 reading them.
 
     .longrun/
-    ├── STATE.md       re-entry pointer: phase • loop and round • checklist position
     ├── BRIEF.md       problem, use-cases, clarifying Q&A
     ├── CONTEXT.md     exploration findings
     ├── PLAN.md        the living plan
     ├── DECISIONS.md   your inbox: open questions • to apply • push/PR/merge
     ├── LEDGER.md      agent notes: settled calls • contested calls • nits • known issues • loop log
     └── REPORT.md      final synthesis
-
-`STATE.md` is the only file whose freshness is load-bearing: a resuming
-session and the session-start hook both read it first, and every phase
-after planning runs with the same other artifacts present, so nothing else
-on disk distinguishes them. Rewrite it in place at every phase boundary,
-every loop round, and every checklist item finished; the three lines above
-suffice. `REPORT.md` existing is what marks a run finished, so write it
-only in Phase 11.
 
 Parking routing lives in `principles.md`. When you park something that
 needs the human (DECISIONS.md), also emit it as a visible message in the
@@ -90,9 +81,6 @@ manage", "Role scoping").
 
        f="$(git rev-parse --git-dir)/info/exclude"
        grep -qxF '.longrun/' "$f" || echo '.longrun/' >> "$f"
-
-4. Write `STATE.md` before Phase 1, so an interruption after setup has a
-   pointer to read.
 
 ## Phase 1: Clarify
 
@@ -276,11 +264,10 @@ on. A dead review, adjudication, or audit subagent is not this case: it
 takes the blocked-role path in `principles.md`.
 
 To resume an interrupted run (including after a usage-limit stop or a
-crash), read `STATE.md` and re-enter at the phase and round it names,
-grounding in the rest of the run directory; if `STATE.md` is missing or
-stale, fall back to the first phase whose output file is missing or
-visibly incomplete. Note the stall gap in the report's loop statistics.
-Flip-flop stickiness re-arms only from recorded contested-calls entries.
+crash), re-enter at the first phase whose output file is missing or
+visibly incomplete, grounding in the run directory; note the stall gap in
+the report's loop statistics. Flip-flop stickiness re-arms only from
+recorded contested-calls entries.
 
 Resuming resumes the pipeline. A run that stopped mid-loop re-enters that
 loop with a fresh subagent and runs it to its mechanical exit; a run that
