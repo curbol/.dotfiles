@@ -12,7 +12,11 @@ if [ ! -d "$run_dir" ] || [ -f "$run_dir/REPORT.md" ]; then
 fi
 
 if [ -f "$run_dir/STATE.md" ]; then
-    state=$(head -c 4000 "$run_dir/STATE.md")
+    # escape_for_json covers only tab, newline, and carriage return, so strip the
+    # other control bytes here, along with any UTF-8 sequence the byte cap split.
+    state=$(head -c 4000 "$run_dir/STATE.md" \
+        | iconv -c -f UTF-8 -t UTF-8 2>/dev/null \
+        | tr -d '\000-\010\013\014\016-\037\177')
 else
     state="STATE.md is absent. Inventory the run directory to establish the phase before re-entering."
 fi
