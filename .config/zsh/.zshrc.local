@@ -14,3 +14,6 @@ export GLADLY_GITHUB_PUBLISH="****************************************"
 export GLADLY_API_TOKEN_MASTER="********************************"
 export GLADLY_API_TOKEN_STAGING="********************************"
 export GLADLY_API_TOKEN_PRODUCTION="********************************"
+
+# Context7
+export CONTEXT7_API_KEY="*******************************************"
