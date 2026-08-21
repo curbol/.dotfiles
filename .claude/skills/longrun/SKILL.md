@@ -12,6 +12,15 @@ as author and implementer. Never include its contents in a prompt for a
 reviewer or adjudicator subagent, and never read `rubric.md` yourself: the
 two files encode opposing biases and are role-scoped on purpose.
 
+## Autonomy
+
+Autonomy is turn-level, not just phase-level. After Phase 2 you do not end
+a turn until the Phase 11 summary, except while a dispatched subagent, a
+scheduled wake-up, or a backgrounded command is pending to bring you back.
+A loop exit, a phase boundary, or a finished checklist item reads like a
+place to hand back and is not one; see "Ending your turn is stopping" in
+`principles.md`.
+
 ## State
 
 All run state lives in `.longrun/` at the worktree root. It is local-only
@@ -75,12 +84,14 @@ manage", "Role scoping").
    `git worktree add ../<repo>-longrun-<slug> -b <prefix>/longrun-<slug>`
    (when a Shortcut story exists, use `<prefix>/sc-XXXXXX/longrun-<slug>`).
    Work exclusively in the worktree.
-3. Create `.longrun/`, then exclude it so it can never be committed. In a
-   worktree `.git` is a file, not a directory, so resolve the exclude path
-   rather than hardcoding it, and append idempotently:
+3. Create `.longrun/`, then exclude it so it can never be committed. Ask git
+   where the exclude file is rather than composing the path: a linked
+   worktree's own git dir holds no `info/`, and git reads the shared one from
+   every worktree. Append idempotently, then confirm it took:
 
-       f="$(git rev-parse --git-dir)/info/exclude"
+       f="$(git rev-parse --git-path info/exclude)"
        grep -qxF '.longrun/' "$f" || echo '.longrun/' >> "$f"
+       git check-ignore .longrun || echo 'NOT EXCLUDED'
 
 ## Phase 1: Clarify
 
@@ -96,6 +107,9 @@ not by assuming:
 - Permission mode: confirm the session can edit files and run the build,
   test, and git commands this run needs without prompting (try one of
   each).
+- Subagent dispatch: spawn one trivial subagent and confirm its output
+  comes back. The review and audit loops are built on it, and a loop whose
+  subagent cannot run is blocked rather than covered by you.
 - MCP: for each external source the brief needs (Slack, Notion, Gong,
   web), make one cheap read call now.
 - QA dependencies: if verification will need tilt, a dev server, or a

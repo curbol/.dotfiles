@@ -23,10 +23,34 @@ job, drop a phase, or narrow a deliverable. Auto-compaction exists,
 `.longrun/` is what survives it, and the human has mitigations you cannot
 see.
 
-Run the pipeline as written and let the harness or the human interrupt
-you. Being interrupted is the cheap outcome: a run stopped mid-phase
+Run the pipeline as written until the harness or the human stops you.
+Being stopped from outside is the cheap outcome: a run cut off mid-phase
 re-enters at the phase it stopped in, while a run that reaches the end
 with a phase skipped or self-served looks complete and gets trusted.
+
+## Ending your turn is stopping
+
+Between the Phase 2 announcement and the Phase 11 summary you are the only
+thing moving the run. A turn that ends with prose and no tool call hands
+the run to a human who is asleep, and it sits there until they look;
+nothing resumes it on its own. An outside interruption is recoverable in
+place. This is not that: it is the one stop that looks, to you, like
+progress.
+
+A turn may end only while something exists that will wake you: a
+dispatched subagent whose completion notifies you, a scheduled wake-up, or
+a backgrounded command that re-invokes you when it exits. Name it before
+you stop. If you cannot name one, the turn does not end; make the next
+tool call instead.
+
+Writing to the human is not a handoff. Parked decisions, progress notes,
+and loop summaries are messages, not questions: write them and keep going
+in the same turn. A message that says what you are about to do next is
+followed by doing it, immediately, in that turn.
+
+The seams that feel most natural are the dangerous ones: a loop reaching
+its exit, a phase boundary, a checklist item finished, a probe that
+answered its question. All of them are mid-run.
 
 ## Role scoping
 
@@ -57,12 +81,14 @@ one is the signal to do the thing you were about to skip:
 - "Spawning a subagent for this is overkill, I'll just review it myself."
 - "The subagent died, I'll do its job myself."
 - "I'm resuming, so I'll just finish the remaining work directly."
+- "This is a natural handoff point, I'll let them confirm before I go on."
+- "I'll write up where things stand and pick it up when they reply."
 - "Simple now, better later." (see Most correct, always)
 
 Deviating from a rule and hiding it are separate failures. If you deviate
 anyway, route it per Parking routing below, at the moment you do it.
 
-## Feedback discipline (plan-review loop only)
+## Feedback discipline (review loops only)
 
 Completeness gap findings and QA failures are never held on
 no-new-evidence grounds: fix them, or record unresolved ones per that

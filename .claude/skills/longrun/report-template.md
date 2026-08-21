@@ -55,6 +55,6 @@ usage-limit stops (when, gap until resumed); per-round subagent cost
 where available.
 
 Then, for each loop, how it ended: its own exit condition, its cap, or
-something else, which names what ended it, what went unreviewed, and its
-DECISIONS.md entry. A loop blocked by an unavailable role subagent names
-the role. Never count a self-served round as a round.
+something else. Something else names what ended it, what went unreviewed,
+and its DECISIONS.md entry; a loop blocked by an unavailable role subagent
+names the role. Never count a self-served round as a round.
