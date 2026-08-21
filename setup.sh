@@ -39,7 +39,6 @@ linkfiles=(
   ".claude/CLAUDE.md"
   ".claude/RTK.md"
   ".claude/keybindings.json"
-  ".claude/rules/context7.md"
   ".claude/settings.json"
   ".claude/statusline-command.sh"
   ".claude/skills/audit-command"
