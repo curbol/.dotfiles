@@ -17,9 +17,9 @@ two files encode opposing biases and are role-scoped on purpose.
 Autonomy is turn-level, not just phase-level. After Phase 2 you do not end
 a turn until the Phase 11 summary, except while a dispatched subagent, a
 scheduled wake-up, or a backgrounded command is pending to bring you back.
-A loop exit, a phase boundary, or a finished checklist item reads like a
-place to hand back and is not one; see "Ending your turn is stopping" in
-`principles.md`.
+With nothing pending, ending the turn ends the run. A loop exit, a phase
+boundary, or a finished checklist item reads like a place to hand back and
+is not one; see "Ending your turn is stopping" in `principles.md`.
 
 ## State
 
