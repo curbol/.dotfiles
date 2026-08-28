@@ -139,15 +139,27 @@ Always create stories under the **AI Knowledge** team (ID `69949769-1bb1-4ded-b7
 
 - Branch name format: `curbol/sc-<story-id>/<description>` (e.g., `curbol/sc-233298/fix-ci-docs`). Include the Shortcut story ID when one exists.
 - When the branch contains a story ID, include `This commit supports [sc-XXXXXX]` in the commit message.
-- PR titles end with the ticket number: `[sc-XXXXXX]`.
+
+## Pull Request Titles
+
+- No ticket number in the title.
+- Never the branch name, and never a copy of the bug description; describe the fix, not the bug.
+- No `feat:` / `bug:` prefixes. Labels are applied automatically from the Shortcut story type.
 
 ## Pull Request Structure
 
-Every PR must include these sections as `##` headers:
+PR descriptions render as markdown. Don't carry commit-message hard wrapping into them; the 75-character limit applies to commits, not descriptions.
 
-- **## What**: Describe the changes.
-- **## Why**: Explain the motivation. When the branch contains a Shortcut story ID, include `This change supports [sc-XXXXXX]` in this section.
-- **## Testing**: Smoke-test runbook for QA. Concrete, copy-pasteable steps (curls with env-var setup, UI clicks, etc.) that confirm the change is present and basically working. 1-3 substantive checks covering the happy path and key invariants; not exhaustive, not edge cases, not a record of dev-time testing. Verify each step actually runs before posting: execute the curls (locally against a dev server or against staging, whichever the change is testable in) and confirm they return what the section claims. If a step can't be verified end-to-end, say so explicitly rather than guessing. Invoke the `/test-deployed:testing-standards` skill when writing or revising this section; it is the canonical standard for Gladly PR Testing sections.
-- **## Release Notes**: Default to writing real notes that describe what an admin or end-user will notice (new options, behavior changes, fixed bugs they were seeing). Only when the change is genuinely invisible to users (refactors, internal API renames, dev tooling, type cleanups, dependency upgrades with no behavior change) write "Internal change, no customer impact."
+Every PR includes these sections as `##` headers:
 
-Apply exactly one label to every PR: `bug` for bug fixes, `enhancement` for new features and enhancements, `demo` for demo changes.
+- **## What**: Describe the changes at a high level, written for a reviewer with no prior context about the feature or area of code (anyone in the company may read it). Open in the imperative mood like the title ("Add", "Fix", "Update"), never "This PR…" or "This change…". Describe only what the change does, never what it excludes ("out of scope", "deliberately not included"); a follow-up PR may be named in one concise line. Omit the section entirely on minor changes where the title is sufficient.
+- **## Why**: Motivation only. Trade-offs and caveats belong in What or the tech spec, not here. Link the relevant tech spec sections when applicable. When the branch contains a Shortcut story ID, include `This change supports [sc-XXXXXX]` after this section.
+- **## Testing**: Smoke-test runbook for QA. Concrete, copy-pasteable steps (curls with env-var setup, UI clicks, etc.) that confirm the change is present and basically working. 1-3 substantive checks covering the happy path and key invariants; not exhaustive, not edge cases, not a record of dev-time testing. Verify each step actually runs before posting: execute the curls (locally against a dev server or against staging, whichever the change is testable in) and confirm they return what the section claims. If a step can't be verified end-to-end, say so explicitly rather than guessing. Invoke `/test-deployed:write-testing-steps` to draft, critique, and dry-run the section; `/test-deployed:testing-standards` is the canonical standard.
+  - Skip the runbook for a refactor fully verified by the compiler or static analysis ("NMTN (no manual testing needed)", otherwise give regression steps), a test-only change ("N/A, test-only change"), a CI/CD, local setup, or tooling change ("N/A"), and a change behind a not-yet-enabled feature flag ("No testing needed since changes are gated behind feature flag").
+  - Customer-reported bug fixes always get testing steps, unless the bug is hard to reproduce (a race condition, say).
+- **## Screenshots**: For UI-affecting changes, include screenshots or gifs, before/after where useful. Invoke `/pr-screenshots:pr-screenshots` to capture them with Playwright and upload to `sagansystems/review-assets`, keeping binaries out of the source repo.
+- **## Release Notes**: Describe what an admin or end-user will notice (new options, behavior changes, fixed bugs they were seeing). For a change behind a feature flag, lead with "*Behind `<flag-name>` feature flag. This feature is not yet active and will be enabled in a future release.*" and then describe the change. For chores, use judgment: write real notes if there is user impact, otherwise `N/A`.
+
+## Review Comments
+
+Never filter or ignore PR review bot comments. Review bots such as `coderabbitai` produce real, actionable feedback; assess and address it with the same rigor as a human reviewer's, and count it toward the total when walking through feedback. CI and automation bots (dependabot, renovate, codecov, github-actions) are fine to filter as noise. If a tool that fetches PR comments filters by `[bot]` in the username, audit the filter and make sure review bots survive it.

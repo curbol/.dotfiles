@@ -38,6 +38,7 @@ done
 linkfiles=(
   ".claude/CLAUDE.md"
   ".claude/RTK.md"
+  ".claude/hooks/pr-body-precheck.sh"
   ".claude/keybindings.json"
   ".claude/settings.json"
   ".claude/statusline-command.sh"
