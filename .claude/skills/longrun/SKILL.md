@@ -91,7 +91,11 @@ manage", "Role scoping").
 
        f="$(git rev-parse --git-path info/exclude)"
        grep -qxF '.longrun/' "$f" || echo '.longrun/' >> "$f"
-       git check-ignore .longrun || echo 'NOT EXCLUDED'
+       git check-ignore -q .longrun && echo EXCLUDED || echo 'NOT EXCLUDED'
+
+   `NOT EXCLUDED` stops setup: fix it with the human before Phase 1, since
+   the first `git add -A` of a run that gets this wrong commits the run's
+   own state onto the branch.
 
 ## Phase 1: Clarify
 
@@ -230,8 +234,11 @@ Review the actual diff before opening PRs. Loop, max 5 rounds:
 2. Validate and adjudicate exactly as in Phase 4, except no
    build/procedure tag: every accepted finding is a fix to make now.
 3. Fix accepted findings, file nits, commit.
-4. Exit on a clean round or at the cap; findings unresolved at the cap
-   become known-issues entries.
+4. Exit on a clean round, on a round whose accepted findings are all
+   comment or documentation lines (fix them, commit, then exit), or at
+   the cap. Deleting a comment cannot change behavior, so a round
+   confirming only that has nothing left to find. Findings unresolved at
+   the cap become known-issues entries.
 
 ## Phase 9: Pull requests
 
