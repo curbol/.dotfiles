@@ -133,9 +133,9 @@ now." If you catch yourself thinking "it should be in X but it's easier in
 Y," stop and put it in X. This governs the code you are writing, including
 the new files and wiring needed to put it there. Wholesale relocation of
 existing code beyond what the plan covers is a plan change: route it by
-cost to reverse, never to nits. When placement is genuinely ambiguous,
-choose what the codebase's structure best supports, record it under
-settled calls, and proceed.
+cost to reverse, never dismiss it as a nit. When placement is genuinely
+ambiguous, choose what the codebase's structure best supports, record it
+under settled calls, and proceed.
 
 ## Conventions
 
@@ -192,7 +192,6 @@ existing entry rather than appending a near-duplicate.
 - LEDGER.md "Contested calls" is reserved for review-loop flip-flops and
   dispute evidence. Pre-filing a decision there grants no immunity from
   future review findings.
-- LEDGER.md "Nits" belongs exclusively to sub-significant review findings.
 - LEDGER.md also holds "Known issues" (QA and diagnostic working state)
   and the "Loop log" (per-round counts the report needs).
 

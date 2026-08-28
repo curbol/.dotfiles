@@ -35,7 +35,7 @@ reading them.
     ├── CONTEXT.md     exploration findings
     ├── PLAN.md        the living plan
     ├── DECISIONS.md   your inbox: open questions • to apply • push/PR/merge
-    ├── LEDGER.md      agent notes: settled calls • contested calls • nits • known issues • loop log
+    ├── LEDGER.md      agent notes: settled calls • contested calls • known issues • loop log
     └── REPORT.md      final synthesis
 
 Parking routing lives in `principles.md`. When you park something that
@@ -170,14 +170,15 @@ Then loop, round r = 1, 2, ...:
    duplicates>`.
 4. Apply per the feedback discipline in `principles.md`: accepted
    findings are applied (confirm unverified tags against the codebase
-   first), nits filed under LEDGER Nits, `PLAN.md` updated.
-5. Exit when a valid round accepts zero findings (re-raise verdicts do
-   not count as accepted), or after 2 consecutive valid rounds in which
-   every accepted finding is procedure-tagged: apply them, then exit.
-   Procedure churn after the deliverables converge is deferrable; its
-   gaps surface loudly in QA. Hard cap 20 rounds; if build-tagged
-   findings are still landing at the cap, record that under contested
-   calls (it is a decomposition signal) and proceed.
+   first) and `PLAN.md` updated. Nit-tagged findings are not applied at
+   plan stage, and are not recorded anywhere.
+5. Exit when a valid round accepts no significant findings (re-raise
+   verdicts do not count as accepted), or after 2 consecutive valid
+   rounds in which every accepted finding is procedure-tagged: apply
+   them, then exit. Procedure churn after the deliverables converge is
+   deferrable; its gaps surface loudly in QA. Hard cap 20 rounds; if
+   build-tagged findings are still landing at the cap, record that under
+   contested calls (it is a decomposition signal) and proceed.
 
 Track per-round counts (accepted by tag, rejected, re-raised, unverified
 tags, invalid rounds) in LEDGER's loop log as you go; the report needs
