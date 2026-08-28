@@ -233,12 +233,11 @@ Review the actual diff before opening PRs. Loop, max 5 rounds:
    `git diff <default-branch>...HEAD`, and the Phase 4 output contract.
 2. Validate and adjudicate exactly as in Phase 4, except no
    build/procedure tag: every accepted finding is a fix to make now.
-3. Fix accepted findings, file nits, commit.
-4. Exit on a clean round, on a round whose accepted findings are all
-   comment or documentation lines (fix them, commit, then exit), or at
-   the cap. Deleting a comment cannot change behavior, so a round
-   confirming only that has nothing left to find. Findings unresolved at
-   the cap become known-issues entries.
+3. Fix accepted findings, nits included; dispute what you believe is
+   wrong rather than dropping it. Commit.
+4. Exit on a round that accepts no significant findings: apply what it
+   did accept, commit, then exit. Otherwise loop, capped at 5 rounds;
+   findings unresolved at the cap become known-issues entries.
 
 ## Phase 9: Pull requests
 

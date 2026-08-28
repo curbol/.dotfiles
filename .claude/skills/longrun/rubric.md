@@ -77,11 +77,10 @@ who never saw the work that produced it or the code's prior state. A
 comment or doc line fails it when it says what the code used to do or why
 it changed, names a task, ticket, or rejected alternative, justifies an
 absence, or only restates what the code and its identifiers already make
-plain. These are the one cosmetic class this rubric calls significant
-rather than a nit: the author is the only reader who still holds the
-context such a line leaks, so it never looks wrong from the inside. The
-finding names the line and asks for it to be deleted or trimmed; the code
-it sits on is not at issue.
+plain. Tag these nits and report them anyway: the author is the only
+reader who still holds the context such a line leaks, so it never looks
+wrong from the inside. The finding names the line and asks for it to be
+deleted or trimmed; the code it sits on is not at issue.
 
 ## Adjudicator rules
 
