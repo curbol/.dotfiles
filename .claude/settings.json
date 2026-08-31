@@ -126,6 +126,5 @@
       "**Org-specific CLIs**: `godot-mono` (Godot binary for this project), `synty-sync` (vendor asset mirror), `rtk`, `dotnet`, `blender`, `grim`, `ydotool`, plus `make` targets (`build`, `test`, `test-godot`, `fmt`, `fmt-check`, `run`, `deps`, `theme`, `theme-check`, `synty-select`, `synty-sync`, `synty-convert`, `characters-bake`)",
       "**Routine under `curbol/` prefix**: branch names are prefixed `curbol/` per user CLAUDE.md; personal repos under `github.com/curbol/*` allow direct commits to `main`"
     ]
-  },
-  "outputStyle": "Concise"
+  }
 }
