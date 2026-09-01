@@ -35,3 +35,7 @@ Use `--force` to overwrite locally copied files (e.g. `.zshrc.local`):
 - [macOS](docs/mac.md)
 - [Linux](docs/linux.md)
 - [Windows](docs/windows.md)
+
+## Support
+
+<a href="https://ko-fi.com/curbol"><img height="42" alt="Buy Me a Coffee at ko-fi.com" src="https://storage.ko-fi.com/cdn/kofi1.png?v=6"></a>
