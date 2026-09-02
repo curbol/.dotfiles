@@ -1,0 +1,75 @@
+#!/bin/bash
+# Installed to a stable path outside the checkout and invoked by the scheduler.
+#
+# A scheduled run inherits nothing: no PATH worth using, no tokens, and on this machine
+# `claude` is a mise shim rather than a callable binary. This script rebuilds only what a
+# run needs, and when it cannot, says so loudly instead of exiting quiet. It never writes
+# health.json, because the situation it exists for is the one where it cannot call into
+# the skill's own scripts at all.
+
+set -uo pipefail
+
+WATCHER="${1:?usage: epic-watch-launch <watcher> <lane>}"
+LANE="${2:?usage: epic-watch-launch <watcher> <lane>}"
+
+CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}/epic-watch"
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/epic-watch/$WATCHER"
+CFG="$CONFIG_HOME/$WATCHER/config.json"
+
+fail() {
+    mkdir -p "$STATE_DIR"
+    # jq, not printf: a detail carrying a newline or a backslash (both reachable, since $PATH
+    # feeds two of these messages) would otherwise write JSON nothing can parse, and the
+    # readers use --argjson, so one bad file would wedge every later run instead of reporting.
+    if command -v jq >/dev/null 2>&1; then
+        jq -nc --arg ts "$(date +%s)" --arg lane "$LANE" --arg class "$1" --arg detail "$2" \
+            '{ts: ($ts|tonumber), lane: $lane, class: $class, detail: $detail}' \
+            > "$STATE_DIR/launch-failure.json"
+    else
+        printf '{"ts":%s,"lane":"%s","class":"%s","detail":"jq unavailable"}\n' \
+            "$(date +%s)" "$LANE" "$1" > "$STATE_DIR/launch-failure.json"
+    fi
+    cp "$STATE_DIR/launch-failure.json" "$STATE_DIR/ALERT"
+    printf 'epic-watch-launch: %s: %s\n' "$1" "$2" >&2
+    exit 1
+}
+
+[ -f "$CFG" ] || fail no_config "no config at $CFG"
+command -v jq >/dev/null 2>&1 || fail no_jq "jq not found in PATH=$PATH"
+
+RECORDED_PATH="$(jq -r '.env.path // ""' "$CFG")"
+[ -n "$RECORDED_PATH" ] && export PATH="$RECORDED_PATH"
+CCD="$(jq -r '.env.claude_config_dir // ""' "$CFG")"
+[ -n "$CCD" ] && export CLAUDE_CONFIG_DIR="$CCD"
+
+# The env file is the only place secrets live. A wrong mode is a rejection with an
+# outcome, not a silent skip: a scheduled fire that writes nothing is indistinguishable
+# from a healthy quiet run.
+ENV_FILE="$CONFIG_HOME/env"
+if [ -f "$ENV_FILE" ]; then
+    # GNU first: see the note in config.sh. The reverse order yields a filesystem dump here,
+    # which rejects every env file on Linux.
+    mode="$(stat -c '%a' "$ENV_FILE" 2>/dev/null || stat -f '%Lp' "$ENV_FILE" 2>/dev/null)"
+    [ "$mode" = 600 ] || fail env_mode "env file mode $mode, expected 600"
+    # shellcheck disable=SC1090
+    . "$ENV_FILE"
+fi
+
+# The recorded root, not a path derived from CLAUDE_CONFIG_DIR: the skill is reachable under
+# two config dirs on this machine and only the recording says which checkout it came from.
+ROOT="$(jq -r '.env.skill_root // ""' "$CFG")"
+[ -n "$ROOT" ] && [ -d "$ROOT" ] || fail no_skill_root "no usable env.skill_root in $CFG"
+
+# claude is unused by this stage's precheck, but it is resolved and reported now so a broken
+# toolchain surfaces during the soak rather than on the first run that needs a model.
+CLAUDE_BIN="$(jq -r '.env.claude_bin // ""' "$CFG")"
+if [ -n "$CLAUDE_BIN" ]; then
+    [ -x "$CLAUDE_BIN" ] || fail no_claude "env.claude_bin is not executable: $CLAUDE_BIN"
+elif ! command -v claude >/dev/null 2>&1; then
+    fail no_claude "claude not found on PATH=$PATH and no env.claude_bin recorded"
+fi
+
+RUNNER="$ROOT/scripts/run-lane.sh"
+[ -x "$RUNNER" ] || fail no_runner "not executable: $RUNNER"
+
+exec "$RUNNER" "$WATCHER" "$LANE"

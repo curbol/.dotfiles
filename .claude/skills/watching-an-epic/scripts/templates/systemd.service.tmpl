@@ -1,0 +1,6 @@
+[Unit]
+Description=epic-watch @@WATCHER@@ @@LANE@@
+
+[Service]
+Type=oneshot
+ExecStart=@@LAUNCHER@@ @@WATCHER@@ @@LANE@@
