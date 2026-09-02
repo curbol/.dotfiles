@@ -44,6 +44,7 @@ linkfiles=(
   ".claude/statusline-command.sh"
   ".claude/skills/audit-command"
   ".claude/skills/longrun"
+  ".claude/skills/work-monitor"
   ".config/ghostty/config"
   ".config/starship.toml"
   ".config/tmux/tmux.conf"

@@ -1,0 +1,19 @@
+{
+  "shortcut": {
+    "epics": [
+      245072,
+      249969,
+      255490
+    ],
+    "recent_days": 7
+  },
+  "github": {
+    "search": "author:@me is:pr is:open archived:false"
+  },
+  "local": {
+    "roots": [
+      "~/code"
+    ],
+    "active_days": 30
+  }
+}
