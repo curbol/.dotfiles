@@ -41,11 +41,6 @@
           {
             "type": "command",
             "command": "rtk hook claude"
-          },
-          {
-            "type": "command",
-            "command": "\"$HOME/.claude/hooks/pr-body-precheck.sh\"",
-            "timeout": 5
           }
         ]
       }

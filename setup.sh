@@ -44,7 +44,6 @@ linkfiles=(
   ".claude/commands/epic-watch.md"
   ".claude/commands/epic-watch-status.md"
   ".claude/commands/epic-watch-stop.md"
-  ".claude/hooks/pr-body-precheck.sh"
   ".claude/keybindings.json"
   ".claude/settings.json"
   ".claude/statusline-command.sh"

@@ -9,9 +9,9 @@ A dotfiles repository for macOS (Apple Silicon and Intel) and Linux (Omarchy/Arc
 ## Setup
 
 ```sh
-sh ~/.dotfiles/setup.sh                     # symlink and copy dotfiles
-sh ~/.dotfiles/setup.sh --force             # overwrite copied files too
-sh ~/.dotfiles/setup.sh --force --packages  # full rebuild after a reformat
+sh ~/code/.dotfiles/setup.sh                     # symlink and copy dotfiles
+sh ~/code/.dotfiles/setup.sh --force             # overwrite copied files too
+sh ~/code/.dotfiles/setup.sh --force --packages  # full rebuild after a reformat
 ```
 
 The setup script does three things:
