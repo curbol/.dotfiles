@@ -79,6 +79,7 @@ Lead with the dimension that drives the decision; don't recite all four.
 - Ambiguous requests: state your interpretation and ask for confirmation (auto mode overrides this; make the reasonable call instead).
 - Minimal scope: implement the smallest viable solution. Prefer small, focused changes over large refactors.
 - Always check locally first. Prefer checked-out repos in `~/code/` over web/remote sources.
+- **Scratch work goes in `~/code/scratch/<name>/`, never a sibling of a real repo in `~/code/`.** This covers extracted archives, probe and experiment dirs, package build trees, log dumps, and one-off analysis output. Git worktrees go in `~/code/worktrees/<branch-suffix>/`. Everything under `~/code/scratch/` is disposable without asking; everything directly under `~/code/` is a repo I intend to keep.
 - **Check what the repo already exposes before hand-rolling a command.** Before building, testing, linting, formatting, or running anything, look for existing entry points: `Makefile` targets, `package.json` scripts, `justfile`/`Taskfile.yml`, `pyproject.toml`/`tox.ini`, cargo aliases, `scripts/` and `bin/` dirs, `.github/workflows/`, and CONTRIBUTING/README docs. Prefer the project's own target over reconstructing the invocation by hand; it encodes flags and setup you'll otherwise miss.
 - Don't ask me to choose execution strategies (which agent type, parallel vs sequential, worktree vs not). Never present "execution options" after writing a plan. These are implementation details; use your judgment and just do the work.
 
