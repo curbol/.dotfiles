@@ -89,6 +89,7 @@ Usage: slack.sh <command> [args...]
   reactions <channel> <ts>                      reactions.get
   search-messages <query> [channel-name]        search.messages; channel NAME, not an ID
   post-thread-reply <channel> <thread-ts> <text>  chat.postMessage into a thread
+  post-message <channel> <text>                 chat.postMessage as a new top-level message
   add-reaction <channel> <ts> <emoji>           reactions.add
   auth-test                                     auth.test; derives workspace and self id
 USAGE
@@ -177,6 +178,15 @@ case "$cmd" in
         require_token
         post chat.postMessage "$(jq -nc --arg c "$1" --arg t "$2" --arg x "$3" \
             '{channel: $c, thread_ts: $t, text: $x}')"
+        ;;
+    post-message)
+        # No thread_ts, so this starts a new top-level message. The lane never uses it:
+        # every write it makes belongs in the thread it read from.
+        refuse_if_dry_run post-message
+        [ $# -eq 2 ] || usage
+        require_token
+        post chat.postMessage "$(jq -nc --arg c "$1" --arg x "$2" \
+            '{channel: $c, text: $x}')"
         ;;
     add-reaction)
         refuse_if_dry_run add-reaction

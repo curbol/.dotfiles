@@ -1,0 +1,124 @@
+#!/bin/bash
+# Post a daily list of my open, unapproved PRs for one epic into a Slack channel, so a
+# reviewer can see what is waiting without asking.
+#
+# Needs no model: the snapshot work-monitor already collects carries every field this
+# formats, so a scheduled run is a shell script and a curl, not a session.
+#
+# Exit codes: 0 posted or nothing to post  1 usage  2 configuration absent  3 upstream error
+
+set -euo pipefail
+
+EPIC=""
+CHANNEL=""
+DRY_RUN=0
+
+usage() {
+    cat >&2 <<'USAGE'
+Usage: epic-pr-digest --epic <id> --channel <C...> [--dry-run]
+
+Posts nothing on a day with no open unapproved PRs for the epic. Silence is the report:
+a message saying "nothing open" every morning is one people learn to skip.
+USAGE
+    exit 1
+}
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --epic)    EPIC="${2:-}"; shift 2 ;;
+        --channel) CHANNEL="${2:-}"; shift 2 ;;
+        --dry-run) DRY_RUN=1; shift ;;
+        *) usage ;;
+    esac
+done
+case "$EPIC" in ""|*[!0-9]*) usage ;; esac
+[ -n "$CHANNEL" ] || usage
+
+command -v jq >/dev/null 2>&1 || { echo "jq is required but not installed" >&2; exit 2; }
+
+# A scheduled run inherits no shell rc, so both tokens would be absent. This is the same
+# 0600 file epic-watch writes; a second secret store for the same two credentials is one
+# more place to leak them from.
+ENV_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/epic-watch/env"
+if [ -f "$ENV_FILE" ]; then
+    # shellcheck source=/dev/null
+    . "$ENV_FILE"
+fi
+
+CONFIG_HOME="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
+MONITOR="$CONFIG_HOME/skills/work-monitor/scripts/collect.sh"
+SLACK="$CONFIG_HOME/skills/watching-an-epic/scripts/slack.sh"
+for f in "$MONITOR" "$SLACK"; do
+    [ -x "$f" ] || { echo "not executable or absent: $f" >&2; exit 2; }
+done
+
+# Collect rather than read whatever is on disk: a digest built from yesterday's snapshot
+# reports PRs that were merged overnight, and is wrong in the direction that wastes a
+# reviewer's time.
+STATE="$("$MONITOR")" || { echo "collector failed" >&2; exit 3; }
+[ -f "$STATE" ] || { echo "collector reported a path that does not exist: $STATE" >&2; exit 3; }
+
+# A source the collector could not read is not the same as a source with nothing in it. A
+# digest built over a failed GitHub read would post an empty list and read as "all clear".
+if [ "$(jq -r '.errors | length' "$STATE")" -gt 0 ]; then
+    printf 'refusing to post: the collector reported errors\n' >&2
+    jq -r '.errors[] | "  - \(.)"' "$STATE" >&2
+    exit 3
+fi
+
+# Tab-separated, because a PR title contains spaces and splitting on those truncates it at
+# the first word. Drafts are excluded: a draft is not waiting on anyone.
+rows() {
+    jq -r --argjson e "$EPIC" --arg want "$1" '
+        .prs[]
+        | select(.epic == $e and (.draft | not) and .review == $want)
+        | [ .repo + "#" + (.number | tostring), .title, .url, (.checks // "-"), (.story // "-") ]
+        | @tsv
+    ' "$STATE"
+}
+
+needs_review="$(rows REVIEW_REQUIRED)"
+changes="$(rows CHANGES_REQUESTED)"
+
+if [ -z "$needs_review" ] && [ -z "$changes" ]; then
+    printf 'nothing open and unapproved for epic %s; posting nothing\n' "$EPIC" >&2
+    exit 0
+fi
+
+# A failing build is stated rather than filtered out. A reviewer deciding what to pick up is
+# better served knowing than having the PR silently withheld.
+format_section() {
+    local heading="$1" body="$2" repo title url checks story
+    [ -n "$body" ] || return 0
+    printf '%s\n' "$heading"
+    while IFS=$'\t' read -r repo title url checks story; do
+        [ -n "$repo" ] || continue
+        case "$checks" in
+            FAILURE) checks=" · checks failing" ;;
+            PENDING) checks=" · checks running" ;;
+            *)       checks="" ;;
+        esac
+        # Many titles already carry "[sc-NNNN]" from the branch-naming convention; appending
+        # it again reads as two different references to two different stories.
+        case "$story" in
+            -) story="" ;;
+            *) case "$title" in *"sc-$story"*) story="" ;; *) story=" · sc-$story" ;; esac ;;
+        esac
+        printf -- '- <%s|%s> %s%s%s\n' "$url" "$repo" "$title" "$story" "$checks"
+    done <<<"$body"
+    printf '\n'
+}
+
+TEXT="$(
+    printf 'Open PRs on <https://app.shortcut.com/gladly/epic/%s|epic %s> waiting on review\n\n' "$EPIC" "$EPIC"
+    format_section "*Needs review*" "$needs_review"
+    format_section "*Changes requested* (on me, not you)" "$changes"
+)"
+
+if [ "$DRY_RUN" -eq 1 ]; then
+    printf '%s\n' "$TEXT"
+    exit 0
+fi
+
+"$SLACK" post-message "$CHANNEL" "$TEXT" >/dev/null || { echo "posting to $CHANNEL failed" >&2; exit 3; }
+printf 'posted to %s\n' "$CHANNEL" >&2
