@@ -42,7 +42,7 @@ launcher at `~/.local/share/epic-watch/bin/epic-watch-launch` rebuilds `PATH`,
 | Variable | Needed for | If absent |
 |---|---|---|
 | `SHORTCUT_API_TOKEN` | everything | hard failure; there is no fallback, since both Shortcut MCP servers are unusable here (one deprecated, one interactive-auth) |
-| `SLACK_USER_TOKEN` | the shell Slack path | the Slack sources report **degraded** rather than failing, and the lane routes those reads through the Slack MCP connector instead |
+| `SLACK_USER_TOKEN` | detecting that there is work, and every Slack read | the Slack sources report **degraded** rather than failing, but the precheck can no longer tell whether a channel has new messages, so the lane is never invoked: the watcher fires on schedule and makes no progress until the token is set |
 
 Both live in a single 0600 file at `${XDG_CONFIG_HOME:-~/.config}/epic-watch/env`, written
 by the setup command. They are deliberately never written into a launchd plist:
@@ -115,8 +115,8 @@ you want to tune it.
 
 `last_success` refreshes only when **no** source was degraded, denied, or errored. So a
 machine with no Slack token shows runs happening and `last_success` unset, which is the
-honest report: something is not configured. A watcher that has quietly done nothing for a
-week cannot look healthy.
+honest report: something is not configured, and until it is, that watcher is filing nothing.
+A watcher that has quietly done nothing for a week cannot look healthy.
 
 Three consecutive failures trip a breaker. It **throttles** to one fire in six rather than
 halting, so a transient outage heals without you: the first success closes it. `config.sh reset

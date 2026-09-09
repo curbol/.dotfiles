@@ -64,6 +64,7 @@ Usage: shortcut.sh <command> [args...]
   story-by-external-link <url>     GET /external-link/stories (singular route)
   search-stories <query> [size]    GET /search/stories; results under .data[]
   workflow-states <workflow-id>    GET /workflows/<id>
+  team <team-id>                   GET /groups/<id>; .workflow_ids is what it may file into
   epic-stories <epic-id>           GET /epics/<id>/stories (stage 2 only; ~187KB)
 USAGE
     exit 1
@@ -74,7 +75,7 @@ cmd="${1:-}"; shift || usage
 # After the dispatch, so an unknown subcommand is a usage error rather than a configuration
 # one no matter what the environment holds.
 case "$cmd" in
-    epic|story|story-by-external-link|search-stories|workflow-states|epic-stories) require_token ;;
+    epic|story|story-by-external-link|search-stories|workflow-states|team|epic-stories) require_token ;;
     create-story|update-story|comment) require_token ;;
 esac
 
@@ -97,6 +98,11 @@ case "$cmd" in
     search-stories)
         [ $# -ge 1 ] || usage
         request GET "/search/stories?query=$(urlencode "$1")&page_size=${2:-5}"
+        ;;
+    team)
+        # A team is a "group" in the REST API; the noun differs from the one the UI shows.
+        [ $# -eq 1 ] || usage
+        request GET "/groups/$1"
         ;;
     workflow-states)
         [ $# -eq 1 ] || usage

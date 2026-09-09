@@ -6,7 +6,9 @@ Every script is in `$EPIC_WATCH_ROOT/scripts/`. All of them share one exit contr
 
 `shortcut.sh` exit 2 is a hard failure: there is no Shortcut MCP to fall back to.
 `slack.sh` exit 2 means the shell path was never configured on this machine, and your
-instruction in that case is to use the Slack MCP tools instead.
+instruction in that case is to use the Slack MCP tools instead. That applies to a run started
+by hand, which is the only way you get here in that state: the scheduled precheck needs the
+shell path to detect work at all, so on a machine without the token it never invokes you.
 
 ## Shortcut
 

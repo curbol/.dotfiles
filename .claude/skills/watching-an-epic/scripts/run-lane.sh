@@ -372,8 +372,12 @@ if "$SHORTCUT" epic "$EPIC" >/dev/null 2>&1; then :; else
     esac
 fi
 
-# Slack: exit 2 means the shell path was never configured here, which 1a records and does
-# not consume. Stage 1b turns the same outcome into a model invocation over MCP.
+# Slack: exit 2 means the shell path was never configured here, which records a degradation
+# and consumes nothing. Every WORK=true below sits behind a successful slack.sh call, so a
+# watcher with no SLACK_USER_TOKEN never reaches invoke_lane at all. There is no degraded mode
+# that still makes progress, and the model's own MCP read path cannot stand in for the shell
+# path, because nothing invokes the model. A watcher in this state fires on schedule and does
+# nothing until the token is set, which is why the token is a prerequisite and not a preference.
 for i in ${WINDOW_KEYS[@]+"${!WINDOW_KEYS[@]}"}; do
     ch="${CHANNELS[$i]}"; bound="${WINDOW_FROM[$i]}"
     newest="$("$SLACK" latest-ts "$ch" 2>/dev/null)" && rc=0 || rc=$?

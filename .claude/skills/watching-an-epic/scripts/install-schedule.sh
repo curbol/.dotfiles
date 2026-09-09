@@ -115,6 +115,35 @@ case "$cmd" in
     else
         printf 'warning: could not verify intake_state against workflow %s\n' "$wf" >&2
     fi
+    # The state belonging to its own workflow proves nothing about whether the team can file
+    # into it. A workflow id lifted from a Shortcut view filter satisfies the check above and
+    # still writes every story into a workflow the team does not own, where no one looking at
+    # the team's board will see it. A team's own workflow_ids is the exact answer, so this is
+    # fatal rather than advisory.
+    team="$("$CONFIG" show "$watcher" | jq -r '.team // ""')"
+    if [ -n "$team" ]; then
+        if group="$("$HERE/shortcut.sh" team "$team" 2>/dev/null)"; then
+            jq -e --argjson w "$wf" '(.workflow_ids // []) | index($w) != null' <<<"$group" >/dev/null \
+                || die 1 "intake_state.workflow_id $wf is not a workflow of team $team (it owns $(jq -rc '.workflow_ids // []' <<<"$group"))"
+        else
+            printf 'warning: could not verify intake workflow against team %s\n' "$team" >&2
+        fi
+    fi
+    # Advisory only, and sampled: page_size caps at 25, so a workflow absent from the sample
+    # may still be one a later story uses, and filing into a workflow no existing story uses
+    # is a legitimate choice. Printing what the epic actually uses is worth more here than a
+    # verdict this check cannot reach.
+    epic="$("$CONFIG" show "$watcher" | jq -r '.epic')"
+    if found="$("$HERE/shortcut.sh" search-stories "epic:$epic" 25 2>/dev/null)"; then
+        seen="$(jq -c '[.data[]?.workflow_id] | unique' <<<"$found")"
+        if [ "$(jq -r 'length' <<<"$seen")" -eq 0 ]; then
+            printf 'note: epic %s has no stories to compare intake workflow %s against\n' "$epic" "$wf" >&2
+        else
+            jq -e --argjson w "$wf" 'index($w) != null' <<<"$seen" >/dev/null \
+                || printf 'warning: no sampled story in epic %s uses intake workflow %s; they use %s\n' \
+                          "$epic" "$wf" "$seen" >&2
+        fi
+    fi
     install_launcher
     # install-schedule.sh runs from the checkout, so it is the one component that knows which
     # copy of the skill this watcher was scheduled from. The launcher has no other way to find
