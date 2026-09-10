@@ -31,11 +31,12 @@ open unapproved PRs: a message saying "nothing open" every morning is one people
 skip, and silence is the same report.
 
   --channel      override the watcher's digest_channel (default: its first slack_channel)
-  --transport shell  chat.postMessage with SLACK_USER_TOKEN. Deterministic; prefer it.
-  --transport mcp    hand the text to `claude -p` to post through the Slack MCP, whose
-                     OAuth grant is a separate credential from the user token. For use
-                     while no user token exists. A model in the loop can reword or drop
-                     the message, so this is the fallback, not the default.
+  --transport mcp    default. Hands the text to `claude -p`, which posts through the Slack
+                     MCP. That OAuth grant already exists wherever this skill runs, so this
+                     needs no setup at all. Costs one model invocation per posting day.
+  --transport shell  chat.postMessage with SLACK_USER_TOKEN. Deterministic and free, but
+                     needs a Slack app someone created and an admin approved. Prefer it
+                     where that token exists.
 USAGE
     exit 1
 }
@@ -66,7 +67,11 @@ EPIC="$(jq -r '.epic' <<<"$cfg")"
 
 # From config unless overridden, so a scheduler entry is `pr-digest.sh <watcher>` on every
 # platform and switching transport is a config edit rather than a re-render of the unit.
-[ -n "$TRANSPORT" ] || TRANSPORT="$(jq -r '.digest_transport // "shell"' <<<"$cfg")"
+#
+# Defaults to mcp because that credential already exists wherever this skill runs, while the
+# shell path needs a Slack app someone has to create and get a workspace admin to approve.
+# Prefer shell where a token exists: it is deterministic, and it costs no model invocation.
+[ -n "$TRANSPORT" ] || TRANSPORT="$(jq -r '.digest_transport // "mcp"' <<<"$cfg")"
 case "$TRANSPORT" in shell|mcp) ;; *) echo "unknown transport: $TRANSPORT" >&2; exit 2 ;; esac
 
 # A scheduled run inherits no shell rc, so the tokens would be absent. This is the same 0600

@@ -153,13 +153,17 @@ and must stay one.
 Optional config keys: `digest_channel` (default: the first `slack_channels` entry) and
 `digest_transport`.
 
-`digest_transport` is `shell` by default, which posts with `SLACK_USER_TOKEN` and is
-deterministic. `mcp` instead hands the text to `claude -p` to post through the Slack MCP,
-whose OAuth grant is a **separate credential from the user token** — which is what makes it
-useful while no user token exists yet. It costs a model invocation, and a model in the loop
-can reword or drop a message, so it is the fallback and not the default. The two transports
-need different bold markers, because `chat.postMessage` takes Slack's mrkdwn where one
-asterisk is bold, while the MCP takes standard markdown where the same string is italic.
+`digest_transport` defaults to `mcp`, which hands the text to `claude -p` and posts through
+the Slack MCP. That grant is a **separate credential from `SLACK_USER_TOKEN`** and already
+exists wherever this skill runs, so the digest works with no Slack app to create and no admin
+approval to wait for. It costs one model invocation per posting day, and a model in the loop
+can in principle reword a message, so the prompt pins it to verbatim reproduction and treats
+the digest as data rather than instruction.
+
+Set it to `shell` where a `SLACK_USER_TOKEN` exists: `chat.postMessage` is deterministic and
+costs nothing. The two transports need different bold markers, because Slack's own mrkdwn
+makes one asterisk bold while the MCP takes standard markdown, where the same string is
+italic.
 
 To schedule it, give the watcher a `digest` cadence and install as usual:
 
