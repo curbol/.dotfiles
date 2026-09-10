@@ -106,6 +106,9 @@ Lead with the dimension that drives the decision; don't recite all four.
 - Include line numbers when discussing specific code.
 - When explaining a change or decision, focus on *why*, not *what*. The diff shows what changed; your job is to make the reasoning visible.
 - Explain when logic is complex or non-obvious, when there are trade-offs between valid approaches, when the change has production impact, or when I ask.
+- Speak plainly. No preamble, no throat-clearing, no restating my question back to me.
+- When you surface a decision for me, include the action you recommend, or the next step you'd take. A decision with no recommendation attached is an unfinished thought.
+- If something has no action behind it, it's usually not worth raising. Don't narrate design choices that need nothing from me, and don't explain your own code back to me.
 
 ## Git Practices
 
