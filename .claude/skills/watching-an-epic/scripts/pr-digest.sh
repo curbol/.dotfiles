@@ -1,26 +1,36 @@
 #!/bin/bash
-# Post a daily list of my open, unapproved PRs for one epic into a Slack channel, so a
-# reviewer can see what is waiting without asking.
+# Post a watcher's open, unapproved PRs into its Slack channel, so a reviewer can see what
+# is waiting without asking. One line per PR, nothing on a quiet day.
 #
-# Needs no model: the snapshot work-monitor already collects carries every field this
-# formats, so a scheduled run is a shell script and a curl, not a session.
+# Needs no model on the shell transport: the snapshot work-monitor collects already carries
+# every field this formats, so a scheduled run is a shell script and a curl.
 #
-# Exit codes: 0 posted or nothing to post  1 usage  2 configuration absent  3 upstream error
+# Everything but the transport comes from the watcher's own config, so this takes a watcher
+# name rather than ids: a second watcher over a different epic needs no new arguments.
+#
+# Exit codes, shared with the rest of this skill:
+#   0 posted or nothing to post  1 usage  2 configuration absent  3 upstream error
 
 set -euo pipefail
 
-EPIC=""
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CONFIG="$HERE/config.sh"
+SLACK="$HERE/slack.sh"
+
+WATCHER=""
 CHANNEL=""
 DRY_RUN=0
-TRANSPORT="shell"
+TRANSPORT=""
 
 usage() {
     cat >&2 <<'USAGE'
-Usage: epic-pr-digest --epic <id> --channel <C...> [--transport shell|mcp] [--dry-run]
+Usage: pr-digest.sh <watcher> [--channel <C...>] [--transport shell|mcp] [--dry-run]
 
-Posts nothing on a day with no open unapproved PRs for the epic. Silence is the report:
-a message saying "nothing open" every morning is one people learn to skip.
+Reads the epic and the channel from the watcher's config. Posts nothing on a day with no
+open unapproved PRs: a message saying "nothing open" every morning is one people learn to
+skip, and silence is the same report.
 
+  --channel      override the watcher's digest_channel (default: its first slack_channel)
   --transport shell  chat.postMessage with SLACK_USER_TOKEN. Deterministic; prefer it.
   --transport mcp    hand the text to `claude -p` to post through the Slack MCP, whose
                      OAuth grant is a separate credential from the user token. For use
@@ -30,36 +40,46 @@ USAGE
     exit 1
 }
 
+[ $# -ge 1 ] || usage
+WATCHER="$1"; shift
+case "$WATCHER" in
+    ""|-*|*[!abcdefghijklmnopqrstuvwxyz0123456789-]*) usage ;;
+esac
+
 while [ $# -gt 0 ]; do
     case "$1" in
-        --epic)      EPIC="${2:-}"; shift 2 ;;
         --channel)   CHANNEL="${2:-}"; shift 2 ;;
         --transport) TRANSPORT="${2:-}"; shift 2 ;;
         --dry-run)   DRY_RUN=1; shift ;;
         *) usage ;;
     esac
 done
-case "$TRANSPORT" in shell|mcp) ;; *) usage ;; esac
-case "$EPIC" in ""|*[!0-9]*) usage ;; esac
-[ -n "$CHANNEL" ] || usage
 
 command -v jq >/dev/null 2>&1 || { echo "jq is required but not installed" >&2; exit 2; }
+[ -x "$CONFIG" ] || { echo "not executable or absent: $CONFIG" >&2; exit 2; }
+[ -x "$SLACK" ]  || { echo "not executable or absent: $SLACK" >&2; exit 2; }
 
-# A scheduled run inherits no shell rc, so both tokens would be absent. This is the same
-# 0600 file epic-watch writes; a second secret store for the same two credentials is one
-# more place to leak them from.
+cfg="$("$CONFIG" show "$WATCHER")" || exit 2
+EPIC="$(jq -r '.epic' <<<"$cfg")"
+[ -n "$CHANNEL" ] || CHANNEL="$(jq -r '.digest_channel // .slack_channels[0] // ""' <<<"$cfg")"
+[ -n "$CHANNEL" ] || { echo "watcher $WATCHER has no channel to post to" >&2; exit 2; }
+
+# From config unless overridden, so a scheduler entry is `pr-digest.sh <watcher>` on every
+# platform and switching transport is a config edit rather than a re-render of the unit.
+[ -n "$TRANSPORT" ] || TRANSPORT="$(jq -r '.digest_transport // "shell"' <<<"$cfg")"
+case "$TRANSPORT" in shell|mcp) ;; *) echo "unknown transport: $TRANSPORT" >&2; exit 2 ;; esac
+
+# A scheduled run inherits no shell rc, so the tokens would be absent. This is the same 0600
+# file the rest of the skill uses; a second secret store for the same credentials is one more
+# place to leak them from.
 ENV_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/epic-watch/env"
-if [ -f "$ENV_FILE" ]; then
-    # shellcheck source=/dev/null
-    . "$ENV_FILE"
-fi
+# shellcheck source=/dev/null
+[ -f "$ENV_FILE" ] && . "$ENV_FILE"
 
-CONFIG_HOME="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
-MONITOR="$CONFIG_HOME/skills/work-monitor/scripts/collect.sh"
-SLACK="$CONFIG_HOME/skills/watching-an-epic/scripts/slack.sh"
-for f in "$MONITOR" "$SLACK"; do
-    [ -x "$f" ] || { echo "not executable or absent: $f" >&2; exit 2; }
-done
+# The collector lives in the work-monitor skill, which is a reader by design. This reads its
+# snapshot rather than living inside it, because that skill must never write.
+MONITOR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/skills/work-monitor/scripts/collect.sh"
+[ -x "$MONITOR" ] || { echo "work-monitor's collector is absent: $MONITOR" >&2; exit 2; }
 
 # Collect rather than read whatever is on disk: a digest built from yesterday's snapshot
 # reports PRs that were merged overnight, and is wrong in the direction that wastes a
@@ -141,19 +161,17 @@ if [ "$TRANSPORT" = shell ]; then
 fi
 
 # The Slack MCP is reachable only from inside a Claude session, so posting through it costs
-# a model invocation the shell transport does not. Resolve the real binary rather than a
-# version-manager shim: a shim re-derives its own config from the environment, which a
+# a model invocation the shell transport does not. Prefer the path the watcher already
+# recorded: a version-manager shim re-derives its own config from the environment, which a
 # scheduled run does not have.
-CLAUDE_BIN="${CLAUDE_BIN:-$(command -v claude || true)}"
-[ -n "$CLAUDE_BIN" ] || { echo "claude not on PATH and CLAUDE_BIN unset" >&2; exit 2; }
-if [ -L "$CLAUDE_BIN" ]; then
-    CLAUDE_BIN="$(python3 -c 'import os,sys;print(os.path.realpath(sys.argv[1]))' "$CLAUDE_BIN" 2>/dev/null || printf '%s' "$CLAUDE_BIN")"
-fi
+CLAUDE_BIN="${CLAUDE_BIN:-$(jq -r '.env.claude_bin // ""' <<<"$cfg")}"
+[ -n "$CLAUDE_BIN" ] || CLAUDE_BIN="$(command -v claude || true)"
+[ -n "$CLAUDE_BIN" ] || { echo "claude not on PATH and no claude_bin recorded" >&2; exit 2; }
 
 # A workspace the CLI does not trust silently drops its permission rules, so the allowed-tool
 # grant below would not apply and the run would stall on a prompt no one can answer.
-TRUSTED_CWD="${EPIC_PR_DIGEST_CWD:-$HOME/code/.dotfiles}"
-[ -d "$TRUSTED_CWD" ] || TRUSTED_CWD="$HOME"
+TRUSTED_CWD="${EPIC_WATCH_DIGEST_CWD:-$(jq -r '.env.skill_root // ""' <<<"$cfg")}"
+[ -n "$TRUSTED_CWD" ] && [ -d "$TRUSTED_CWD" ] || TRUSTED_CWD="$HOME"
 
 # The digest text is delimited rather than interpolated into the instruction: it carries PR
 # titles written by other people, and a title is data, never a directive.

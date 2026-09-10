@@ -127,6 +127,44 @@ are reachable. It covers a missing config, an env file whose mode is not 0600, a
 recorded skill root it cannot resolve. Every one of those writes a record and an `ALERT`, because a scheduled fire that
 writes nothing is indistinguishable from a healthy quiet run.
 
+## The PR digest
+
+`scripts/pr-digest.sh <watcher>` posts that watcher's open, unapproved PRs into its Slack
+channel, so a reviewer can see what is waiting without asking. It takes the epic and the
+channel from the watcher's own config, so a second watcher over another epic needs no new
+arguments.
+
+It is not a lane and needs no model on the shell transport. It reads the snapshot
+`work-monitor`'s collector produces, which already carries each PR's repo, number, story,
+epic, review state, draft flag and checks, so a scheduled run is a shell script and a curl.
+It reads that snapshot rather than living inside `work-monitor`, which is a reader by design
+and must stay one.
+
+- Nothing is posted on a day with no open unapproved PRs. A daily "nothing open" is a message
+  people learn to skip, and silence says the same thing.
+- A collector error is not an empty list. If any source failed, it refuses to post rather
+  than publish an all-clear it cannot support.
+- Drafts are excluded, since a draft waits on nobody. `CHANGES_REQUESTED` is listed
+  separately from `REVIEW_REQUIRED`: one is waiting on a reviewer, the other on the author.
+- Attribution is the poster's own account, so the digest is a non-bot message in a channel
+  the intake lane watches. The rubric sorts a status update to `ignore`; if that ever
+  regresses, the symptom is a filed story every morning.
+
+Optional config keys: `digest_channel` (default: the first `slack_channels` entry) and
+`digest_transport`.
+
+`digest_transport` is `shell` by default, which posts with `SLACK_USER_TOKEN` and is
+deterministic. `mcp` instead hands the text to `claude -p` to post through the Slack MCP,
+whose OAuth grant is a **separate credential from the user token** — which is what makes it
+useful while no user token exists yet. It costs a model invocation, and a model in the loop
+can reword or drop a message, so it is the fallback and not the default. The two transports
+need different bold markers, because `chat.postMessage` takes Slack's mrkdwn where one
+asterisk is bold, while the MCP takes standard markdown where the same string is italic.
+
+Scheduling is not wired into `install-schedule.sh`, whose unit templates take exactly
+`<launcher> <watcher> <lane>`. Until it is, add a unit by hand; the command is
+`scripts/pr-digest.sh <watcher>` on either platform, with `CLAUDE_CONFIG_DIR` set.
+
 ## Tests
 
 ```bash

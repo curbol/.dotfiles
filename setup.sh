@@ -61,7 +61,6 @@ linkfiles=(
   ".gitconfig"
   ".gitignore"
   ".ideavimrc"
-  ".local/bin/epic-pr-digest"
   ".markdownlint.jsonc"
   ".npmrc"
   ".zshenv"
