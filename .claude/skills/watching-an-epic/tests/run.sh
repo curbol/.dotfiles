@@ -161,6 +161,21 @@ eq "doc_surfaces without a page is not" "2" "$( ( "$S/config.sh" init t3 "$(jq -
 for bad_patch in '.epic=null' '.epic="abc"' '.slack_channels=[]' '.slack_workspace=null' '.slack_self_id=null' '.intake_state.workflow_id=null' '.intake_state.workflow_state_id=null' '.lanes={"nope":"hourly"}' '.lookback="30d"'; do
     eq "rejects $bad_patch" "2" "$( ( "$S/config.sh" init tbad "$(jq -c "$bad_patch" <<<"$CFG")" >/dev/null 2>&1 ); echo $? )"
 done
+# digest is schedulable but holds no per-lane state, so it is valid in .lanes and still
+# refused by the subcommands that read or write a lane's state. Both halves are asserted,
+# because accepting it in the second would silently create lane records nothing ever wrote.
+eq "digest is a valid lane" "0" \
+   "$( ( "$S/config.sh" init tdig "$(jq -c '.name="tdig"|.lanes={"intake":"hourly","digest":"daily"}' <<<"$CFG")" >/dev/null 2>&1 ); echo $? )"
+eq "  but keeps no lane state" "1" "$( ( "$S/config.sh" reset tdig digest >/dev/null 2>&1 ); echo $? )"
+
+"$S/config.sh" set-lane tdig digest weekly >/dev/null 2>&1
+eq "set-lane changes a cadence" "weekly" "$("$S/config.sh" show tdig | jq -r '.lanes.digest')"
+"$S/config.sh" set-lane tdig digest "" >/dev/null 2>&1
+eq "set-lane with an empty cadence removes the lane" "null" "$("$S/config.sh" show tdig | jq -r '.lanes.digest // "null"')"
+eq "set-lane refuses an unknown lane" "2" "$( ( "$S/config.sh" set-lane tdig nope daily >/dev/null 2>&1 ); echo $? )"
+# The rejection must not have been applied first and rolled back: a half-written config is
+# worse than a refused edit, since nothing downstream re-reads it.
+eq "  leaving the config untouched" "hourly" "$("$S/config.sh" show tdig | jq -r '.lanes.intake')"
 
 group "a crash after the lock is recorded, not silent"
 # A fatal error while holding the lock must still leave a record and a non-zero status.

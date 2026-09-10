@@ -69,6 +69,16 @@ elif ! command -v claude >/dev/null 2>&1; then
     fail no_claude "claude not found on PATH=$PATH and no env.claude_bin recorded"
 fi
 
+# The digest is a scheduled job of a watcher but not a model lane: it keeps no watermark, no
+# breaker and no lock, and on the shell transport it runs no model at all. It needs this
+# script for one reason only, the environment a scheduled run does not inherit, so it
+# dispatches here rather than growing a second launcher that would drift from this one.
+if [ "$LANE" = digest ]; then
+    RUNNER="$ROOT/scripts/pr-digest.sh"
+    [ -x "$RUNNER" ] || fail no_runner "not executable: $RUNNER"
+    exec "$RUNNER" "$WATCHER"
+fi
+
 RUNNER="$ROOT/scripts/run-lane.sh"
 [ -x "$RUNNER" ] || fail no_runner "not executable: $RUNNER"
 

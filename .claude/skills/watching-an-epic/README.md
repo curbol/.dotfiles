@@ -161,9 +161,19 @@ can reword or drop a message, so it is the fallback and not the default. The two
 need different bold markers, because `chat.postMessage` takes Slack's mrkdwn where one
 asterisk is bold, while the MCP takes standard markdown where the same string is italic.
 
-Scheduling is not wired into `install-schedule.sh`, whose unit templates take exactly
-`<launcher> <watcher> <lane>`. Until it is, add a unit by hand; the command is
-`scripts/pr-digest.sh <watcher>` on either platform, with `CLAUDE_CONFIG_DIR` set.
+To schedule it, give the watcher a `digest` cadence and install as usual:
+
+```bash
+scripts/config.sh set-lane <watcher> digest daily   # or edit .lanes in config.json
+scripts/install-schedule.sh --install <watcher>
+```
+
+`digest` is a lane for scheduling purposes and nothing else. It reaches the scheduler through
+the same templates and the same launcher as a model lane, differing only in the argument, so
+it inherits the environment rebuild a scheduled run needs and the launch-failure reporting
+that goes with it. What it does not share is per-lane state: it has no watermark, no breaker
+and no lock, which is why `config.sh reset`, `health-set` and the lock subcommands still
+refuse the name.
 
 ## Tests
 

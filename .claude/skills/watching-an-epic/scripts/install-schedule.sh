@@ -8,7 +8,7 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG="$HERE/config.sh"
 TEMPLATES="$HERE/templates"
 
-IMPLEMENTED_LANES="intake"
+IMPLEMENTED_LANES="intake digest"
 ALL_LANES="intake groom docs"
 LABEL_PREFIX="com.gladly.epic-watch"
 BIN_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/epic-watch/bin"
@@ -95,7 +95,7 @@ install_launcher() {
 
 cmd="${1:-}"; shift || usage
 require_name "${1:-}"
-case "$cmd" in --render) case "${2:-}" in intake|groom|docs) ;; *) die 1 "invalid lane: '${2:-}'" ;; esac ;; esac
+case "$cmd" in --render) case "${2:-}" in intake|groom|docs|digest) ;; *) die 1 "invalid lane: '${2:-}'" ;; esac ;; esac
 
 case "$cmd" in
 --render)

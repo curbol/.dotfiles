@@ -33,6 +33,11 @@ require_name() {
 }
 
 # The lane reaches mkdir, rm -rf and jq programs on the same paths the name does.
+#
+# `digest` is deliberately absent: it is schedulable but keeps no per-lane state, so it has
+# no breaker to reset, no health to record and no lock to take. Every subcommand guarded by
+# this one operates on state a digest does not have, and accepting the name here would create
+# empty lane records that look like a lane that never ran.
 require_lane() {
     case "${1:-}" in
         intake|groom|docs) ;;
@@ -112,9 +117,12 @@ validate() {
     [ "$(jq -r '.slack_self_id // ""' <<<"$cfg")" != "" ] || err+=("slack_self_id is required")
     [ "$(jq -r 'if (.lanes | type) == "object" then (.lanes | length) else 0 end' <<<"$cfg")" -gt 0 ] \
         || err+=("lanes must be present and non-empty")
+    # `digest` rides in .lanes because everything scheduling needs from a lane — a cadence, a
+    # unit, a launcher argument — is the same for it. What it does not share is per-lane
+    # state, which is why require_lane above still refuses it.
     while read -r lane; do
         [ -z "$lane" ] && continue
-        case "$lane" in intake|groom|docs) ;; *) err+=("unknown lane: $lane") ;; esac
+        case "$lane" in intake|groom|docs|digest) ;; *) err+=("unknown lane: $lane") ;; esac
     done < <(jq -r '(.lanes // {}) | keys[]' <<<"$cfg")
     local ask_expiry; ask_expiry="$(parse_duration "$(jq -r '.ask_expiry // "72h"' <<<"$cfg")")" \
         || err+=("ask_expiry is not a duration")
@@ -144,6 +152,7 @@ Usage: config.sh <command> [args...]
   show <name>                            print config.json
   list                                   list watcher names
   set-env <name> <key> <value>           set one config .env field
+  set-lane <name> <lane> <cadence>       enable a lane at a cadence ("" removes it)
   watermark-get <name> <key>             print a watermark value ("" if unset)
   watermark-set <name> <key> <value> [backfill-latest]
   effective-bound <name> <key> <lookback>
@@ -220,6 +229,20 @@ set-env)
     jq -e . "$f" >/dev/null 2>&1 || die 2 "refusing to rewrite $f: it is not valid JSON"
     jq -S --arg k "$2" --arg v "$3" '.env[$k] = $v' "$f" | write_atomic "$f" \
         || die 2 "failed to write $f"
+    ;;
+set-lane)
+    # Revalidated after the edit rather than checked before it: validate() is the one place
+    # that knows which lane names and cadences are legal, and a second copy of that list here
+    # is a copy that drifts.
+    [ $# -eq 3 ] || usage
+    f="$(config_file "$1")"
+    [ -f "$f" ] || die 2 "no config for watcher $1"
+    jq -e . "$f" >/dev/null 2>&1 || die 2 "refusing to rewrite $f: it is not valid JSON"
+    updated="$(jq -S --arg l "$2" --arg c "$3" \
+        'if $c == "" then del(.lanes[$l]) else .lanes[$l] = $c end' "$f")" \
+        || die 2 "failed to read $f"
+    validate "$updated"
+    printf '%s' "$updated" | write_atomic "$f" || die 2 "failed to write $f"
     ;;
 watermark-get)
     [ $# -eq 2 ] || usage

@@ -31,7 +31,7 @@ INSTALLED_WATCHERS="$W_MAIN $W_SIB"
 # purpose, so cleanup would report the sibling's units as this watcher's leftovers.
 units_for() {
     find "$HOME/Library/LaunchAgents" -name "com.gladly.epic-watch.$1.*.plist" 2>/dev/null
-    for lane in intake groom docs; do
+    for lane in intake groom docs digest; do
         for suffix in timer service; do
             f="$HOME/.config/systemd/user/epic-watch@$1-$lane.$suffix"
             [ -f "$f" ] && printf '%s\n' "$f"
@@ -92,6 +92,16 @@ Darwin)
     fi
     ;;
 esac
+
+# The digest reaches the scheduler through the same launcher and the same templates as a
+# model lane, differing only in the lane argument. Asserted because the alternative that was
+# considered — a second unit shape carrying its own argument list — would have put the
+# digest's environment rebuild on a path nothing else exercises.
+"$S/config.sh" init "$W_MAIN" "$(jq -c '.lanes={"intake":"hourly","digest":"daily"}' <<<"$CFG")" >/dev/null
+"$S/install-schedule.sh" --render "$W_MAIN" digest > "$SANDBOX/unit.digest"
+eq "the digest renders from the same template" "true" \
+   "$(grep -q 'epic-watch-launch' "$SANDBOX/unit.digest" && grep -q 'digest' "$SANDBOX/unit.digest" && echo true || echo false)"
+"$S/config.sh" init "$W_MAIN" "$CFG" >/dev/null
 
 printf '\ninstall lifecycle\n'
 # Only exercised where the scheduler actually exists; loading a unit is the whole point.
