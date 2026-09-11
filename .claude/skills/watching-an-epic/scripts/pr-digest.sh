@@ -132,28 +132,33 @@ fi
 
 # A failing build is stated rather than filtered out. A reviewer deciding what to pick up is
 # better served knowing than having the PR silently withheld.
+# One story routinely ships as several PRs that must merge in order, so they are grouped
+# under their story rather than listed flat. Sorting is by story then PR number: within a repo
+# that is creation order, which is the order the PRs were written to merge in. It is not a
+# verified merge order, so the grouping says which PRs belong together and leaves the sequence
+# to what the PR bodies state.
 format_section() {
-    local heading="$1" body="$2" repo title url checks story epic
+    local heading="$1" body="$2" repo title url checks story epic last_story=""
     [ -n "$body" ] || return 0
     printf '%s\n' "$heading"
     while IFS=$'\t' read -r repo title url checks story epic; do
         [ -n "$repo" ] || continue
-        # Only when more than one epic is in play: on a single-epic digest the header already
-        # says which, and repeating it on every line is noise.
         if [ "$MULTI" -eq 1 ]; then epic=" · epic $epic"; else epic=""; fi
         case "$checks" in
             FAILURE) checks=" · checks failing" ;;
             PENDING) checks=" · checks running" ;;
             *)       checks="" ;;
         esac
-        # Many titles already carry "[sc-NNNN]" from the branch-naming convention; appending
-        # it again reads as two different references to two different stories.
-        case "$story" in
-            -) story="" ;;
-            *) case "$title" in *"sc-$story"*) story="" ;; *) story=" · sc-$story" ;; esac ;;
-        esac
-        printf -- '- <%s|%s> %s%s%s%s\n' "$url" "$repo" "$title" "$story" "$epic" "$checks"
-    done <<<"$body"
+        if [ "$story" != "-" ] && [ "$story" != "$last_story" ]; then
+            printf -- '- <https://app.shortcut.com/gladly/story/%s|sc-%s>%s\n' "$story" "$story" "$epic"
+            last_story="$story"
+        fi
+        if [ "$story" = "-" ]; then
+            printf -- '- <%s|%s> %s%s\n' "$url" "$repo" "$title" "$checks"
+        else
+            printf -- '    - <%s|%s> %s%s\n' "$url" "$repo" "$title" "$checks"
+        fi
+    done <<<"$(sort -t$'\t' -k5,5 -k1,1 <<<"$body")"
     printf '\n'
 }
 
