@@ -62,6 +62,14 @@ command -v jq >/dev/null 2>&1 || { echo "jq is required but not installed" >&2; 
 
 cfg="$("$CONFIG" show "$WATCHER")" || exit 2
 EPIC="$(jq -r '.epic' <<<"$cfg")"
+
+# Work for one project routinely lives in more than one epic: a follow-up epic, a split, a
+# tracker. Reporting only the watched epic reads as "nothing waiting" while PRs sit in the
+# other one, which is the failure this whole digest exists to prevent.
+EPICS="$(jq -c '.digest_epics // [.epic]' <<<"$cfg")"
+[ "$(jq -r 'length' <<<"$EPICS")" -gt 0 ] || EPICS="[$EPIC]"
+MULTI=0
+[ "$(jq -r 'length' <<<"$EPICS")" -gt 1 ] && MULTI=1
 [ -n "$CHANNEL" ] || CHANNEL="$(jq -r '.digest_channel // .slack_channels[0] // ""' <<<"$cfg")"
 [ -n "$CHANNEL" ] || { echo "watcher $WATCHER has no channel to post to" >&2; exit 2; }
 
@@ -102,17 +110,20 @@ fi
 
 # Tab-separated, because a PR title contains spaces and splitting on those truncates it at
 # the first word. Drafts are excluded: a draft is not waiting on anyone.
+# Takes a JSON array of review states. REVIEW_REQUIRED and NONE are one section on purpose:
+# NONE means no reviewer was ever requested, which from a reviewer's side is indistinguishable
+# from awaiting them, and filtering it out hid the PRs nobody had been asked to look at.
 rows() {
-    jq -r --argjson e "$EPIC" --arg want "$1" '
+    jq -r --argjson es "$EPICS" --argjson want "$1" '
         .prs[]
-        | select(.epic == $e and (.draft | not) and .review == $want)
-        | [ .repo + "#" + (.number | tostring), .title, .url, (.checks // "-"), (.story // "-") ]
+        | select(.epic != null and (.epic as $e | $es | index($e)) != null and (.draft | not) and (.review as $r | $want | index($r)) != null)
+        | [ .repo + "#" + (.number | tostring), .title, .url, (.checks // "-"), (.story // "-"), (.epic | tostring) ]
         | @tsv
     ' "$STATE"
 }
 
-needs_review="$(rows REVIEW_REQUIRED)"
-changes="$(rows CHANGES_REQUESTED)"
+needs_review="$(rows '["REVIEW_REQUIRED","NONE"]')"
+changes="$(rows '["CHANGES_REQUESTED"]')"
 
 if [ -z "$needs_review" ] && [ -z "$changes" ]; then
     printf 'nothing open and unapproved for epic %s; posting nothing\n' "$EPIC" >&2
@@ -122,11 +133,14 @@ fi
 # A failing build is stated rather than filtered out. A reviewer deciding what to pick up is
 # better served knowing than having the PR silently withheld.
 format_section() {
-    local heading="$1" body="$2" repo title url checks story
+    local heading="$1" body="$2" repo title url checks story epic
     [ -n "$body" ] || return 0
     printf '%s\n' "$heading"
-    while IFS=$'\t' read -r repo title url checks story; do
+    while IFS=$'\t' read -r repo title url checks story epic; do
         [ -n "$repo" ] || continue
+        # Only when more than one epic is in play: on a single-epic digest the header already
+        # says which, and repeating it on every line is noise.
+        if [ "$MULTI" -eq 1 ]; then epic=" · epic $epic"; else epic=""; fi
         case "$checks" in
             FAILURE) checks=" · checks failing" ;;
             PENDING) checks=" · checks running" ;;
@@ -138,7 +152,7 @@ format_section() {
             -) story="" ;;
             *) case "$title" in *"sc-$story"*) story="" ;; *) story=" · sc-$story" ;; esac ;;
         esac
-        printf -- '- <%s|%s> %s%s%s\n' "$url" "$repo" "$title" "$story" "$checks"
+        printf -- '- <%s|%s> %s%s%s%s\n' "$url" "$repo" "$title" "$story" "$epic" "$checks"
     done <<<"$body"
     printf '\n'
 }
@@ -149,7 +163,11 @@ format_section() {
 if [ "$TRANSPORT" = mcp ]; then B='**'; else B='*'; fi
 
 TEXT="$(
-    printf 'Open PRs on <https://app.shortcut.com/gladly/epic/%s|epic %s> waiting on review\n\n' "$EPIC" "$EPIC"
+    if [ "$MULTI" -eq 1 ]; then
+        printf 'Open PRs waiting on review, across %s epics\n\n' "$(jq -r 'length' <<<"$EPICS")"
+    else
+        printf 'Open PRs on <https://app.shortcut.com/gladly/epic/%s|epic %s> waiting on review\n\n' "$EPIC" "$EPIC"
+    fi
     format_section "${B}Needs review${B}" "$needs_review"
     format_section "${B}Changes requested${B} (on me, not you)" "$changes"
 )"
