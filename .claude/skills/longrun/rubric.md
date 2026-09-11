@@ -18,6 +18,13 @@ loud failure during QA (the QA loop hits the failure and fixes the
 procedure then); a procedure gap is significant only when it would let a
 wrong result pass silently.
 
+What a passing verification must rule out is plan material, judged by the
+test above. How a case gets wired to prove it (fixture construction, how
+inputs are derived, which harness assembles them) is the implementer's
+call: say it once as a nit. The completeness auditor and the diff review
+see that test as code, where its discriminating power can be checked
+instead of argued.
+
 ## Scope guard (deliverable-adding findings)
 
 A finding that would add a deliverable to the plan is significant only if:

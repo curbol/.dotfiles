@@ -156,6 +156,13 @@ story motivated it, what alternative you rejected, or why something is
 absent; that belongs in the commit and the PR. You are holding the plan,
 the review history, and the story, so this is where they leak.
 
+PLAN.md is held to the same standard: it states the design as it now
+stands. A round that overturns an earlier draft rewrites the passage
+rather than arguing with it; the refuted draft goes to settled calls, or
+to contested calls if you disputed it. Reviewers read the whole plan
+fresh, so an argument written into it becomes surface the next round
+reviews.
+
 ## Production boundary
 
 Operations that touch production (infrastructure, deployed config, live
@@ -198,9 +205,9 @@ existing entry rather than appending a near-duplicate.
 ## Plan sync
 
 Parking any assumption or decision that changes a plan deliverable updates
-PLAN.md at park time, with a pointer to that entry. The
-completeness auditor audits the plan; a parked deviation the plan doesn't
-reflect becomes a false gap.
+PLAN.md at park time, with a pointer to that entry. The completeness
+auditor audits the plan, so a parked deviation the plan doesn't reflect
+becomes a false gap.
 
 ## Replan path
 

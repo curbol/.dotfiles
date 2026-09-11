@@ -63,11 +63,10 @@ inventory what already exists and start in the right place:
 Judgment governs which phases run and where to enter, with one exception:
 Preflight (Phase 2) always runs before autonomy begins, even on a
 mid-stream entry, since it gates leash-readiness and has no artifact to
-inventory. Judgment never governs how loops exit: loop exits stay
-mechanical. Each loop's numeric cap is a hard backstop: a healthy loop
-reaches its clean or no-progress exit well before the cap, and a loop
-that instead terminates by hitting the cap records that in the report's
-loop statistics.
+inventory. Judgment never governs how loops exit. Each loop's numeric cap
+is a hard backstop: a healthy loop reaches its clean or no-progress exit
+well before the cap, and one that terminates by hitting the cap records
+that in the report's loop statistics.
 
 Nothing about the harness ends a loop early: not context, not compaction,
 not cost, not how converged the last round looked. A loop whose role
@@ -118,6 +117,9 @@ not by assuming:
   web), make one cheap read call now.
 - QA dependencies: if verification will need tilt, a dev server, or a
   database, confirm it is up now.
+- Host wakefulness: start whatever keeps this machine awake for the run
+  (`caffeinate -dims` on macOS). A sleeping host kills every in-flight
+  subagent mid-stream.
 - Announce going autonomous: tell the human the leash is on and anything
   needing them will be parked in `DECISIONS.md` from here.
 
@@ -142,9 +144,12 @@ material clearly and attribute it to its source.
 
 Draft `PLAN.md`: deliverables, design, and a verification mechanism per
 deliverable (unit tests, tsc/lint, tilt + curl, Playwright where
-feasible); prefer machine-verifiable designs. Staged production changes
-(never applied autonomously; see `principles.md`) declare the class
-"staged: human applies, post-apply check documented".
+feasible); prefer machine-verifiable designs. Each verification states in
+one line what a passing run rules out; that line is what the review loop
+holds you to and what the completeness auditor checks the shipped test
+against. Staged production changes (never applied autonomously; see
+`principles.md`) declare the class "staged: human applies, post-apply
+check documented".
 
 Then loop, round r = 1, 2, ...:
 
@@ -158,7 +163,10 @@ Then loop, round r = 1, 2, ...:
 2. Validate the output: parseable, every finding tagged. Invalid → retry
    once, including the validation error. Still invalid → record the round
    as invalid (it counts toward the cap and can never be the clean exit)
-   and continue.
+   and continue. Invalid means output that failed validation; a subagent
+   that returned nothing takes the blocked-role path in `principles.md`,
+   and its round re-dispatches under the same number once the block is
+   repaired, consuming no cap slot.
 3. Spawn a fresh ADJUDICATOR subagent. Its prompt contains: the absolute
    paths of this skill's `rubric.md` and the worktree's `PLAN.md` and
    `BRIEF.md` (instruct it to read all three first), the round's findings
@@ -168,10 +176,10 @@ Then loop, round r = 1, 2, ...:
    `accept <build|procedure>` (optionally adding `unverified: author must
    confirm`), `reject: <why>`, or `re-raise: <the contested-calls entry it
    duplicates>`.
-4. Apply per the feedback discipline in `principles.md`: accepted
-   findings are applied (confirm unverified tags against the codebase
-   first) and `PLAN.md` updated. Nit-tagged findings are not applied at
-   plan stage, and are not recorded anywhere.
+4. Apply per the feedback discipline in `principles.md`: every accepted
+   finding is applied, nits included (confirm unverified tags against the
+   codebase first), and `PLAN.md` updated. Significance decides when the
+   loop exits, never whether a finding gets fixed.
 5. Exit when a valid round accepts no significant findings (re-raise
    verdicts do not count as accepted), or after 2 consecutive valid
    rounds in which every accepted finding is procedure-tagged: apply
@@ -196,13 +204,12 @@ proves structurally wrong, follow the replan path in `principles.md`.
 
 Loop, capped at 10 rounds:
 
-1. Spawn a fresh AUDITOR subagent. Its prompt contains: the worktree
-   path, instructions to read `PLAN.md` and run
-   `git diff <default-branch>...HEAD`, and the
-   output contract: a table with one row per plan item, status
+1. Spawn a fresh AUDITOR subagent. Its prompt contains: the worktree path,
+   instructions to read `PLAN.md` and run `git diff <default-branch>...HEAD`,
+   and the output contract: a table with one row per plan item, status
    done|partial|missing with file:line evidence, plus rows flagged
-   not-in-plan for material changes the plan never mentions. No rubric,
-   no principles.
+   not-in-plan for material changes the plan never mentions. No rubric, no
+   principles.
 2. Fix every partial and missing row; gap findings are never held. If a
    row is factually wrong, record the evidence under contested calls and
    mark it disputed. Investigate not-in-plan rows: either they trace to a
@@ -237,8 +244,8 @@ Review the actual diff before opening PRs. Loop, max 5 rounds:
 3. Fix accepted findings, nits included; dispute what you believe is
    wrong rather than dropping it. Commit.
 4. Exit on a round that accepts no significant findings: apply what it
-   did accept, commit, then exit. Otherwise loop, capped at 5 rounds;
-   findings unresolved at the cap become known-issues entries.
+   did accept, commit, then exit. Findings unresolved at the cap become
+   known-issues entries.
 
 ## Phase 9: Pull requests
 
