@@ -103,6 +103,28 @@ eq "the digest renders from the same template" "true" \
    "$(grep -q 'epic-watch-launch' "$SANDBOX/unit.digest" && grep -q 'digest' "$SANDBOX/unit.digest" && echo true || echo false)"
 "$S/config.sh" init "$W_MAIN" "$CFG" >/dev/null
 
+# A weekdays cadence is five scheduler entries on macOS, because StartCalendarInterval matches
+# on set fields and has no range syntax. Asserted per platform: the macOS awk rejects a newline
+# passed through -v, so the five entries travel as one sentinel-joined string and a regression
+# there renders a plist that still lints but fires on one day.
+"$S/config.sh" init "$W_MAIN" "$(jq -c '.lanes={"intake":"hourly","digest":"weekdays"}' <<<"$CFG")" >/dev/null
+"$S/install-schedule.sh" --render "$W_MAIN" digest > "$SANDBOX/unit.weekdays"
+case "$(uname -s)" in
+Darwin)
+    eq "weekdays renders one entry per weekday" "5" \
+       "$(grep -c '<key>Weekday</key>' "$SANDBOX/unit.weekdays")"
+    if command -v plutil >/dev/null 2>&1; then
+        plutil -lint "$SANDBOX/unit.weekdays" >/dev/null 2>&1 && ok "  and still lints" \
+            || bad "weekdays plist lint" "OK" "$(plutil -lint "$SANDBOX/unit.weekdays" 2>&1)"
+    fi
+    ;;
+*)
+    eq "weekdays renders a Mon..Fri OnCalendar" "true" \
+       "$(grep -q '^OnCalendar=Mon\.\.Fri ' "$SANDBOX/unit.weekdays" && echo true || echo false)"
+    ;;
+esac
+"$S/config.sh" init "$W_MAIN" "$CFG" >/dev/null
+
 printf '\ninstall lifecycle\n'
 # Only exercised where the scheduler actually exists; loading a unit is the whole point.
 case "$(uname -s)" in

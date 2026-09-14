@@ -168,9 +168,13 @@ italic.
 To schedule it, give the watcher a `digest` cadence and install as usual:
 
 ```bash
-scripts/config.sh set-lane <watcher> digest daily   # or edit .lanes in config.json
+scripts/config.sh set-lane <watcher> digest weekdays   # or edit .lanes in config.json
 scripts/install-schedule.sh --install <watcher>
 ```
+
+Cadences are `hourly`, `daily`, `weekdays` and `weekly`. `weekdays` is the one a digest
+usually wants: nobody reads a review queue on a Saturday, and skipping at the scheduler means
+those days cost nothing rather than waking up to decide there is nothing to say.
 
 `digest` is a lane for scheduling purposes and nothing else. It reaches the scheduler through
 the same templates and the same launcher as a model lane, differing only in the argument, so

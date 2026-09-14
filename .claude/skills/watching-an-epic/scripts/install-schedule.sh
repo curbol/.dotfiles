@@ -58,20 +58,32 @@ render() {
         case "$cadence" in
             hourly) schedule="    <dict><key>Minute</key><integer>${min}</integer></dict>" ;;
             daily)  schedule="    <dict><key>Hour</key><integer>9</integer><key>Minute</key><integer>${min}</integer></dict>" ;;
+            # One dict per weekday rather than a range: StartCalendarInterval matches on the
+            # fields a dict sets and has no range syntax, so Monday-to-Friday is five entries.
+            # Joined with a sentinel rather than newlines: the substitution below passes this
+            # through `awk -v`, and the awk macOS ships rejects a newline inside one.
+            weekdays)
+                schedule=""
+                for wd in 1 2 3 4 5; do
+                    [ -n "$schedule" ] && schedule="${schedule}@@NL@@"
+                    schedule="${schedule}    <dict><key>Weekday</key><integer>${wd}</integer><key>Hour</key><integer>9</integer><key>Minute</key><integer>${min}</integer></dict>"
+                done
+                ;;
             weekly) schedule="    <dict><key>Weekday</key><integer>1</integer><key>Hour</key><integer>9</integer><key>Minute</key><integer>${min}</integer></dict>" ;;
             *) die 1 "unknown cadence '$cadence'" ;;
         esac
         sed -e "s|@@LABEL@@|${label}|g" -e "s|@@LAUNCHER@@|${launcher}|g" \
             -e "s|@@WATCHER@@|${watcher}|g" -e "s|@@LANE@@|${lane}|g" \
             -e "s|@@LOGDIR@@|${LOG_DIR}|g" "$TEMPLATES/launchd.plist.tmpl" \
-            | awk -v s="$schedule" '{ if ($0 == "@@SCHEDULE@@") print s; else print }'
+            | awk -v s="$schedule" '{ if ($0 == "@@SCHEDULE@@") { n = split(s, part, "@@NL@@"); for (i = 1; i <= n; i++) print part[i] } else print }'
         ;;
     *)
         local oncal
         case "$cadence" in
-            hourly) oncal="*-*-* *:${min}:00" ;;
-            daily)  oncal="*-*-* 09:${min}:00" ;;
-            weekly) oncal="Mon *-*-* 09:${min}:00" ;;
+            hourly)   oncal="*-*-* *:${min}:00" ;;
+            daily)    oncal="*-*-* 09:${min}:00" ;;
+            weekdays) oncal="Mon..Fri *-*-* 09:${min}:00" ;;
+            weekly)   oncal="Mon *-*-* 09:${min}:00" ;;
             *) die 1 "unknown cadence '$cadence'" ;;
         esac
         sed -e "s|@@WATCHER@@|${watcher}|g" -e "s|@@LANE@@|${lane}|g" \
