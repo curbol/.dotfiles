@@ -278,7 +278,20 @@ polling loop. Then, for up to 5 cycles:
 ## Phase 11: Report
 
 Write `REPORT.md` following `report-template.md` from this skill's base
-directory. End with a short visible summary pointing at the report.
+directory.
+
+Then close the run with a summary in the session itself, written for
+someone who has read none of the artifacts and wants to know what
+happened without opening one. It carries the honest status (complete,
+partial, or blocked), what shipped and where (PRs, branches, the order to
+merge them), how each loop ran and what ended it, what the human still
+has to decide or apply, and what went unverified or is otherwise worth
+distrusting. Where the run changed its own mind, say so: a design the
+review loops moved, a claim of yours a reviewer refuted, a finding you
+disputed and why.
+
+Let the run's shape decide the summary's, and favor whatever scans
+fastest. `REPORT.md` is the reference; this is what gets read first.
 
 ## Drift and recovery
 
