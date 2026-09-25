@@ -85,6 +85,9 @@
   "skipWorkflowUsageWarning": true,
   "teammateMode": "auto",
   "remoteControlAtStartup": true,
+  "attribution": {
+    "sessionUrl": false
+  },
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "autoMode": {
