@@ -48,6 +48,7 @@ linkfiles=(
   ".claude/settings.json"
   ".claude/statusline-command.sh"
   ".claude/skills/audit-command"
+  ".claude/skills/grooming-an-epic"
   ".claude/skills/longrun"
   ".claude/skills/watching-an-epic"
   ".claude/skills/work-monitor"

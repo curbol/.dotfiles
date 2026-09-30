@@ -88,7 +88,7 @@ candidate.
 
 ## What you never do
 
-- Move a story between workflow states. That is the groom lane's job and it is not built.
+- Move a story between workflow states. That is the grooming-an-epic skill's job.
 - Edit an existing story's description.
 - Touch Notion.
 - File anything into an epic other than the configured one.
