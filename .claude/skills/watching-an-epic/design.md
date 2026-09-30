@@ -23,8 +23,9 @@ pages, and it keeps the epic honest without being asked.
 
 Not a Slack bot: it polls on a schedule and owns no socket, no webhook, and no
 hosted app. Not a planning tool: it does not estimate, prioritize, or assign,
-and the only workflow transitions it makes are the two corrections described
-in Groom. Not a reporter: a run that finds nothing produces no
+and the only workflow transitions it makes on its own are the corrections
+described in Groom; an audit's closures are applied after a person reviews
+them. Not a reporter: a run that finds nothing produces no
 Slack message, no comment, and no summary.
 
 ## Constraints established by spike
@@ -230,7 +231,8 @@ they reported it, and can say so if it is wrong.
 
 ## Lane: groom
 
-Default daily. Two jobs.
+Default daily. It also runs by hand in an interactive session, which is where
+its audit mode runs.
 
 **Enrich.** For each story with a Slack permalink in `external_links`, check
 whether its thread gained substantive detail since the watermark. Substantive
@@ -238,23 +240,55 @@ means a repro, an affected org, a severity observation, or a decision. Append
 it as a comment quoting the new material with a link, never a silent
 description rewrite.
 
-**Re-check what shipped.** The stale story is rarely the one being worked; it
-is the story related to it. For every story that reached a done state since
-the last run, walk `story_links` to its related and downstream stories, and
-compare each one's description against what actually shipped, using the
-merged work in the configured repos and the resolution of the story that
-moved.
+**Keep descriptions current.** A story or epic description states what is
+true now: scope, shape, evidence, ordering, and open questions. It is not a
+log. Grooming never appends a dated entry to a description ("Decided
+2026-09-28:", "Revised", "an earlier version said", "superseded"); when a
+fact changes, the sentence that states it is replaced. The history goes in a
+comment naming what changed, and a decision that still shapes the design goes
+into the design doc as a present-tense statement. Before a decision is
+removed from a description, it has to be stated in the design doc or in its
+story.
+
+The same rules apply to every rewrite:
+
+- Dated measurements and deadlines keep their dates.
+- A name appears only where the reader uses it: an owner, who to ask, who a
+  review waits on. It never frames content ("met with X", "to answer X's
+  questions").
+- A rejected alternative appears only when a reader would otherwise propose
+  it again, as one sentence on why it doesn't work.
+- Every still-current fact, file path and measurement survives the rewrite.
+  It is a correction, not a summary.
+
+**Re-check what shipped, and what changed.** The stale story is rarely the one
+being worked; it is the story related to it. For every story that reached a
+done state since the last run, walk `story_links` to its related and
+downstream stories, and compare each one's description against what actually
+shipped, using the merged work in the configured repos and the resolution of
+the story that moved.
+
+A closed decision is as much a trigger as shipped work. A story closed Won't
+Fix, or a decision changed on the epic or its design doc, can remove the
+premise another story or open PR rests on. For each, find everything whose
+"why" cites it (`story_links`, then a search of the epic's descriptions and
+open PR bodies for the story ID and the decision's key terms), and re-derive
+that conclusion from the new premise. Re-derive the cost of each option too,
+rather than reusing an earlier framing of how big an option is. A premise that
+no longer holds makes a story a candidate to close or rescope. That is
+reported with the evidence, not acted on.
 
 Narrow factual drift is corrected in place: a renamed flag, a moved endpoint,
 a dependency the description calls pending that is now in place. Anything
 broader gets a comment naming what changed and which part of the description
 it contradicts, because a description rewrite that guesses at intent is worse
-than a description that is visibly out of date.
+than a description that is visibly out of date. A person then rewrites it
+under the rules above.
 
-**Correct the two transitions PR automation cannot see.** Shortcut already
+**Correct the transitions PR automation gets wrong.** Shortcut already
 moves a story to In Development when a branch or PR appears and to Ready for
 Test when its PR merges. Groom never duplicates those rules. It corrects the
-two cases they get wrong:
+three cases they get wrong:
 
 A story in Ready for Test whose testing is recorded somewhere moves to
 Completed. The only acceptable evidence is an explicit statement that it was
@@ -269,8 +303,54 @@ story are still open, moves back to In Development. Evidence is an open PR
 whose branch carries the story ID or whose body references it, read with `gh`
 in the configured repos.
 
-Both transitions are journaled with the evidence that justified them, and no
-other transition is ever made.
+A story moved by a PR that isn't its work moves back to the state it held
+before, which the story's history shows. Shortcut links a PR to every story
+whose ID appears in its body or comments, including one named as out of scope
+or as a dependency, and moves that story with the PR. Evidence is that the
+PR's branch carries a different story's ID and the change the story describes
+is not on the default branch.
+
+All three transitions are journaled with the evidence that justified them, and
+no other transition is made without a person.
+
+### Audit
+
+Run by hand, on request and whenever a premise the epic rests on changes. It
+asks one question of every open story: is it needed in the epic's end state?
+The failure it catches is a story or PR built on a premise that has since
+changed. On epic 255490, a PR refusing supernova's own Shopify authorize was
+justified by "two installers on one grant can never be made safe", which
+assumed two copies of the token. Later work removed that premise, and the PR
+was closed once someone asked why it was still needed.
+
+1. Write down the end state, from the epic description and its design doc: the
+   system when the epic is done, the decisions in force, what is closed and
+   why, the ordering rules, and what is out of scope. Stories are judged
+   against this, never against their own text.
+2. Split the open stories into batches by area and give each batch to a
+   read-only subagent. For each story, the subagent states its premise in one
+   or two sentences, then verifies that premise independently. That means
+   reading the code on the configured repos' default branches, and every story
+   it depends on or is blocked by. Then it gives one verdict with evidence:
+   - needed, as scoped
+   - needed, with a rescope: exactly what changes
+   - not needed for the deadline: where it belongs instead
+   - not needed: why
+   - duplicate: of what, and what overlaps
+   - done pending verification: whether any step remains
+   - unclear: the one fact that would decide it
+
+   It notes a gap only when one is obvious; the job is necessity.
+3. Check every verdict before acting, and verify in code any claim that would
+   change the plan rather than the wording.
+4. Apply: close, complete, move stories to the epic's hardening or follow-up
+   home, reset states PR automation got wrong, and fix `story_links` so each
+   story names its real blockers. A subagent may draft each rescoped
+   description from a fresh snapshot, under "Keep descriptions current". The
+   apply step refuses to write over a story whose description changed after
+   its snapshot was taken.
+5. Update the epic description and the design doc to match, and file a new
+   story only for a gap that the end state needs.
 
 ## Lane: docs
 
