@@ -9,8 +9,8 @@ A reader. It assembles one briefing across every epic and project in flight so
 the human does not have to remember which sources to check.
 
 **Never writes.** No Shortcut stories, no GitHub comments, no Slack messages, no
-branch or commit operations. Writing to an epic is `epic-watch`'s job (intake, and
-`grooming-an-epic` in a session), and one writer per epic is its invariant. Breaking that here would double-write.
+branch or commit operations. Writing to an epic is `grooming-an-epic`'s job, and one
+writer per epic is its invariant. Breaking that here would double-write.
 
 ## On invoke
 

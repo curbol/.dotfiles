@@ -1,6 +1,6 @@
 ---
 name: grooming-an-epic
-description: Keeps a Shortcut epic's plan true as the work changes it. When something an epic depends on changes (a decision, a finding, a merged PR, stories closed elsewhere), works out which stories and PRs that affects and updates them; keeps story and epic descriptions as current state; fixes story states PR automation got wrong; audits whether each open story is still needed. Use during work on an epic whenever such a change happens, before editing a Shortcut story or epic description, or when asked to audit or clean up an epic.
+description: Keeps a Shortcut epic's plan true as the work changes it. When something an epic depends on changes (a decision, a finding, a merged PR, stories closed elsewhere), works out which stories and PRs that affects and updates them; keeps story and epic descriptions as current state; fixes story states PR automation got wrong; audits whether each open story is still needed; lists the epic's PRs waiting on review. Use during work on an epic whenever such a change happens, before editing a Shortcut story or epic description, when asked to audit or clean up an epic, or when asked which of its PRs are waiting on review.
 ---
 
 # Grooming an epic
@@ -9,8 +9,7 @@ The expensive way an epic goes wrong is not stale wording. It is a story or PR s
 built for a reason that stopped being true. Grooming is mostly propagation: when something
 changes, work out what it means for the rest of the plan, and update the plan.
 
-This is epic-watch's groom lane, run in a session. It writes to the epic; work-monitor only
-reads.
+It writes to the epic; work-monitor only reads.
 
 ## When to act
 
@@ -58,6 +57,13 @@ Shortcut moves a story when a branch or PR mentions it, and it gets three cases 
 - A story moved by a PR that isn't its work goes back to its previous state. Shortcut links
   every story whose ID appears in a PR's body or comments, even one mentioned as out of scope.
   So never write another story's `sc-` ID in PR text; describe it in words.
+
+## PRs waiting on review
+
+When asked for the epic's PRs waiting on review, run `scripts/pr-digest.sh <epic-id>...` (list
+every epic the work spans). It collects a fresh work-monitor snapshot and prints the open,
+unapproved, non-draft PRs grouped under their story, with changes-requested ones separate.
+Post or draft it only when asked, laid out the way the person wants it.
 
 ## Rules
 
