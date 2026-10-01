@@ -1,4 +1,7 @@
 {
+  "attribution": {
+    "sessionUrl": false
+  },
   "permissions": {
     "allow": [
       "Bash(go *)",
@@ -67,7 +70,8 @@
     "pr-screenshots@gladly-claude-tools": true,
     "skill-creator@claude-plugins-official": true,
     "frontend-design@claude-plugins-official": true,
-    "context7@claude-plugins-official": true
+    "context7@claude-plugins-official": true,
+    "glados-mcp@gladly-claude-tools": true
   },
   "extraKnownMarketplaces": {
     "gladly-claude-tools": {
@@ -85,9 +89,6 @@
   "skipWorkflowUsageWarning": true,
   "teammateMode": "auto",
   "remoteControlAtStartup": true,
-  "attribution": {
-    "sessionUrl": false
-  },
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "autoMode": {

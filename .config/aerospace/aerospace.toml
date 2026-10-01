@@ -75,6 +75,9 @@ cmd-shift-9 = 'move-node-to-workspace 9'
 cmd-tab       = 'workspace --wrap-around next'
 cmd-shift-tab = 'workspace --wrap-around prev'
 
+# Screenshot (same overlay as CMD+SHIFT+5)
+f13 = 'exec-and-forget open -b com.apple.screenshot.launcher'
+
 # App shortcuts (matches Hyprland SUPER+SHIFT+letter pattern)
 cmd-shift-b = 'exec-and-forget open -a "Zen"'
 cmd-shift-s = 'exec-and-forget open -a /Applications/Slack.app'
