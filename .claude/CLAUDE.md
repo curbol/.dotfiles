@@ -137,10 +137,6 @@ Lead with the dimension that drives the decision; don't recite all four.
 
 Applies only to Gladly repositories (`github.com/sagansystems/*` internal, `github.com/gladly/*` public).
 
-## Shortcut
-
-Always create stories under the **AI Knowledge** team (ID `69949769-1bb1-4ded-b7ff-3fa8df4fa57f`). Do not infer the team from the story topic.
-
 ## Git Practices (Gladly)
 
 - Branch name format: `curbol/sc-<story-id>/<description>` (e.g., `curbol/sc-233298/fix-ci-docs`). Include the Shortcut story ID when one exists.
