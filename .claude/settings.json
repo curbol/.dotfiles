@@ -1,4 +1,7 @@
 {
+  "env": {
+    "PONYTAIL_DEFAULT_MODE": "lite"
+  },
   "attribution": {
     "sessionUrl": false
   },
@@ -71,7 +74,8 @@
     "skill-creator@claude-plugins-official": true,
     "frontend-design@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
-    "glados-mcp@gladly-claude-tools": true
+    "glados-mcp@gladly-claude-tools": true,
+    "ponytail@ponytail": true
   },
   "extraKnownMarketplaces": {
     "gladly-claude-tools": {
@@ -80,6 +84,12 @@
         "repo": "sagansystems/gladly-claude-tools"
       },
       "autoUpdate": true
+    },
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
     }
   },
   "effortLevel": "xhigh",
