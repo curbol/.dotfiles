@@ -50,6 +50,16 @@
           }
         ]
       }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ~/.claude/skills/longrun/scripts/keep-going.mjs"
+          }
+        ]
+      }
     ]
   },
   "statusLine": {

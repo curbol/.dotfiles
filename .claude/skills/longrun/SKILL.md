@@ -34,6 +34,7 @@ reading them.
     ├── BRIEF.md       problem, use-cases, clarifying Q&A
     ├── CONTEXT.md     exploration findings
     ├── PLAN.md        the living plan
+    ├── TASKS.md       the checklist the Stop hook reads; see "Staying on the leash"
     ├── DECISIONS.md   your inbox: open questions • to apply • push/PR/merge
     ├── LEDGER.md      agent notes: settled calls • contested calls • known issues • loop log
     └── REPORT.md      final synthesis
@@ -96,6 +97,27 @@ manage", "Role scoping").
    the first `git add -A` of a run that gets this wrong commits the run's
    own state onto the branch.
 
+4. **Write `.longrun/TASKS.md` now, before Phase 1**, seeded with the phases this
+   run will actually execute, one `- [ ]` each:
+
+       - [ ] Phase 1 clarify
+       - [ ] Phase 2 preflight
+       - [ ] Phase 3 explore
+       - [ ] Phase 4 plan and review loop
+       - [ ] Phase 5 implement
+       - [ ] Phase 6 completeness loop
+       - [ ] Phase 7 QA loop
+       - [ ] Phase 8 self-review loop
+       - [ ] Phase 9 pull requests
+       - [ ] Phase 10 automated-review window
+       - [ ] Phase 11 report
+
+   **The file must exist from the start, not from Phase 5.** The Stop hook is
+   inert without it, so seeding it late leaves Phases 3 and 4 unprotected, and
+   Phase 4 is where stopping is most tempting: a review loop offers a natural
+   hand-back point after every single round. Phase 5 expands its line into the
+   real task list rather than creating the file.
+
 ## Phase 1: Clarify
 
 Ask the human clarifying questions now, scaled to how ambiguous the prompt
@@ -120,11 +142,67 @@ not by assuming:
 - Host wakefulness: start whatever keeps this machine awake for the run
   (`caffeinate -dims` on macOS). A sleeping host kills every in-flight
   subagent mid-stream.
+- Loop closure: run `claude plugin details longrun` and confirm the output
+  lists `Hooks (1)  Stop`. Without it nothing holds the run open and the
+  autonomous phases decay into a supervised one, one turn at a time.
+
+  **`Hooks (0)` means the run is not leash-ready. Say so and stop**, rather
+  than starting and discovering it at Phase 5. The hook cannot be armed
+  mid-run: plugins are copied into a cache at install time, so editing the
+  source changes nothing until the human reinstalls, and by then the run is
+  hours in. This is the one preflight item that cannot be fixed later.
+
+  Also confirm `.longrun/TASKS.md` exists, since the hook is inert without
+  it. See "Staying on the leash".
 - Announce going autonomous: tell the human the leash is on and anything
   needing them will be parked in `DECISIONS.md` from here.
 
 If any item fails, fix it with the human now; never start the autonomous
 phases on a known-broken leash.
+
+## Staying on the leash
+
+An interactive turn ends whenever the model stops emitting tool calls.
+Nothing about saying "continuing with the next task" makes the next task
+happen: the turn is already over, and control is back with the human. A run
+told to work for hours will otherwise finish a phase, write a summary, and
+stop, over and over, and no amount of instruction in this file prevents it.
+
+So it is mechanical. This plugin registers a `Stop` hook,
+`scripts/keep-going.mjs`, which refuses the stop while
+`.longrun/TASKS.md` still has unchecked items and names the next one.
+
+It is inert unless that file exists, so an ordinary session never sees it.
+Three things always release it:
+
+- `.longrun/STOP` exists. The human's kill switch.
+- The harness reports a stop hook already ran, so it cannot re-enter.
+- 25 consecutive blocks. The important one: being held on a task that cannot
+  be finished burns tokens producing nothing, which is worse than stopping
+  to ask.
+
+It deliberately does **not** release when something is parked in
+`DECISIONS.md`. Parking a question and carrying on is the intended
+behaviour; parking it and stopping is what the hook exists to prevent.
+
+### What the hook cannot do, and what you must do instead
+
+It can refuse a stop. It cannot make the refusal productive. Three habits
+turn a blocked stop into wasted tokens rather than progress:
+
+- **Do not re-report.** Being held open is not a cue to summarise what you
+  just did. Take the next checklist item and start it.
+- **Do not re-plan.** The plan is settled by Phase 4. A held turn is for
+  executing the next line, not for reconsidering the line after it.
+- **Tick as you go, in the same commit as the work.** The hook reads the
+  file, so a checklist that lags the tree makes it release early. It is also
+  the re-entry point after a compaction, when nothing else survives.
+
+**A blocked stop is not a signal that something is wrong.** It is the normal
+state of a run with work left. The only signals worth acting on are the
+release paths: the checklist emptying, the kill switch, or the block ceiling
+telling you the current item cannot be finished, which belongs in
+`DECISIONS.md` as a parked blocker before you move to the next one.
 
 ## Phase 3: Explore
 
@@ -194,11 +272,23 @@ them.
 
 ## Phase 5: Implement
 
-Derive an explicit task checklist from `PLAN.md` and work through it with
-small, narrative commits. Park questions per the routing in
+Expand the Phase 5 line of **`.longrun/TASKS.md`** into an explicit task
+checklist derived from `PLAN.md`, and work through it with small, narrative
+commits. Park questions per the routing in
 `principles.md`, never blocking. Keep `PLAN.md` in sync: a parked decision
 that changes a deliverable updates the plan at park time. If the plan
 proves structurally wrong, follow the replan path in `principles.md`.
+
+The file is `TASKS.md` and the format is a GitHub checklist, one `- [ ]` per
+unit of work, because the Stop hook reads it (see "Staying on the leash").
+Tick each line as you finish it, in the same commit as the work. A checklist
+that lags the tree makes the hook release early and makes a resumed run
+redo finished work.
+
+**Do not write a progress report between tasks.** The human reads
+`REPORT.md` at the end and `DECISIONS.md` when something needs them; a
+running commentary after every task converts an autonomous run into a
+supervised one. Finish the checklist, then report once.
 
 ## Phase 6: Completeness loop
 
@@ -256,6 +346,38 @@ and story links; write the Testing section with the
 stories where the repo's practice expects it. PRs are opened, never
 merged: merging is the human's call. Record PR links under
 "Push / PR / merge" in `DECISIONS.md`.
+
+### Every PR gets a "Where to look" section
+
+A long run produces a large diff, and a reviewer who opens it has no idea
+which parts can hurt them. You have spent hours learning that and they have
+not. Hand it over rather than making them re-derive it.
+
+**Say what NOT to read, first.** Vendored moves, generated files, mechanical
+renames and bulk reformatting can dominate a diff while carrying no risk. Name
+them, give the command that excludes them, and say how much smaller the real
+surface is. If a move is a whole commit, commit it first and unmodified so
+`git diff <that-commit>..HEAD` is the review surface.
+
+**Rank the rest by what a bug COSTS, not by how much changed.** The
+expensive files are usually small: the merge rule, the key derivation, the
+lock. A one-line table of file, size and why-it-is-risky beats any amount of
+prose. Say plainly what goes wrong if each is wrong, in terms of consequence
+rather than mechanism: unrecoverable, silent, expensive to reverse.
+
+**State known defects up front.** Anything in the known-issues list that a
+reviewer will trip over belongs in the PR, not just in the report. A reviewer
+who spends an hour rediscovering something you already knew will trust the
+next PR less, and rightly.
+
+**Include the questions worth arguing with.** Every run makes calls that
+could reasonably have gone the other way, and those are recorded under
+settled and contested calls. Surface two or three, phrased as open. A review
+section that only defends the work is not worth reading, and the calls most
+worth challenging are the ones a reviewer would otherwise nod past.
+
+Keep it proportionate: a five-file PR needs a sentence pointing at the one
+line that matters, not a table.
 
 ## Phase 10: Automated-review window
 
