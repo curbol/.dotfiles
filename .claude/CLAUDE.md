@@ -93,6 +93,10 @@ Lead with the dimension that drives the decision; don't recite all four.
 
 ### Writing
 
+- Speak plainly. Write full, ordinary sentences the way a colleague would say them out loud, in code comments, docs, PR text and replies alike. Plain beats short: add the words a sentence needs to read normally.
+  - Don't turn verbs into nouns. Write "if another request updates the record after we read it", not "a write between our read and this one". The same goes for "a hold", "a read", "a refusal", "a miss".
+  - Use words in their ordinary sense, not as jargon or slang. "Land" means arrive; for code, say "is saved", "is merged" or "succeeds". An error "includes" or "lists" something; it doesn't "name" it. Data is "stored", not "held". The same goes for "carries", "surfaces", "bites", "lives in" and the like.
+  - If a sentence sounds clipped or clever when read aloud, rewrite it in plain words.
 - Never use em-dashes. Use commas, semicolons, colons, parentheses, or separate sentences instead.
 - Don't prefix bullets with a redundant label (bold or otherwise) that restates what follows. Write the content directly.
   - BAD: `1. Pact tests — Added pact tests for all gateway endpoints.`
