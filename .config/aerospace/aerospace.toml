@@ -18,6 +18,8 @@ default-root-container-orientation = 'auto'
 
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 
+focus-follows-mouse.enabled = true
+
 automatically-unhide-macos-hidden-apps = true
 
 [gaps]
@@ -61,15 +63,15 @@ cmd-8 = 'workspace 8'
 cmd-9 = 'workspace 9'
 
 # Move window to workspace (matches Hyprland SUPER+SHIFT+number)
-cmd-shift-1 = 'move-node-to-workspace 1'
-cmd-shift-2 = 'move-node-to-workspace 2'
-cmd-shift-3 = 'move-node-to-workspace 3'
-cmd-shift-4 = 'move-node-to-workspace 4'
-cmd-shift-5 = 'move-node-to-workspace 5'
-cmd-shift-6 = 'move-node-to-workspace 6'
-cmd-shift-7 = 'move-node-to-workspace 7'
-cmd-shift-8 = 'move-node-to-workspace 8'
-cmd-shift-9 = 'move-node-to-workspace 9'
+cmd-shift-1 = 'move-node-to-workspace --focus-follows-window 1'
+cmd-shift-2 = 'move-node-to-workspace --focus-follows-window 2'
+cmd-shift-3 = 'move-node-to-workspace --focus-follows-window 3'
+cmd-shift-4 = 'move-node-to-workspace --focus-follows-window 4'
+cmd-shift-5 = 'move-node-to-workspace --focus-follows-window 5'
+cmd-shift-6 = 'move-node-to-workspace --focus-follows-window 6'
+cmd-shift-7 = 'move-node-to-workspace --focus-follows-window 7'
+cmd-shift-8 = 'move-node-to-workspace --focus-follows-window 8'
+cmd-shift-9 = 'move-node-to-workspace --focus-follows-window 9'
 
 # Workspace navigation (matches Hyprland SUPER+TAB / SUPER+SHIFT+TAB)
 cmd-tab       = 'workspace --wrap-around next'
