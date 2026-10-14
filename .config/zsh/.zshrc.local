@@ -14,6 +14,9 @@ export GLADLY_GITHUB_PUBLISH="****************************************"
 export GLADLY_API_TOKEN_MASTER="********************************"
 export GLADLY_API_TOKEN_STAGING="********************************"
 export GLADLY_API_TOKEN_PRODUCTION="********************************"
+export SUMO_ENDPOINT="https://api.us2.sumologic.com/api"
+export SUMO_ACCESS_ID="**************"
+export SUMO_ACCESS_KEY="****************************************************************"
 
 # Context7
 export CONTEXT7_API_KEY="*******************************************"
