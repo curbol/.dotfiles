@@ -63,7 +63,6 @@ Secrets are deliberately not reproducible from this repo. A reformat still needs
 | IdeaVim | `.ideavimrc` | JetBrains vim keybindings |
 | Claude Code | `.claude/CLAUDE.md` | Global Claude Code instructions (symlinked to ~/.claude/) |
 | npm | `.npmrc` | GitHub Package Registry for @sagansystems/@gladly |
-| MCP servers | `mcp.json` | Claude Code MCP server configs |
 
 ### Theming
 
