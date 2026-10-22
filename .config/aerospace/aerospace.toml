@@ -22,8 +22,6 @@ default-root-container-orientation = 'auto'
 
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 
-focus-follows-mouse.enabled = true
-
 automatically-unhide-macos-hidden-apps = true
 
 [gaps]
