@@ -141,6 +141,8 @@ Lead with the dimension that drives the decision; don't recite all four.
 
 Applies only to Gladly repositories (`github.com/sagansystems/*` internal, `github.com/gladly/*` public).
 
+@~/.claude-work/GLOBAL_MEMORY.md
+
 ## Git Practices (Gladly)
 
 - Branch name format: `curbol/sc-<story-id>/<description>` (e.g., `curbol/sc-233298/fix-ci-docs`). Include the Shortcut story ID when one exists.
