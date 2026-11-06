@@ -194,6 +194,19 @@ for file in "${linkfiles[@]}"; do
   fi
 done
 
+# Work account inherits skills installed directly into the personal account
+# (e.g. by `rex skill setup`). Existing work skills are left alone, and synced/
+# is per-account.
+for skill in "$HOME"/.claude/skills/*; do
+  name="$(basename "$skill")"
+  [[ "$name" == synced ]] && continue
+  dest="$HOME/.claude-work/skills/$name"
+  if [[ ! -e "$dest" && ! -L "$dest" ]]; then
+    echo -e "${COLOR_GREEN}Creating symlink:${COLOR_RESET} $dest ${COLOR_CYAN}->${COLOR_RESET} $skill"
+    ln -s "$skill" "$dest"
+  fi
+done
+
 # Iterate over the copyfiles array and copy files
 for file in "${copyfiles[@]}"; do
   src="$dotfiles_dir/$file"
