@@ -47,6 +47,10 @@
           {
             "type": "command",
             "command": "rtk hook claude"
+          },
+          {
+            "type": "command",
+            "command": "[ -x ~/code/glados/node_modules/.bin/tsx ] || exit 0; ~/code/glados/node_modules/.bin/tsx ~/code/glados/.claude/scripts/hooks/pre-tool-use/index.ts"
           }
         ]
       }
@@ -96,7 +100,16 @@
     "frontend-design@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
     "glados-mcp@gladly-claude-tools": true,
-    "ponytail@ponytail": true
+    "tech-specs@gladly-claude-tools": true,
+    "ai-arr-model@gladly-claude-tools": true,
+    "flag-harness@gladly-claude-tools": true,
+    "gladly@gladly-claude-tools": true,
+    "incident-response@gladly-claude-tools": true,
+    "shortcut@gladly-claude-tools": true,
+    "datadog@claude-plugins-official": true,
+    "pact-tests@gladly-claude-tools": true,
+    "product-insight@gladly-claude-tools": true,
+    "sumologic-mcp@synced": false
   },
   "extraKnownMarketplaces": {
     "gladly-claude-tools": {
@@ -105,12 +118,6 @@
         "repo": "sagansystems/gladly-claude-tools"
       },
       "autoUpdate": true
-    },
-    "ponytail": {
-      "source": {
-        "source": "github",
-        "repo": "DietrichGebert/ponytail"
-      }
     }
   },
   "modelSettings": {
@@ -126,8 +133,8 @@
   "skipWorkflowUsageWarning": true,
   "teammateMode": "auto",
   "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": true,
   "inputNeededNotifEnabled": true,
+  "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "autoMode": {
     "allow": [
