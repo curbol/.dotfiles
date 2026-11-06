@@ -67,6 +67,7 @@ if [[ $is_mac_os -eq 1 ]]; then
     ".config/aerospace/aerospace.toml"
     ".config/borders/bordersrc"
     ".config/ghostty/theme.conf"
+    ".config/rex/init.lua"
   )
 fi
 
