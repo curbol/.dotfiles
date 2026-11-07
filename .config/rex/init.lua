@@ -40,8 +40,8 @@ rex.bind("alt+7", "client.tab.goto", { index = 7 })
 rex.bind("alt+8", "client.tab.goto", { index = 8 })
 rex.bind("alt+9", "client.tab.goto", { index = 9 })
 
-rex.bind("alt+left", "client.tab.previous")
-rex.bind("alt+right", "client.tab.next")
+rex.bind("alt+up", "client.tab.previous")
+rex.bind("alt+down", "client.tab.next")
 rex.bind("alt+b", "client.tab.previous")
 rex.bind("alt+f", "client.tab.next")
 
@@ -51,8 +51,8 @@ rex.bind("ctrl+space>shift+k", "session.close")
 rex.bind("ctrl+space>shift+p", "session.previous")
 rex.bind("ctrl+space>shift+n", "session.next")
 
-rex.bind("alt+up", "session.previous")
-rex.bind("alt+down", "session.next")
+rex.bind("alt+left", "session.previous")
+rex.bind("alt+right", "session.next")
 
 rex.bind("shift+insert", "pane.paste")
 rex.bind("ctrl+insert", "pane.copy")
