@@ -337,6 +337,9 @@ Review the actual diff before opening PRs. Loop, max 5 rounds:
    did accept, commit, then exit. Findings unresolved at the cap become
    known-issues entries.
 
+After the loop, run the `readability-review` skill on the branch, apply
+what it finds as that skill describes, and commit.
+
 ## Phase 9: Pull requests
 
 Open the PRs the plan defines, following the repo's PR conventions and
@@ -388,7 +391,8 @@ polling loop. Then, for up to 5 cycles:
 
 1. Fetch new PR feedback: review comments and failing checks.
 2. Triage with the same investigate-before-acting discipline as the
-   review loops: fix what is right and push. Findings you believe are
+   review loops: fix what is right, run the `readability-review` skill
+   on the new commits when they change code, and push. Findings you believe are
    wrong take the dispute path in `principles.md`, which includes replying
    on the thread. Style preferences are nits unless repo convention
    requires them. Failing checks follow the QA discipline in

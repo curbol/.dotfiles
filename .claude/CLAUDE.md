@@ -68,11 +68,14 @@ Lead with the dimension that drives the decision; don't recite all four.
 
 - **Put code in the correct layer, even when it's more work.** If you know the right place for logic (runtime vs conversion, application vs handler, core vs presentation), put it there. Never choose a worse approach because it's fewer lines, faster to write, or "simpler for now"; correctness is the baseline, not a stretch goal. You can write code in seconds; I spend hours debugging the tech debt you leave behind. If you catch yourself thinking "it should be in X but it's easier in Y," stop and put it in X.
 - **If unsure about the right layer, ask.** Do not guess and do not default to the convenient option.
+- **Name things for a reviewer who reads one function at a time.** A name says what the thing holds or does, including its scope (`enabledShopifyLookupAdapters`, not `enabledLookupAdapters`) and, where the codebase has several kinds of a thing, which kind. Prefer a specific noun to `value`, `result`, `data` or `holders`.
+- **Write new multi-step code top-down where it fits.** The top-level function reads as the steps in order, each a call named for its step, and each step does the same one level down. Changes to existing code, and code that follows an established pattern, keep the shape they have.
 
 ## Comments and Documentation
 
 - **Default to no comment.** Identifiers, types, and structure are self-documenting. Comment only what a reader of the file could not work out from it: a hidden invariant, a subtle bug fix, a workaround, behavior that would surprise. The test is a cold reader with zero outside context: no PR, no review, no conversation, no spec. If the comment needs them to know what was rejected, what's coming later, what it pairs with elsewhere, what the team's versioning policy is, or what someone said in chat, delete it. Never reference identifiers, functions, or concepts that don't appear in the file being commented.
 - **Comments describe current code, nothing else.** Never reference what the code used to do, what changed, why it was added, or what task motivated it. No "no longer needs X", "unlike the old approach", "added for sc-12345", or "now supports Y instead of Z". That context belongs in commits and PRs.
+- **A comment on a function or type says what it returns or represents.** Not what callers do with it, why the design is right, or what would break without it: "reports whether the app is authorized outside Gladly", not "...so Gladly refuses to authorize it, because...".
 - **Don't document non-decisions.** Applies to code comments and all docs (CLAUDE.md, README.md, etc.). Don't explain why something *isn't* there or why an alternative wasn't chosen; the structure is the answer. Wait for the question rather than preempting "why didn't you do X?" An empty switch case needs no comment saying "no series emitted here."
 
 ## Task Execution
