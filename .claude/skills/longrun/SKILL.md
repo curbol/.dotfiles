@@ -350,37 +350,12 @@ stories where the repo's practice expects it. PRs are opened, never
 merged: merging is the human's call. Record PR links under
 "Push / PR / merge" in `DECISIONS.md`.
 
-### Every PR gets a "Where to look" section
+### Every PR says where to start reading
 
-A long run produces a large diff, and a reviewer who opens it has no idea
-which parts can hurt them. You have spent hours learning that and they have
-not. Hand it over rather than making them re-derive it.
-
-**Say what NOT to read, first.** Vendored moves, generated files, mechanical
-renames and bulk reformatting can dominate a diff while carrying no risk. Name
-them, give the command that excludes them, and say how much smaller the real
-surface is. If a move is a whole commit, commit it first and unmodified so
-`git diff <that-commit>..HEAD` is the review surface.
-
-**Rank the rest by what a bug COSTS, not by how much changed.** The
-expensive files are usually small: the merge rule, the key derivation, the
-lock. A one-line table of file, size and why-it-is-risky beats any amount of
-prose. Say plainly what goes wrong if each is wrong, in terms of consequence
-rather than mechanism: unrecoverable, silent, expensive to reverse.
-
-**State known defects up front.** Anything in the known-issues list that a
-reviewer will trip over belongs in the PR, not just in the report. A reviewer
-who spends an hour rediscovering something you already knew will trust the
-next PR less, and rightly.
-
-**Include the questions worth arguing with.** Every run makes calls that
-could reasonably have gone the other way, and those are recorded under
-settled and contested calls. Surface two or three, phrased as open. A review
-section that only defends the work is not worth reading, and the calls most
-worth challenging are the ones a reviewer would otherwise nod past.
-
-Keep it proportionate: a five-file PR needs a sentence pointing at the one
-line that matters, not a table.
+End the PR's What section with a "Where to start reading:" bullet: one to
+four sub-bullets in the order a reviewer should read them, each naming a
+file and the function, route or handler to read first, with one plain line
+on what it does. A small PR needs one line.
 
 ## Phase 10: Automated-review window
 
