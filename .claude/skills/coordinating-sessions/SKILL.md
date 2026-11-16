@@ -60,7 +60,7 @@ When a session depends on a branch, PR or story in an area another coordinator o
 
 ## Decisions
 
-A worker brings to the coordinator any finding that changes behavior, a design or the spec. Decide it on the evidence, or bring it to the user with a recommendation when it reverses something the user decided. Record the decision in the spec in the same turn.
+A worker brings to the coordinator any finding that changes behavior, a design or the spec, including any place where its design departs from how the codebase already does the same job. Decide it on the evidence, or bring it to the user with a recommendation when it reverses something the user decided. Record the decision in the spec in the same turn.
 
 ## Review comments
 

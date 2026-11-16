@@ -229,6 +229,12 @@ against. Staged production changes (never applied autonomously; see
 `principles.md`) declare the class "staged: human applies, post-apply
 check documented".
 
+For each new mechanism the design adds (a logger, a cache, a hook, a
+wrapper, a new context value), `PLAN.md` names the existing code that does
+the same job and says the design follows it. If the design departs from
+it, that departure is a decision for the human or the coordinating
+session, not a ledger note: raise it before building.
+
 Then loop, round r = 1, 2, ...:
 
 1. Spawn a fresh REVIEWER subagent (Agent tool). Its prompt contains: the
