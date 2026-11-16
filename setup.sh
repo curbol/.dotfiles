@@ -70,6 +70,8 @@ if [[ $is_mac_os -eq 1 ]]; then
     ".config/borders/bordersrc"
     ".config/ghostty/theme.conf"
     ".config/rex/init.lua"
+    ".local/bin/code-sweep"
+    "Library/LaunchAgents/com.curbol.code-sweep.plist"
   )
 fi
 
@@ -217,6 +219,13 @@ for file in "${copyfiles[@]}"; do
 
   copy_file "$src" "$dest" "$force_overwrite_copy"
 done
+
+if [[ $is_mac_os -eq 1 ]]; then
+  agent="$HOME/Library/LaunchAgents/com.curbol.code-sweep.plist"
+  launchctl bootout "gui/$(id -u)" "$agent" 2>/dev/null
+  launchctl bootstrap "gui/$(id -u)" "$agent" &&
+    echo -e "${COLOR_GREEN}Loaded launch agent:${COLOR_RESET} $agent"
+fi
 
 if [[ $install_packages -eq 1 ]]; then
   if [[ $is_linux -eq 1 ]]; then

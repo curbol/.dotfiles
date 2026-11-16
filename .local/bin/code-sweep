@@ -1,0 +1,73 @@
+#!/bin/bash
+# Deletes stale scratch dirs and worktrees under ~/code.
+#
+# A scratch dir is stale when no file in it changed in SCRATCH_DAYS.
+# A worktree is stale when no file in it changed in WORKTREE_DAYS, it has no
+# uncommitted changes, and every commit on its HEAD is on a remote.
+# Anything a process is running inside is left alone.
+#
+# Usage: code-sweep [--dry-run]
+
+set -u
+
+SCRATCH_DAYS=30
+WORKTREE_DAYS=60
+scratch_root="$HOME/code/scratch"
+worktree_root="$HOME/code/worktrees"
+
+dry_run=0
+[[ "${1:-}" == "--dry-run" ]] && dry_run=1
+
+log() { echo "$(date '+%Y-%m-%d %H:%M:%S') $*"; }
+
+dirs_in_use() {
+  lsof -d cwd -Fn 2>/dev/null | sed -n 's/^n//p'
+}
+
+in_use() {
+  local dir=$1
+  grep -qxF "$dir" <<<"$busy_dirs" || grep -qF "$dir/" <<<"$busy_dirs"
+}
+
+changed_within() {
+  local dir=$1 days=$2
+  [[ -n "$(find "$dir" -type f -mtime "-$days" -print -quit 2>/dev/null)" ]]
+}
+
+sweep_scratch() {
+  local dir
+  for dir in "$scratch_root"/*/; do
+    dir=${dir%/}
+    [[ -d "$dir" ]] || continue
+    changed_within "$dir" "$SCRATCH_DAYS" && continue
+    in_use "$dir" && { log "skip scratch (in use): $dir"; continue; }
+    log "delete scratch: $dir"
+    [[ $dry_run -eq 1 ]] || rm -rf -- "$dir"
+  done
+}
+
+sweep_worktrees() {
+  local dir unpushed
+  for dir in "$worktree_root"/*/; do
+    dir=${dir%/}
+    [[ -f "$dir/.git" ]] || continue
+    changed_within "$dir" "$WORKTREE_DAYS" && continue
+    in_use "$dir" && { log "skip worktree (in use): $dir"; continue; }
+    if [[ -n "$(git -C "$dir" status --porcelain 2>/dev/null)" ]]; then
+      log "skip worktree (uncommitted changes): $dir"
+      continue
+    fi
+    unpushed=$(git -C "$dir" rev-list --count HEAD --not --remotes 2>/dev/null)
+    if [[ "$unpushed" != 0 ]]; then
+      log "skip worktree (${unpushed:-unknown} unpushed commits): $dir"
+      continue
+    fi
+    log "delete worktree: $dir"
+    [[ $dry_run -eq 1 ]] && continue
+    git -C "$dir" worktree remove "$dir" || log "failed to remove worktree: $dir"
+  done
+}
+
+busy_dirs=$(dirs_in_use)
+sweep_scratch
+sweep_worktrees
