@@ -134,6 +134,7 @@ Lead with the dimension that drives the decision; don't recite all four.
 
 - Create new commits to fix mistakes. Never amend pushed commits or force push.
 - PR titles use imperative mood ("Add", "Fix", "Update", not "Added", "Fixes"), a capital first letter, and no period at the end.
+- Before opening a PR, run the `refinement-review` skill on the branch unless it has already run on the current changes. Weigh its findings like a colleague's suggestions; don't apply one just because it was raised.
 
 ## Security
 

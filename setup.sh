@@ -45,7 +45,7 @@ linkfiles=(
   ".claude/skills/coordinating-sessions"
   ".claude/skills/grooming-an-epic"
   ".claude/skills/longrun"
-  ".claude/skills/readability-review"
+  ".claude/skills/refinement-review"
   ".claude/skills/work-monitor"
   ".config/ghostty/config"
   ".config/starship.toml"

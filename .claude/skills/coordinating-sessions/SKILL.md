@@ -79,7 +79,7 @@ When a branch changes (renames, a fix, a merge of master for a CI fix), tell eac
 
 ## Telling a reviewer it's ready
 
-Before the user tells a reviewer that PRs are ready, check each PR: CI passes, no unresolved threads, a readability review has run, and the description ends What with where to start reading. The message lists each PR with its number and a few words on what it is.
+Before the user tells a reviewer that PRs are ready, check each PR: CI passes, no unresolved threads, a refinement review has run, and the description ends What with where to start reading. The message lists each PR with its number and a few words on what it is.
 
 ## Messages for the user to send
 
