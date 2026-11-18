@@ -142,9 +142,11 @@ not by assuming:
   web), make one cheap read call now.
 - QA dependencies: if verification will need tilt, a dev server, or a
   database, confirm it is up now.
-- Host wakefulness: start whatever keeps this machine awake for the run
-  (`caffeinate -dims` on macOS). A sleeping host kills every in-flight
-  subagent mid-stream.
+- Host wakefulness: start whatever keeps this machine awake for the run,
+  bound to this session so it cannot outlive it. On macOS that is
+  `caffeinate -ims -w $PPID &` from the Bash tool, where `$PPID` is the
+  session's own process. A sleeping host kills every in-flight subagent
+  mid-stream; the displays may still sleep and lock.
 - Loop closure: confirm that `hooks.Stop` in `~/.claude/settings.json` (or
   the work config's, `$CLAUDE_CONFIG_DIR/settings.json`) runs
   `keep-going.mjs`. Without it nothing holds the run open and the
@@ -411,6 +413,9 @@ disputed and why.
 
 Let the run's shape decide the summary's, and favor whatever scans
 fastest. `REPORT.md` is the reference; this is what gets read first.
+
+Last, release the host: stop the wakefulness process from Phase 2 (on
+macOS, `pkill -f "caffeinate -ims -w $PPID"`) and confirm it is gone.
 
 ## Drift and recovery
 
