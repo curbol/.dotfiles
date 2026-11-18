@@ -69,7 +69,7 @@ Check, Verdict, Evidence), and return a table of id, verdict and one-line reason
 Read every result. Verify in code yourself any claim that would change the plan rather than
 the wording: a new ordering constraint, a mechanism that doesn't work the way the epic
 assumes, a population count. Watch for stories in Ready for Test with none of their work on
-the default branch. PR automation puts them there (see SKILL.md, Correct states).
+the default branch. PR automation puts them there (see SKILL.md, "Fix states PR automation got wrong").
 
 ## 5. Apply
 

@@ -68,7 +68,7 @@ Lead with the dimension that drives the decision; don't recite all four.
 
 - **Put code in the correct layer, even when it's more work.** If you know the right place for logic (runtime vs conversion, application vs handler, core vs presentation), put it there. Never choose a worse approach because it's fewer lines, faster to write, or "simpler for now"; correctness is the baseline, not a stretch goal. You can write code in seconds; I spend hours debugging the tech debt you leave behind. If you catch yourself thinking "it should be in X but it's easier in Y," stop and put it in X.
 - **If unsure about the right layer, ask.** Do not guess and do not default to the convenient option.
-- **Callers pass facts; the receiver decides what they mean.** Code that hands data to a logger, notifier or other component passes what happened (the request, the IDs, the auth domain), not a flag it computed for the receiver's sake, such as "is this Gladly's client". The receiver works out what it needs from those facts.
+- **Lean toward callers passing facts and the receiver deciding what they mean.** Code that hands data to a logger, notifier or other component passes what happened (the request, the IDs, the auth domain), not a flag it computed for the receiver's sake, such as "is this Gladly's client". The receiver works out what it needs from those facts. Weigh it against how the codebase already does it.
 - **Name things for a reviewer who reads one function at a time.** A name says what the thing holds or does, including its scope (`enabledShopifyLookupAdapters`, not `enabledLookupAdapters`) and, where the codebase has several kinds of a thing, which kind. Prefer a specific noun to `value`, `result`, `data` or `holders`.
 - **Lean toward handling a special case where its data is loaded or returned, so the code that uses it doesn't change.** When one kind of thing needs different handling, such as one provider's token stored somewhere else, one place where the thing is loaded usually beats a check in every caller, and a value only one consumer needs usually belongs in that consumer's response rather than in a field on a widely shared type. Weigh it against how the codebase already handles the case.
 - **Lean toward organizing new code around the concepts it works with.** Each concept's data and rules usually belong to the type or package that owns that concept, so a reader finds them in one place. A new multi-step process has a top-level function that reads as the steps in order, and each step is a call on the concept it acts on, named for what it does there, side effects included. Changes to existing code, and code that follows an established pattern, keep the shape they have.
@@ -82,9 +82,9 @@ Lead with the dimension that drives the decision; don't recite all four.
 
 ## Task Execution
 
-- Ambiguous requests: state your interpretation and ask for confirmation (auto mode overrides this; make the reasonable call instead).
+- Ambiguous requests: state your interpretation and proceed; ask only when the readings lead to different work that is costly to undo.
 - Minimal scope: do what was asked, with focused changes rather than refactors nobody requested. This bounds scope, not quality; within it, the most correct design wins over the smallest.
-- Always check locally first. Prefer checked-out repos in `~/code/` over web/remote sources.
+- Check locally first, in the repos under `~/code/`, against `origin/<default branch>` after a fetch rather than whatever branch the checkout is on.
 - **Scratch work goes in `~/code/scratch/<name>/`, never a sibling of a real repo in `~/code/`.** This covers extracted archives, probe and experiment dirs, package build trees, log dumps, and one-off analysis output. Git worktrees go in `~/code/worktrees/<branch-suffix>/`. Everything under `~/code/scratch/` is disposable without asking; everything directly under `~/code/` is a repo I intend to keep.
 - **Check what the repo already exposes before hand-rolling a command.** Before building, testing, linting, formatting, or running anything, look for existing entry points: `Makefile` targets, `package.json` scripts, `justfile`/`Taskfile.yml`, `pyproject.toml`/`tox.ini`, cargo aliases, `scripts/` and `bin/` dirs, `.github/workflows/`, and CONTRIBUTING/README docs. Prefer the project's own target over reconstructing the invocation by hand; it encodes flags and setup you'll otherwise miss.
 - Don't ask me to choose execution strategies (which agent type, parallel vs sequential, worktree vs not). Never present "execution options" after writing a plan. These are implementation details; use your judgment and just do the work.
@@ -92,7 +92,7 @@ Lead with the dimension that drives the decision; don't recite all four.
 ## Testing & Verification
 
 - Write tests for new logic; match the existing test patterns in the repo.
-- Run existing tests before and after changes to verify no regressions.
+- Run the tests that cover what you change, before and after.
 
 ## Output Style
 
@@ -143,11 +143,11 @@ Lead with the dimension that drives the decision; don't recite all four.
 
 ---
 
+@~/.claude-work/GLOBAL_MEMORY.md
+
 # Gladly (Work Only)
 
 Applies only to Gladly repositories (`github.com/sagansystems/*` internal, `github.com/gladly/*` public).
-
-@~/.claude-work/GLOBAL_MEMORY.md
 
 ## Git Practices (Gladly)
 
@@ -168,7 +168,7 @@ PR descriptions use these `##` sections, in this order. What and Screenshots are
 
 - **## What**: Describe the changes at a high level, written for a reviewer with no prior context about the feature or area of code (anyone in the company may read it). Open in the imperative mood like the title ("Add", "Fix", "Update"), never "This PR…" or "This change…". Describe only what the change does, never what it excludes ("out of scope", "deliberately not included"); a follow-up PR may be named in one concise line. Omit the section entirely on minor changes where the title is sufficient. When a reviewer can't take the change in at once, end the section with a "Where to start reading:" bullet: one to four sub-bullets in reading order, each naming a file and the function, route or handler to read first, with one plain line on what it does.
 - **## Why**: Motivation only. Trade-offs and caveats belong in What or the tech spec, not here. Link the relevant tech spec sections when applicable. When the branch contains a Shortcut story ID, include `This change supports [sc-XXXXXX]` after this section.
-- **## Testing**: Smoke-test runbook for QA. Concrete, copy-pasteable steps (curls with env-var setup, UI clicks, etc.) that confirm the change is present and basically working. 1-3 substantive checks covering the happy path and key invariants; not exhaustive, not edge cases, not a record of dev-time testing. Verify each step actually runs before posting: execute the curls (locally against a dev server or against staging, whichever the change is testable in) and confirm they return what the section claims. If a step can't be verified end-to-end, say so explicitly rather than guessing. Invoke `/test-deployed:write-testing-steps` to draft, critique, and dry-run the section; `/test-deployed:testing-standards` is the canonical standard.
+- **## Testing**: Smoke-test runbook for QA. Concrete, copy-pasteable steps (curls with env-var setup, UI clicks, etc.) that confirm the change is present and basically working. 1-3 substantive checks covering the happy path and key invariants; not exhaustive, not edge cases, not a record of dev-time testing. Dry-run each step where the change can already run, such as locally against a dev server, and say plainly which steps haven't been run because they need the change deployed. Invoke `/test-deployed:write-testing-steps` to draft, critique, and dry-run the section; `/test-deployed:testing-standards` is the canonical standard.
   - Skip the runbook for a refactor fully verified by the compiler or static analysis ("NMTN (no manual testing needed)", otherwise give regression steps), a test-only change ("N/A, test-only change"), a CI/CD, local setup, or tooling change ("N/A"), and a change behind a not-yet-enabled feature flag ("No testing needed since changes are gated behind feature flag").
   - Customer-reported bug fixes always get testing steps, unless the bug is hard to reproduce (a race condition, say).
 - **## Screenshots**: For UI-affecting changes, include screenshots or gifs, before/after where useful. Invoke `/pr-screenshots:pr-screenshots` to capture them with Playwright and upload to `sagansystems/review-assets`, keeping binaries out of the source repo.

@@ -32,13 +32,13 @@ tool that failed to connect; note the gap instead.
 Group by epic, largest claim on the human's attention first. Work with no
 watched epic goes in a final group.
 
-    AI Vision — 12/27
+    AI Vision: 12/27
     - Content warnings: 3 PRs open across the stack, unreviewed since Aug 28
       (glados#9209, supernova#18996, agent-desktop#19820)
     - Phoebe asked for custom-fields copy (sc-257407); glados#9313 up, no review
     - Process Attachment optional context is in Ready for Test
 
-    Express SunCo — 99/119
+    Express SunCo: 99/119
     - thankful#4550 approved and mergeable, ready to merge
     - Sarah filed two this week: post-handoff fallback never expires, and
       integration coverage for the handoff lifecycle (assigned to you)

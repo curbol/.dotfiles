@@ -9,10 +9,9 @@ Never defer correctness. "Simple now, better later" reasoning is banned:
 later never comes, and whatever you write becomes the next session's
 definition of the right way, so hacks compound at interest. This does not
 mean overcomplicate; it means when options A and B exist, choose what is
-most correct, not what is fastest to write. If something can be made more
-generic at low cost, do it, with one ratchet guard: the reviewed plan
-supersedes this default. Re-introducing scope or genericity that plan
-review removed is a plan change, not an implementation detail.
+most correct, not what is fastest to write. The reviewed plan sets the
+scope: re-introducing scope or genericity that plan review removed is a
+plan change, not an implementation detail.
 
 ## The harness is not yours to manage
 

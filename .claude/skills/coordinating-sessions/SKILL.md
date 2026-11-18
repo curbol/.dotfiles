@@ -91,4 +91,4 @@ Search Slack first for whether the user has already answered. Keep it to a line 
 
 ## Closing a session
 
-When a session's PRs have merged and nothing is left for it, close it and mark it done in the roster.
+When a session it started has its PRs merged and nothing left to do, close it and mark it done in the roster.

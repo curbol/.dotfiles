@@ -81,9 +81,12 @@ manage", "Role scoping").
 2. From the repo's default branch (pull first), create a worktree on a new
    branch. Prefix the branch with your usual convention (your username or
    initials, matching your other branches; check `git config` if unsure):
-   `git worktree add ../<repo>-longrun-<slug> -b <prefix>/longrun-<slug>`
+   `git worktree add ~/code/worktrees/<repo>-longrun-<slug> -b <prefix>/longrun-<slug>`
    (when a Shortcut story exists, use `<prefix>/sc-XXXXXX/longrun-<slug>`).
-   Work exclusively in the worktree.
+   Work exclusively in the worktree. The run's Stop hook reads `.longrun/`
+   from the directory the session started in, so when setup creates the
+   worktree, the human restarts the session from it (a coordinating session
+   already starts the run there).
 3. Create `.longrun/`, then exclude it so it can never be committed. Ask git
    where the exclude file is rather than composing the path: a linked
    worktree's own git dir holds no `info/`, and git reads the shared one from
@@ -142,15 +145,13 @@ not by assuming:
 - Host wakefulness: start whatever keeps this machine awake for the run
   (`caffeinate -dims` on macOS). A sleeping host kills every in-flight
   subagent mid-stream.
-- Loop closure: run `claude plugin details longrun` and confirm the output
-  lists `Hooks (1)  Stop`. Without it nothing holds the run open and the
+- Loop closure: confirm that `hooks.Stop` in `~/.claude/settings.json` (or
+  the work config's, `$CLAUDE_CONFIG_DIR/settings.json`) runs
+  `keep-going.mjs`. Without it nothing holds the run open and the
   autonomous phases decay into a supervised one, one turn at a time.
 
-  **`Hooks (0)` means the run is not leash-ready. Say so and stop**, rather
-  than starting and discovering it at Phase 5. The hook cannot be armed
-  mid-run: plugins are copied into a cache at install time, so editing the
-  source changes nothing until the human reinstalls, and by then the run is
-  hours in. This is the one preflight item that cannot be fixed later.
+  **No Stop hook running `keep-going.mjs` means the run is not leash-ready.
+  Say so and stop**, rather than starting and discovering it at Phase 5.
 
   Also confirm `.longrun/TASKS.md` exists, since the hook is inert without
   it. See "Staying on the leash".
@@ -234,10 +235,8 @@ can hold in mind while reading the code. It lists the concepts the change
 works with, existing types first; what each one owns, meaning its data and
 the rules that decide things about it; which package each new rule goes
 in under the repository's layering; and which existing code should see no
-difference. The design then puts each
-function on the concept whose rule it carries, named for what it does
-there, side effects included. A new process's top-level function still
-reads as its steps, each a call on the concept it acts on.
+difference. The rest of the design follows CLAUDE.md's Code Structure
+section.
 
 When the brief names a coordinating session, send it the conceptual model
 as soon as the draft has one, and keep working through the review loop
@@ -373,10 +372,8 @@ merged: merging is the human's call. Record PR links under
 
 ### Every PR says where to start reading
 
-End the PR's What section with a "Where to start reading:" bullet: one to
-four sub-bullets in the order a reviewer should read them, each naming a
-file and the function, route or handler to read first, with one plain line
-on what it does. A small PR needs one line.
+Follow CLAUDE.md's rules for PR descriptions, including where to start
+reading.
 
 ## Phase 10: Automated-review window
 
