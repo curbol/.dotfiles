@@ -64,7 +64,9 @@ A worker brings to the coordinator any finding that changes behavior, a design o
 
 ## Review comments
 
-To check for unaddressed comments, run `bash <this skill's folder>/scripts/open-threads.sh <owner> <your-login> <since> <repo:number>...` over every open PR. Since is the time of the last check. It takes one GitHub owner per run, so PRs in repos of different owners need a run each.
+Watch the PRs instead of waiting to be asked. Keep a list file beside the roster with one `owner/repo#number` per line, and update it in the same turn a PR opens, merges or closes. Start `bash <this skill's folder>/scripts/watch-prs.sh <list file> <your-login>` with the Monitor tool at its longest timeout, and start it again each time it expires. Each line it prints is new: a review or approval, a reviewer's comment, an unresolved thread whose last reply is someone else's, a failed check, or a PR merging or closing. Route each one as below, and tell the user about approvals, merges and failures that change what they do next.
+
+To check for unaddressed comments by hand, run `bash <this skill's folder>/scripts/open-threads.sh <owner> <your-login> <since> <repo:number>...` over every open PR. Since is the time of the last check. It takes one GitHub owner per run, so PRs in repos of different owners need a run each.
 
 For each new review, including automated reviewers like CodeRabbit or a reviewer's own Claude review:
 1. Send it to the owning session with the points listed. Ask it to assess each one, fix what's right, reply on every thread (with the reason for any it declines), resolve the threads it fixed, and push.
