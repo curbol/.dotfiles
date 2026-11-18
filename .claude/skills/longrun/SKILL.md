@@ -232,8 +232,9 @@ check documented".
 `PLAN.md`'s design opens with a conceptual model: a few lines a reviewer
 can hold in mind while reading the code. It lists the concepts the change
 works with, existing types first; what each one owns, meaning its data and
-the rules that decide things about it; and which package each new rule
-goes in under the repository's layering. The design then puts each
+the rules that decide things about it; which package each new rule goes
+in under the repository's layering; and which existing code should see no
+difference. The design then puts each
 function on the concept whose rule it carries, named for what it does
 there, side effects included. A new process's top-level function still
 reads as its steps, each a call on the concept it acts on.

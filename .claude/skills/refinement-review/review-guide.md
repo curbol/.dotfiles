@@ -14,6 +14,7 @@ New code is easier to review and maintain when it does things the way the code a
 
 - For each new mechanism in the change (an abstraction, helper, interface, file layout, error handling, logging, configuration, test setup), is there existing code that does the same job? Search the repository for it; don't judge from the diff alone.
 - If the change does it differently, does the difference look deliberate and reasonable? Weigh how established and consistent the existing way is (one old example, or the same shape in every service?), whether it's known legacy (a deprecated helper, a migration in progress, a rule in the repository's docs saying to stop using it), and whether the new case would have to be forced to fit.
+- Does the change spread one special case or one consumer's need across shared code: a field added to a widely used type that only one consumer reads, or the same check added to many callers? Handling it where the data is loaded or returned would leave the rest unchanged.
 - Is the change building machinery for a single case: an abstraction, interface or extension point with one caller, or a new practice (a tool, a test style, a layer) introduced to cover one thing?
 - Do names follow what nearby code calls the same kind of thing? If most map variables in the package have plain names, a new one with a `ByX` suffix stands out.
 
