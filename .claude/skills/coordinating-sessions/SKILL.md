@@ -69,7 +69,7 @@ To check for unaddressed comments, run `bash <this skill's folder>/scripts/open-
 For each new review, including automated reviewers like CodeRabbit or a reviewer's own Claude review:
 1. Send it to the owning session with the points listed. Ask it to assess each one, fix what's right, reply on every thread (with the reason for any it declines), resolve the threads it fixed, and push.
 2. Decide any point that changes behavior (see Decisions).
-3. Re-request the reviewer only after a major change, such as a redesign or new behavior. Fixes to their comments, merges and small follow-ups don't need one.
+3. Once its threads are answered, re-request a reviewer who hasn't approved, since the PR still needs their approval. On a PR the reviewer already approved, re-request only after a major change, such as a redesign or new behavior.
 
 In repos that keep approvals across new pushes, as Gladly's do, don't hold back a needed change to protect an approval.
 
