@@ -70,7 +70,7 @@ Lead with the dimension that drives the decision; don't recite all four.
 - **If unsure about the right layer, ask.** Do not guess and do not default to the convenient option.
 - **Callers pass facts; the receiver decides what they mean.** Code that hands data to a logger, notifier or other component passes what happened (the request, the IDs, the auth domain), not a flag it computed for the receiver's sake, such as "is this Gladly's client". The receiver works out what it needs from those facts.
 - **Name things for a reviewer who reads one function at a time.** A name says what the thing holds or does, including its scope (`enabledShopifyLookupAdapters`, not `enabledLookupAdapters`) and, where the codebase has several kinds of a thing, which kind. Prefer a specific noun to `value`, `result`, `data` or `holders`.
-- **Write new multi-step code top-down where it fits.** The top-level function reads as the steps in order, each a call named for its step, and each step does the same one level down. Changes to existing code, and code that follows an established pattern, keep the shape they have.
+- **Organize new code around the concepts it works with.** Each concept's data and rules belong to the type or package that owns that concept, so a reader finds them in one place. A new multi-step process has a top-level function that reads as the steps in order, and each step is a call on the concept it acts on, named for what it does there, side effects included. Changes to existing code, and code that follows an established pattern, keep the shape they have.
 
 ## Comments and Documentation
 

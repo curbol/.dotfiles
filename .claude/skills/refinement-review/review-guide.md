@@ -36,7 +36,8 @@ Report a departure as the trade-off it is in this repository, naming the existin
 
 - Can each function be checked on its own, from its body and the names of what it calls?
 - Does each function do one job, at one level of detail?
-- For new code that carries out a process of several steps, does the top-level function read as those steps in order, each a call named for its step, with failures visible at that level? This shape suits new process code. A change to an existing function, or code that follows an established pattern (handlers, repositories, framework callbacks), reads best in the shape it already has, and a short function reads best left whole.
+- Is new code organized around the concepts it works with, so each concept's data and rules sit in the type or package that owns it? Code split by the task's steps instead spreads one concept's logic over several helpers that a reader has to collect.
+- For new code that carries out a process of several steps, does the top-level function read as those steps in order, each a call on the concept it acts on and named for its step, with failures visible at that level? This shape suits new process code. A change to an existing function, or code that follows an established pattern (handlers, repositories, framework callbacks), reads best in the shape it already has, and a short function reads best left whole.
 - Is the control flow as plain as it can be? For example, one `if`/`else` rather than two `if`s on the same value, or a named variable for a condition that needs explaining.
 
 ## Comments

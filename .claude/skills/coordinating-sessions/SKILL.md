@@ -29,7 +29,7 @@ Keep a handoff file beside it, so that a session on another account can take ove
    `rex new "<name>" -c <worktree> --interactive --keep-open --json -- env CLAUDE_CONFIG_DIR=<work config dir> claude -n "<name>" "$(cat <prompt file>)"`
 4. Write the prompt from a shared part that every session gets (for example `prompts/common.md`) and a part for this session. The shared part says:
    - the spec and where a local copy is, and that the spec's design is decided;
-   - the coordinator's name, and what to send it: questions the spec doesn't answer, findings that change behavior or the spec, each PR's link, when a PR is ready for a human reviewer, and anything a permission check blocks;
+   - the coordinator's name, and what to send it: each PR's conceptual model before building it (a longrun sends it from Phase 4), questions the spec doesn't answer, findings that change behavior or the spec, each PR's link, when a PR is ready for a human reviewer, and anything a permission check blocks;
    - that the session is already in its worktree, so a longrun skips its worktree step;
    - that a longrun runs every phase, including opening its own PRs and its automated-review window, and that it never merges or requests human reviewers;
    - the repo's branch, commit and PR conventions.
@@ -61,6 +61,8 @@ When a session depends on a branch, PR or story in an area another coordinator o
 ## Decisions
 
 A worker brings to the coordinator any finding that changes behavior, a design or the spec, including any place where its design departs from how the codebase already does the same job. Decide it on the evidence, or bring it to the user with a recommendation when it reverses something the user decided. Record the decision in the spec in the same turn.
+
+Answer each conceptual model a session sends before it builds: check the concepts against the spec, and each rule's package against the repository's layering and existing code. Send the user the ones that change shared platform code, with your recommendation.
 
 ## Review comments
 

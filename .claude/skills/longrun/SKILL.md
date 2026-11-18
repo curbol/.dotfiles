@@ -229,6 +229,20 @@ against. Staged production changes (never applied autonomously; see
 `principles.md`) declare the class "staged: human applies, post-apply
 check documented".
 
+`PLAN.md`'s design opens with a conceptual model: a few lines a reviewer
+can hold in mind while reading the code. It lists the concepts the change
+works with, existing types first; what each one owns, meaning its data and
+the rules that decide things about it; and which package each new rule
+goes in under the repository's layering. The design then puts each
+function on the concept whose rule it carries, named for what it does
+there, side effects included. A new process's top-level function still
+reads as its steps, each a call on the concept it acts on.
+
+When the brief names a coordinating session, send it the conceptual model
+as soon as the draft has one, and keep working through the review loop
+while you wait. Apply its answer to `PLAN.md` before Phase 5 builds the
+code the model shapes.
+
 For each new mechanism the design adds (a logger, a cache, a hook, a
 wrapper, a new context value), `PLAN.md` names the existing code that does
 the same job and says the design follows it. If the design departs from
