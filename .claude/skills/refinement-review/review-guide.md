@@ -17,6 +17,8 @@ New code is easier to review and maintain when it does things the way the code a
 - Is the change building machinery for a single case: an abstraction, interface or extension point with one caller, or a new practice (a tool, a test style, a layer) introduced to cover one thing?
 - Do names follow what nearby code calls the same kind of thing? If most map variables in the package have plain names, a new one with a `ByX` suffix stands out.
 
+When the new code does the same job as existing code but behaves differently, such as a different rule for the same decision or a case the existing code handles and this one doesn't, report the difference and say it changes behavior. Don't look for bugs beyond that.
+
 Report a departure as the trade-off it is in this repository, naming the existing code: "the other services log through a plain logger (`services/x/logging.go`); this adds a listener abstraction with one implementation". A departure that looks deliberate and justified isn't a finding.
 
 ## Names
