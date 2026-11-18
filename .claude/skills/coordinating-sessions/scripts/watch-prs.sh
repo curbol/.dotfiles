@@ -3,7 +3,8 @@
 # thread reply from someone else, failed check, or merge or close on the pull
 # requests listed in a file, polling until it's killed.
 #
-# Usage: bash watch-prs.sh <pr-list-file> <author-login> [interval-seconds]
+# Usage: bash watch-prs.sh [--once] <pr-list-file> <author-login> [interval-seconds]
+# With --once, it exits after the first poll that prints anything.
 # The list file has one owner/repo#number per line (lines starting with # are
 # skipped). It's reread on every poll, so PRs can be added or removed while it
 # runs. What has been reported is kept in <pr-list-file without extension>.seen,
@@ -11,6 +12,8 @@
 # printing it.
 
 set -u
+once=0
+if [ "${1:-}" = "--once" ]; then once=1; shift; fi
 list=$1
 author=$2
 interval=${3:-180}
@@ -53,15 +56,21 @@ events_for() {
 }
 
 while true; do
-  while read -r ref; do
-    [[ -z "$ref" || "$ref" == \#* ]] && continue
-    events_for "$ref"
-  done < "$list" |
-    while IFS=$'\t' read -r key message; do
-      grep -qxF "$key" "$seen" && continue
-      echo "$key" >> "$seen"
-      [ "$announce" = 1 ] && echo "$message"
-    done
+  new=$(
+    while read -r ref; do
+      [[ -z "$ref" || "$ref" == \#* ]] && continue
+      events_for "$ref"
+    done < "$list" |
+      while IFS=$'\t' read -r key message; do
+        grep -qxF "$key" "$seen" && continue
+        echo "$key" >> "$seen"
+        [ "$announce" = 1 ] && echo "$message"
+      done
+  )
+  if [ -n "$new" ]; then
+    echo "$new"
+    [ "$once" = 1 ] && exit 0
+  fi
   announce=1
   sleep "$interval"
 done
