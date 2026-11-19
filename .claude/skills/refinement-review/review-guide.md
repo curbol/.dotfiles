@@ -43,7 +43,7 @@ Report a departure as the trade-off it is in this repository, naming the existin
 
 ## Comments
 
-- Does a comment on a function or type say what it returns or represents? A comment that explains what callers do with it, argues why the design is right, or says what would break without it usually reads better as the plain statement of what it is: "reports whether the app is authorized outside Gladly", not "...so Gladly refuses to authorize it, because...".
+- Does a comment on a function or type say briefly what it's for, at a high level, the way comments elsewhere in the codebase do? A comment that walks through each case, the error handling or the logging repeats the code; keep only what would surprise a caller. A comment that explains what callers do with it, argues why the design is right, or says what would break without it usually reads better as the plain statement of what it is: "reports whether the app is authorized outside Gladly", not "...so Gladly refuses to authorize it, because...".
 - Does a comment, log message or error message describe history or timing relative to when it shipped: what changed, what it replaced, "no longer", "for now", "existing installs", or which review or task prompted it? Describe the condition the code checks instead.
 - Does a comment carry context from outside the file (why another repository behaves some way, what was decided in a meeting)? That belongs in the commit message or PR description.
 - Does a comment repeat the code, or narrate steps the code already shows? Would a better name make it unnecessary?
