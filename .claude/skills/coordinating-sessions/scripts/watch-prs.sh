@@ -37,7 +37,7 @@ events_for() {
   env -u GITHUB_TOKEN gh api graphql -f query="$query" -f o="$owner" -f r="$repo" -F n="$number" 2>/dev/null |
     jq -r --arg ref "$ref" --arg me "$author" '
       def text: (. // "") | gsub("[\t\r\n]+"; " ") | .[0:160];
-      def ci_bot: test("^(github-actions|dependabot|renovate|codecov|saganbot)(\\[bot\\])?$");
+      def ci_bot: test("^(github-actions|dependabot|renovate|codecov|saganbot|gladly-status-checks)(\\[bot\\])?$");
       .data.repository.pullRequest as $pr
       | select($pr != null)
       | (if $pr.state != "OPEN" then "\($ref) \($pr.state)\t\($ref) is \($pr.state | ascii_downcase)" else empty end),
