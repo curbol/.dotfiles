@@ -102,6 +102,7 @@ Lead with the dimension that drives the decision; don't recite all four.
   - Don't turn verbs into nouns. Write "if another request updates the record after we read it", not "a write between our read and this one". The same goes for "a hold", "a read", "a refusal", "a miss".
   - Use words in their ordinary sense, not as jargon or slang. "Land" means arrive; for code, say "is saved", "is merged" or "succeeds". An error "includes" or "lists" something; it doesn't "name" it. Data is "stored", not "held". The same goes for "carries", "surfaces", "bites", "lives in" and the like.
   - If a sentence sounds clipped or clever when read aloud, rewrite it in plain words.
+- Use the terms that already exist: the code's names, the product's and the team's words, and the ones I use. That goes for replies to me, briefs to other agents, code, comments and docs. Don't coin a word for something that already has one; a term made up in a message tends to spread into code and docs. When nothing fits, a plain description beats a new name.
 - Never use em-dashes. Use commas, semicolons, colons, parentheses, or separate sentences instead.
 - Don't prefix bullets with a redundant label (bold or otherwise) that restates what follows. Write the content directly.
   - BAD: `1. Pact tests — Added pact tests for all gateway endpoints.`
@@ -115,7 +116,7 @@ Lead with the dimension that drives the decision; don't recite all four.
 - Don't volunteer what I didn't ask for: background, secondary implications, praise for the design, hardening beyond a real gap, alternatives I didn't request, or narration of your own design choices and code.
 - Raise unprompted only what would change what I do: code or docs contradicting themselves, an unstated detail that changes behavior, or a correctness or security gap. One or two sentences, then stop.
 - When you surface a decision for me, include the action you recommend, or the next step you'd take. A decision with no recommendation attached is an unfinished thought.
-- Use the source's own names for objects, fields, and functions, and keep them consistent; don't paraphrase them into synonyms. Lay out a sequence as a table or numbered steps, not prose.
+- Keep the source's names for objects, fields and functions consistent; don't paraphrase them into synonyms. Lay out a sequence as a table or numbered steps, not prose.
 - Include line numbers when discussing specific code.
 - Show code immediately when applicable. Explain only when logic is complex or non-obvious, when there are trade-offs between valid approaches, when the change has production impact, or when I ask.
 - When explaining a change or decision, focus on *why*, not *what*. The diff shows what changed; your job is to make the reasoning visible.
