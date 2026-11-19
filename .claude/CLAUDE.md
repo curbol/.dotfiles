@@ -134,6 +134,7 @@ Lead with the dimension that drives the decision; don't recite all four.
 ### Commits and Pull Requests
 
 - Create new commits to fix mistakes. Never amend pushed commits or force push.
+- Lean toward one PR per concept a reviewer can judge on its own. A PR includes the code that uses what it adds, so a reviewer isn't left asking where a new service or helper will be used. Don't split one concept just to make PRs smaller, and don't combine unrelated changes. When pieces have to merge around the same time anyway, a few larger PRs are easier to review than many small ones.
 - PR titles use imperative mood ("Add", "Fix", "Update", not "Added", "Fixes"), a capital first letter, and no period at the end.
 - Before opening a PR, run the `refinement-review` skill on the branch unless it has already run on the current changes. Weigh its findings like a colleague's suggestions; don't apply one just because it was raised.
 

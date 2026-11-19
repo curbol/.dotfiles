@@ -223,7 +223,7 @@ material clearly and attribute it to its source.
 
 ## Phase 4: Plan, then review loop
 
-Draft `PLAN.md`: deliverables, design, and a verification mechanism per
+Draft `PLAN.md`: deliverables (split into PRs as CLAUDE.md describes), design, and a verification mechanism per
 deliverable (unit tests, tsc/lint, tilt + curl, Playwright where
 feasible); prefer machine-verifiable designs. Each verification states in
 one line what a passing run rules out; that line is what the review loop
