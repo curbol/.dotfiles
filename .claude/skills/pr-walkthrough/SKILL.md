@@ -1,5 +1,5 @@
 ---
-name: walking-through-a-pr
+name: pr-walkthrough
 description: Use when the user wants to be walked through a pull request's code, or a stack of PRs, to understand what it does and how its code paths connect, with the code shown in a Neovim pane beside the chat.
 ---
 
