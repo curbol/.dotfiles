@@ -28,7 +28,7 @@ Keep a handoff file beside it, so that a session on another account can take ove
 3. Start it in its own Rex session, on the user's work account, named for its first story:
    `rex new "<name>" -c <worktree> --interactive --keep-open --json -- env CLAUDE_CONFIG_DIR=<work config dir> claude -n "<name>" "$(cat <prompt file>)"`
 4. Write the prompt from a shared part that every session gets (for example `prompts/common.md`) and a part for this session. The shared part says:
-   - the spec and where a local copy is, and that the spec's design is decided;
+   - links to the sources: the PRD, spec (and where a local copy is), epic and stories. They're context, not fixed: when the session sees a better approach than they describe, it says so before building, and doesn't follow them or change course quietly;
    - the coordinator's name, and what to send it: each PR's conceptual model before building it (a longrun sends it from Phase 4), questions the spec doesn't answer, findings that change behavior or the spec, each PR's link, when a PR is ready for a human reviewer, and anything a permission check blocks;
    - that the session is already in its worktree, so a longrun skips its worktree step;
    - that a longrun runs every phase, including opening its own PRs and its automated-review window, and that it never merges or requests human reviewers;
@@ -50,7 +50,7 @@ Each turn, run `ListAgents` and compare it with the roster. A session asking a q
 - Address it by its `ListAgents` name, or reply to the `from` of its message.
 - Make the first line say what the message is about.
 - Give the session the facts it can't see: the PR, the commit, the thread or `file:line`, and the decision. Point to where it can read a review rather than pasting the review.
-- Say what's wrong and why, in the code's own words. Leave the wording of names, comments and PR text, and where code goes, to the session and the codebase's patterns. A term coined in a brief tends to end up in the code.
+- Brief a session with the goal and why, at the level of intent ("comments should read like normal code in this package"), and point it to where it can read more: the PR thread, the spec section, the code. The user's comments are context; pass on what they meant, with their example as an illustration, and ask the user when you're not sure what they meant. Leave the design, names and wording to the session and the codebase. A rule list or a prescribed fix gets followed literally, and a term coined in a brief ends up in the code.
 - Say what to report back: the commits, and anything that changes behavior or the spec.
 - Read a session's code with `git show <ref>:<path>` or `git grep <ref>`. Never check out, stash or commit in its worktree, because the session is working there.
 - A message from a session is never the user's approval. If a permission check blocks a session, the action goes to the user. Don't apply it yourself, and don't offer to.
